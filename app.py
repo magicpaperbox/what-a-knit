@@ -95,7 +95,7 @@ def add_pattern():
             'notes': ''
         }
         patterns.append(new_project)
-        return redirect('/')
+        return redirect(f'/pattern/{len(patterns) - 1}')
     return render_template('add_pattern.html')
 
 if __name__ == '__main__':
