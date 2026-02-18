@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}What a knit!{% endblock %}</title>
+    <link rel="icon" type="image/png" href="/static/icons/yarn_ball.png">
     <style>
         @font-face {
             font-family: 'AmaticSC';
@@ -331,21 +332,51 @@
             color: #2d1b3d;
             box-shadow: 4px 4px 0px #fd79a8;
         }
+
+        /* ---------- ICONS ---------- */
+        .icon {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        .icon-footer {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+        }
+
+        .icon-dark {
+            display: none;
+        }
+
+        body.dark .icon-light {
+            display: none;
+        }
+
+        body.dark .icon-dark {
+            display: inline;
+        }
     </style>
 </head>
 
 <body>
     <h1>What a knit!</h1>
     <nav>
-        <a href="/">🧶 Your projects</a>
-        <a href="/add">✨ Create project</a>
-        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark mode</button>
+        <a href="/"><img src="/static/icons/projects.png" class="icon" alt="projects"> Your projects</a>
+        <a href="/add"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Create project</a>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <img src="/static/icons/moon.png" class="icon icon-light" alt="dark mode">
+            <img src="/static/icons/sun.png" class="icon icon-dark" alt="light mode">
+            <span class="toggle-text">Dark mode</span>
+        </button>
     </nav>
     {% block content %}
     {% endblock %}
     <footer
         style="margin-top: 40px; text-align: center; color: #9b84b8; font-family: LaBelleAurore, sans-serif; font-size: 14px;">
-        <p>@magicpaperbox 2026 🧶</p>
+        <p>@magicpaperbox 2026 <img src="/static/icons/yarn_ball.png" class="icon-footer" alt="yarn"></p>
     </footer>
 
     <script>
@@ -355,19 +386,17 @@
             const isDark = document.body.classList.contains('dark');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
 
-            const btn = document.querySelector('.theme-toggle');
-            btn.textContent = isDark ? '☀️ Light mode' : '🌙 Dark mode';
+            const toggleText = document.querySelector('.toggle-text');
+            toggleText.textContent = isDark ? 'Light mode' : 'Dark mode';
         }
 
         // On page load: restore saved theme
-        (function () {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'dark') {
-                document.body.classList.add('dark');
-                const btn = document.querySelector('.theme-toggle');
-                if (btn) btn.textContent = '☀️ Light mode';
-            }
-        })();
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') {
+            document.body.classList.add('dark');
+            const toggleText = document.querySelector('.toggle-text');
+            if (toggleText) toggleText.textContent = 'Light mode';
+        }
     </script>
 </body>
 
