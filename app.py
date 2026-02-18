@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from datetime import datetime
 
 app = Flask("what a knit")
@@ -52,10 +52,10 @@ patterns=[
 ]
 
 @app.route('/')
-def hello_world():
+def main_page():
     # Przykładowe dane do przekazania do template
     return render_template(
-        'index.html',
+        'main_page.html',
         title='What a knit!',
         username='Klaudia',
         current_date=datetime.now().strftime('%Y-%m-%d %H:%M'),
@@ -75,6 +75,28 @@ def hello_world():
 def pattern_detail(pattern_id):
     pattern = patterns[pattern_id]
     return render_template('pattern_detail.html', pattern=pattern)
+
+@app.route('/add', methods=['GET', 'POST'])
+def add_pattern():
+    if request.method == 'POST':
+        new_project = {
+            'name': request.form['name'],
+            'type': request.form['type'],
+            'subtype': request.form['subtype'],
+            'tool': 'needles',
+            'needle_size': '2.5mm',
+            'yarn_bought': False,
+            'difficulty': None,
+            'status': 'not started',
+            'completion': 0,
+            'rating': None,
+            'language': 'polish',
+            'designer': 'Knitted moments',
+            'notes': ''
+        }
+        patterns.append(new_project)
+        return redirect('/')
+    return render_template('add_pattern.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

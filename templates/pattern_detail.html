@@ -2,17 +2,21 @@
 {% block content %}
     <h2>{{ pattern.name }}</h2>
     <div class="section">
-        <p>Category: {{ pattern.type }}</p>
-        <p>Type: {{ pattern.subtype }}</p>
-        <p>Needle size: {{ pattern.needle_size }}</p>
-        <p>Status: {{ pattern.status }}</p>
-        <p>Difficulty level: {{ pattern.difficulty }}</p>
-        {% if pattern.completion > 0 %}
-        <p>Completion: {{ pattern.completion }} %</p>
+        <p><strong>Category:</strong> {{ pattern.type }}</p>
+        <p><strong>Type:</strong> {{ pattern.subtype }}</p>
+        <p><strong>Needle size:</strong> {{ pattern.needle_size }}</p>
+        <p><strong>Status:</strong> {{ pattern.status }}</p>
+
+        {% if pattern.difficulty %}
+        <p><strong>Difficulty level:</strong> {{ pattern.difficulty }}</p>
         {% endif %}
+
+        {% if pattern.completion > 0 %}
+        <p><strong>Completion:</strong> {{ pattern.completion }} %</p>
+        {% endif %}
+
         {% if pattern.rating %}
-        <p>
-            Rating: {{ pattern.rating }}/5</p>
+        <p><strong>Rating:</strong> {{ pattern.rating }}/5</p>
         {% endif %}
     </div>
 {% endblock %}

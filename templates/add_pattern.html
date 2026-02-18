@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="section">
+    <form method="POST" action="/add">{#send to add#}
+        <p>
+            <strong>Pattern name:</strong>
+            <input type="text" name="name">
+        </p>
+        <p>
+            <strong>Category:</strong>
+            <input type="text" name="type">
+        </p>
+        <p>
+            <strong>Subcategory:</strong>
+            <input type="text" name="subtype">
+        </p>
+        <p>
+            <strong>Notes:</strong>
+            <input type="text" name="notes">
+        </p>
+        <input type="submit" value="Add">
+    </form>
+
+
+    </div>
+{% endblock %}
