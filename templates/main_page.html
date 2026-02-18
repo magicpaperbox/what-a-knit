@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="section">
+        <h2>Witaj, {{ username }}!</h2>
+        <h3>Co nowego?</h3>
+        <p>Dzisiaj jest: {{ current_date }}</p>
+        {% if is_logged_in %}
+            <p>✅ Jesteś zalogowany!</p>
+        {% else %}
+            <p>❌ Nie jesteś zalogowany.</p>
+        {% endif %}
+        
+        {% if yarn_count > 5 %}
+            <p>🎉 Masz dużo włóczek! ({{ yarn_count }} sztuk)</p>
+        {% elif yarn_count > 0 %}
+            <p>📦 Masz trochę włóczek: {{ yarn_count }}</p>
+        {% else %}
+            <p>😢 Nie masz żadnych włóczek.</p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Twoje włóczki:</h2>
+        <ul>
+        {% for yarn in yarns %}
+            <li class="yarn">
+                {{ loop.index }}. {{ yarn.color }} - {{ yarn.weight }}g
+                {% if loop.first %} 👑 (pierwsza!){% endif %}
+                {% if loop.last %} 🏁 (ostatnia!){% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+        
+        {% if yarns|length == 0 %}
+            <p><em>Lista jest pusta</em></p>
+        {% endif %}
+    </div>
+
+
+    <div class="section">
+    <h2>Your projects:</h2>
+        {% for pattern in patterns %}
+        <h3><a href="/pattern/{{ loop.index0 }}">{{ pattern.name }}</a></h3>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}
