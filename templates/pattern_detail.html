@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>{{ pattern.name }}</h2>
+    <div class="section">
+        <p>Category: {{ pattern.type }}</p>
+        <p>Type: {{ pattern.subtype }}</p>
+        <p>Needle size: {{ pattern.needle_size }}</p>
+        <p>Status: {{ pattern.status }}</p>
+        <p>Difficulty level: {{ pattern.difficulty }}</p>
+        {% if pattern.completion > 0 %}
+        <p>Completion: {{ pattern.completion }} %</p>
+        {% endif %}
+        {% if pattern.rating %}
+        <p>
+            Rating: {{ pattern.rating }}/5</p>
+        {% endif %}
+    </div>
+{% endblock %}
