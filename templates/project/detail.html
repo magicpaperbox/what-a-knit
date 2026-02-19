@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ project.name }}</h2>
+<div class="section">
+    <p><strong>Category:</strong> {{ project.type }}</p>
+
+    {% if project.subtype %}
+    <p><strong>Subcategory:</strong> {{ project.subtype }}</p>
+    {% endif %}
+
+    {% if project.tool %}
+    <p><strong>Tool:</strong> {{ project.tool }}</p>
+    {% endif %}
+
+    {% if project.needle_size %}
+    <p><strong>Needle/hook size:</strong> {{ project.needle_size }} mm</p>
+    {% endif %}
+
+    {% if project.skeins %}
+    <p><strong>Yarn:</strong> {{ project.skeins }}</p>
+    {% endif %}
+
+    {% if project.skeins_needed %}
+    <p><strong>Skeins needed:</strong> {{ project.skeins_needed }}</p>
+    {% endif %}
+
+    {% if project.pattern_language %}
+    <p><strong>Pattern language:</strong> {{ project.pattern_language }}</p>
+    {% endif %}
+
+    {% if project.designer %}
+    <p><strong>Designer:</strong> {{ project.designer }}</p>
+    {% endif %}
+
+    {% if project.yarn_bought %}
+    <p><strong>Yarn bought:</strong> {{ project.yarn_bought }}</p>
+    {% endif %}
+
+    <p><strong>Status:</strong> {{ project.status }}</p>
+
+    {% if project.difficulty %}
+    <p><strong>Difficulty level:</strong> {{ project.difficulty }}</p>
+    {% endif %}
+
+    {% if project.completion > 0 %}
+    <p><strong>Completion:</strong> {{ project.completion }}%</p>
+    {% endif %}
+
+    {% if project.rating %}
+    <p><strong>Rating:</strong> {{ project.rating }}/5</p>
+    {% endif %}
+
+    {% if project.notes %}
+    <p><strong>Notes:</strong> {{ project.notes }}</p>
+    {% endif %}
+</div>
+
+<div class="action-buttons">
+    <button class="btn-delete" onclick="openDeleteModal()">
+        <img src="/static/icons/frog.png" alt="Frog" style="width: 24px; vertical-align: middle; margin-right: 8px;">
+        Frog
+        project
+    </button>
+    <a href="{{ url_for('projects.edit', project_id=project.id) }}" class="btn-submit">
+        ✏️ Edit project
+    </a>
+</div>
+
+<!-- CUSTOM MODAL -->
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>🐸 Frog it?</h3>
+        <p>Are you sure you want to delete <strong>{{ project.name }}</strong>?<br>This cannot be undone!</p>
+
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
+
+            <form method="POST" action="{{ url_for('projects.delete', project_id=project.id) }}"
+                style="display:inline;">
+                <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

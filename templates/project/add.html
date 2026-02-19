@@ -2,9 +2,9 @@
 {% block content %}
 <div class="section">
     <h2><img src="/static/icons/needles.png" class="icon-header" alt="Needle"> New project</h2>
-    <form method="POST" action="/add">
+    <form method="POST" action="{{ url_for('projects.add') }}">
         <div class="form-group">
-            <label for="name">Pattern name:</label>
+            <label for="name">Project name:</label>
             <input type="text" id="name" name="name" placeholder="pattern name" required>
         </div>
 
