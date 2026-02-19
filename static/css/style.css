@@ -1,0 +1,353 @@
+
+@font-face {
+    font-family: 'AmaticSC';
+    src: url('/static/fonts/AmaticSC.ttf');
+}
+
+@font-face {
+    font-family: 'Fredoka';
+    src: url('/static/fonts/Fredoka.ttf');
+}
+
+@font-face {
+    font-family: 'LaBelleAurore';
+    src: url('/static/fonts/LaBelleAurore.ttf');
+}
+
+@font-face {
+    font-family: 'Delius';
+    src: url('/static/fonts/Delius.ttf');
+}
+
+@font-face {
+    font-family: 'PrincessSofia';
+    src: url('/static/fonts/PrincessSofia.ttf');
+}
+
+/* ---------- GLOBAL ---------- */
+body {
+    font-family: Fredoka, sans-serif;
+    font-size: 18px;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    background-color: #fff8e7;
+    color: #3a3a3a;
+}
+
+/* ---------- HEADER ---------- */
+h1 {
+    font-family: Fredoka, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    font-size: 52px;
+    color: #e84393;
+    margin-bottom: 5px;
+}
+
+h2 {
+    font-family: Fredoka, sans-serif;
+    color: #6c5ce7;
+    font-size: 26px;
+    margin-top: 0;
+}
+
+h3 {
+    font-family: Fredoka, sans-serif;
+    color: #e84393;
+    font-size: 20px;
+}
+
+/* ---------- NAVIGATION ---------- */
+nav {
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+nav a {
+    display: inline-block;
+    font-family: Fredoka, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #e84393;
+    text-decoration: none;
+    padding: 10px 28px;
+    margin: 4px 8px;
+    background: #fff;
+    border: 3px solid #badc58;
+    border-radius: 25px;
+    transition: all 0.25s ease;
+}
+
+nav a:hover {
+    background: #e84393;
+    color: #fff;
+    border-color: #e84393;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px #badc58;
+}
+
+/* ---------- SECTIONS ---------- */
+.section {
+    background: #fffdf5;
+    padding: 22px 28px;
+    margin: 24px 0;
+    border-radius: 16px;
+    border: 3px solid #e84393;
+    box-shadow: 6px 6px 0px #badc58;
+}
+
+.section:nth-child(even) {
+    border-color: #6c5ce7;
+    box-shadow: 6px 6px 0px #fdcb6e;
+}
+
+/* ---------- YARN BADGES ---------- */
+.yarn {
+    display: inline-block;
+    padding: 6px 14px;
+    margin: 4px;
+    background: #ffeaa7;
+    border: 2px solid #fdcb6e;
+    border-radius: 20px;
+    font-size: 16px;
+    color: #6c5ce7;
+    font-weight: bold;
+}
+
+/* ---------- LINKS ---------- */
+a {
+    color: #e84393;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #badc58;
+}
+
+/* ---------- CODE ---------- */
+code {
+    background: #ffeaa7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+/* ---------- FORMS ---------- */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: #6c5ce7;
+    margin-bottom: 6px;
+    font-size: 17px;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: Fredoka, sans-serif;
+    font-size: 16px;
+    border: 3px solid #badc58;
+    border-radius: 12px;
+    background: #fff;
+    color: #3a3a3a;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #e84393;
+    box-shadow: 4px 4px 0px #fdcb6e;
+}
+
+.form-group input[type="text"]::placeholder {
+    color: #ccc;
+    font-style: italic;
+}
+
+.btn-submit {
+    display: inline-block;
+    font-family: Fredoka, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    padding: 12px 32px;
+    margin-top: 10px;
+    background: #e84393;
+    border: 3px solid #e84393;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-submit:hover {
+    background: #6c5ce7;
+    border-color: #6c5ce7;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px #badc58;
+}
+
+/* ---------- DARK MODE TOGGLE ---------- */
+.theme-toggle {
+    display: inline-block;
+    font-family: Fredoka, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #e84393;
+    padding: 10px 28px;
+    margin: 4px 8px;
+    background: #fff;
+    border: 3px solid #fdcb6e;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.theme-toggle:hover {
+    background: #fdcb6e;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px #e84393;
+}
+
+/* ---------- DARK MODE ---------- */
+body.dark {
+    background-color: #2d1b3d;
+    color: #e8e0f0;
+}
+
+body.dark h1 {
+    color: #ff6b9d;
+}
+
+body.dark h2 {
+    color: #c4b5fd;
+}
+
+body.dark h3 {
+    color: #fd79a8;
+}
+
+body.dark nav a {
+    background: #3d2b50;
+    color: #fd79a8;
+    border-color: #badc58;
+}
+
+body.dark nav a:hover {
+    background: #fd79a8;
+    color: #2d1b3d;
+    border-color: #fd79a8;
+    box-shadow: 4px 4px 0px #badc58;
+}
+
+body.dark .section {
+    background: #3d2b50;
+    border-color: #fd79a8;
+    box-shadow: 6px 6px 0px #6c5ce7;
+}
+
+body.dark .section:nth-child(even) {
+    border-color: #a29bfe;
+    box-shadow: 6px 6px 0px #badc58;
+}
+
+body.dark .yarn {
+    background: #4a3660;
+    border-color: #a29bfe;
+    color: #ffeaa7;
+}
+
+body.dark a {
+    color: #fd79a8;
+}
+
+body.dark a:hover {
+    color: #badc58;
+}
+
+body.dark .theme-toggle {
+    background: #3d2b50;
+    color: #ffeaa7;
+    border-color: #fdcb6e;
+}
+
+body.dark .theme-toggle:hover {
+    background: #fdcb6e;
+    color: #2d1b3d;
+    box-shadow: 4px 4px 0px #fd79a8;
+}
+
+body.dark code {
+    background: #4a3660;
+    color: #ffeaa7;
+}
+
+body.dark footer {
+    color: #7f6b96 !important;
+}
+
+body.dark .form-group label {
+    color: #c4b5fd;
+}
+
+body.dark .form-group input[type="text"] {
+    background: #4a3660;
+    color: #e8e0f0;
+    border-color: #6c5ce7;
+}
+
+body.dark .form-group input[type="text"]:focus {
+    border-color: #fd79a8;
+    box-shadow: 4px 4px 0px #6c5ce7;
+}
+
+body.dark .form-group input[type="text"]::placeholder {
+    color: #7f6b96;
+}
+
+body.dark .btn-submit {
+    background: #fd79a8;
+    border-color: #fd79a8;
+}
+
+body.dark .btn-submit:hover {
+    background: #c4b5fd;
+    border-color: #c4b5fd;
+    color: #2d1b3d;
+    box-shadow: 4px 4px 0px #fd79a8;
+}
+
+/* ---------- ICONS ---------- */
+.icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.icon-footer {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
+
+.icon-dark {
+    display: none;
+}
+
+body.dark .icon-light {
+    display: none;
+}
+
+body.dark .icon-dark {
+    display: inline;
+}
