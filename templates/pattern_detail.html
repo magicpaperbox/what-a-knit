@@ -55,10 +55,16 @@
     {% endif %}
 </div>
 
-<button class="btn-delete" onclick="openDeleteModal()">
-    <img src="/static/icons/frog.png" alt="Frog" style="width: 24px; vertical-align: middle; margin-right: 8px;"> Frog
-    project
-</button>
+<div class="action-buttons">
+    <button class="btn-delete" onclick="openDeleteModal()">
+        <img src="/static/icons/frog.png" alt="Frog" style="width: 24px; vertical-align: middle; margin-right: 8px;">
+        Frog
+        project
+    </button>
+    <a href="/pattern/{{ pattern.id }}/edit" class="btn-submit">
+        ✏️ Edit project
+    </a>
+</div>
 
 <!-- CUSTOM MODAL -->
 <div id="deleteModal" class="modal-overlay">

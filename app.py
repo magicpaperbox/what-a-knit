@@ -86,5 +86,32 @@ def delete_pattern(pattern_id):
     db.session.commit()
     return redirect('/projects')
 
+@app.route('/pattern/<int:pattern_id>/edit', methods=['GET', 'POST'])
+def edit_pattern(pattern_id):
+    pattern = db.get_or_404(Pattern, pattern_id)
+    if request.method == 'POST':
+        pattern.name = request.form['name']
+        pattern.type = request.form.get('type')
+        pattern.subtype = request.form.get('subtype')
+        pattern.tool = request.form.get('tool')
+        pattern.needle_size = request.form.get('needle_size')
+        pattern.skeins = request.form.get('skeins')
+        pattern.skeins_needed = request.form.get('skeins_needed', type=int)
+        pattern.pattern_language = request.form.get('pattern_language')
+        pattern.designer = request.form.get('designer')
+        pattern.yarn_bought = request.form.get('yarn_bought')
+        pattern.difficulty = None
+        pattern.status = 'not started'
+        pattern.completion = 0
+        pattern.rating = None
+        pattern.notes = request.form.get('notes')
+        db.session.commit()
+        return redirect(f'/pattern/{pattern.id}')
+    return render_template('edit_pattern.html', pattern=pattern)
+
+@app.route('/pattern/<int:pattern_id>/edit', methods=['GET'])
+def search_by_needle_size(needle_size: str, wanted_size: str):
+    filter(Pattern.needle_size.contains(wanted_size))
+
 if __name__ == '__main__':
     app.run(debug=True)

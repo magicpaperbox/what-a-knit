@@ -225,7 +225,7 @@ code {
     font-family: Fredoka, sans-serif;
     font-size: 18px;
     font-weight: bold;
-    color: #fff;
+    color: #fff !important;
     padding: 12px 32px;
     margin-top: 10px;
     background: #e84393;
@@ -246,11 +246,11 @@ code {
 .btn-delete {
     display: inline-block;
     font-family: Fredoka, sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     color: #fff;
-    padding: 10px 24px;
-    margin-top: 16px;
+    padding: 12px 32px;
+    margin-top: 10px;
     background: #b2675e;
     border: 3px solid #b2675e;
     border-radius: 25px;
@@ -263,6 +263,20 @@ code {
     border-color: #d63031;
     transform: translateY(-2px);
     box-shadow: 4px 4px 0px #fdcb6e;
+}
+
+/* ---------- ACTION BUTTONS CONTAINER (New) ---------- */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.action-buttons .btn-submit,
+.action-buttons .btn-delete {
+    margin-top: 0;
+    /* Let flex gap handle spacing */
 }
 
 /* ---------- CUSTOM MODAL ---------- */
