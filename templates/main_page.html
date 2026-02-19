@@ -40,7 +40,7 @@
     <div class="section">
     <h2>Your projects:</h2>
         {% for pattern in patterns %}
-        <h3><a href="/pattern/{{ loop.index0 }}">{{ pattern.name }}</a></h3>
+        <h3><a href="/pattern/{{ pattern.id }}">{{ pattern.name }}</a></h3>
         {% endfor %}
     </div>
 
