@@ -173,6 +173,37 @@ code {
     font-style: italic;
 }
 
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: Fredoka, sans-serif;
+    font-size: 16px;
+    border: 3px solid #badc58;
+    border-radius: 12px;
+    background: #fff;
+    color: #3a3a3a;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e84393' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+.form-group select:focus {
+    border-color: #e84393;
+    box-shadow: 4px 4px 0px #fdcb6e;
+}
+
+.form-group select option {
+    font-family: Fredoka, sans-serif;
+    padding: 8px;
+}
+
 .btn-submit {
     display: inline-block;
     font-family: Fredoka, sans-serif;
@@ -312,6 +343,23 @@ body.dark .form-group input[type="text"]:focus {
 
 body.dark .form-group input[type="text"]::placeholder {
     color: #7f6b96;
+}
+
+body.dark .form-group select {
+    background-color: #4a3660;
+    color: #e8e0f0;
+    border-color: #6c5ce7;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fd79a8' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+}
+
+body.dark .form-group select:focus {
+    border-color: #fd79a8;
+    box-shadow: 4px 4px 0px #6c5ce7;
+}
+
+body.dark .form-group select option {
+    background: #4a3660;
+    color: #e8e0f0;
 }
 
 body.dark .btn-submit {
