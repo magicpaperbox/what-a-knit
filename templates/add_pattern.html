@@ -7,6 +7,7 @@
             <label for="name">Pattern name:</label>
             <input type="text" id="name" name="name" placeholder="pattern name">
         </div>
+
         <div class="form-group">
             <label for="type">Category:</label>
             <select id="type" name="type">
@@ -27,9 +28,12 @@
                 <option value="plushie">plushie</option>
             </select>
         </div>
+
         <div class="form-group">
             <label for="subtype">Subcategory:</label>
-            <input type="text" id="subtype" name="subtype" placeholder="e.g. raglan, heel flap">
+            <select id="subtype" name="subtype">
+                <option value="" disabled selected hidden>select category first</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="notes">Notes:</label>
