@@ -79,5 +79,12 @@ def add_pattern():
         return redirect(f'/pattern/{new_pattern.id}')
     return render_template('add_pattern.html')
 
+@app.route('/pattern/<int:pattern_id>/delete', methods=['POST'])
+def delete_pattern(pattern_id):
+    pattern = db.get_or_404(Pattern, pattern_id)
+    db.session.delete(pattern)
+    db.session.commit()
+    return redirect('/projects')
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -67,3 +67,21 @@ if (typeSelect) {
         }
     });
 }
+
+// ========== DELETE MODAL ==========
+function openDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    if (modal) modal.style.display = 'flex';
+}
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    if (modal) modal.style.display = 'none';
+}
+// Close modal if clicking outside the content box
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('deleteModal');
+    // Check if modal exists
+    if (modal && event.target === modal) {
+        closeDeleteModal();
+    }
+});

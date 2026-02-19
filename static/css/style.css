@@ -49,6 +49,16 @@ h2 {
     color: #6c5ce7;
     font-size: 26px;
     margin-top: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-header {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 h3 {
@@ -230,6 +240,153 @@ code {
     border-color: #6c5ce7;
     transform: translateY(-2px);
     box-shadow: 4px 4px 0px #badc58;
+}
+
+/* ---------- DELETE BUTTON ---------- */
+.btn-delete {
+    display: inline-block;
+    font-family: Fredoka, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    padding: 10px 24px;
+    margin-top: 16px;
+    background: #b2675e;
+    border: 3px solid #b2675e;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-delete:hover {
+    background: #d63031;
+    border-color: #d63031;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px #fdcb6e;
+}
+
+/* ---------- CUSTOM MODAL ---------- */
+.modal-overlay {
+    display: none;
+    /* hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(45, 27, 61, 0.7);
+    /* dark overlay */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    border: 4px solid #e84393;
+    box-shadow: 8px 8px 0px #fdcb6e;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #6c5ce7;
+}
+
+.modal-content p {
+    font-size: 18px;
+    color: #3a3a3a;
+    margin-bottom: 24px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.btn-cancel {
+    background: #dfe6e9;
+    color: #636e72;
+    border: 3px solid #b2bec3;
+    border-radius: 25px;
+    padding: 10px 24px;
+    font-family: Fredoka, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background: #b2bec3;
+    color: #2d3436;
+}
+
+.btn-confirm-delete {
+    background: #d63031;
+    color: #fff;
+    border: 3px solid #d63031;
+    border-radius: 25px;
+    padding: 10px 24px;
+    font-family: Fredoka, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-confirm-delete:hover {
+    background: #ff7675;
+    border-color: #ff7675;
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0px #fab1a0;
+}
+
+/* Modal Dark Mode */
+body.dark .modal-content {
+    background: #3d2b50;
+    border-color: #fd79a8;
+    box-shadow: 8px 8px 0px #6c5ce7;
+}
+
+body.dark .modal-content h3 {
+    color: #fd79a8;
+}
+
+body.dark .modal-content p {
+    color: #e8e0f0;
+}
+
+body.dark .btn-cancel {
+    background: #2d1b3d;
+    border-color: #a29bfe;
+    color: #a29bfe;
+}
+
+body.dark .btn-cancel:hover {
+    background: #a29bfe;
+    color: #2d1b3d;
 }
 
 /* ---------- DARK MODE TOGGLE ---------- */
