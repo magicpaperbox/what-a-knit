@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'AmaticSC';
     src: url('/static/fonts/AmaticSC.ttf');
@@ -149,7 +148,8 @@ code {
     font-size: 17px;
 }
 
-.form-group input[type="text"] {
+.form-group input[type="text"],
+.form-group input[type="number"] {
     width: 100%;
     padding: 12px 16px;
     font-family: Fredoka, sans-serif;
@@ -163,12 +163,14 @@ code {
     box-sizing: border-box;
 }
 
-.form-group input[type="text"]:focus {
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus {
     border-color: #e84393;
     box-shadow: 4px 4px 0px #fdcb6e;
 }
 
-.form-group input[type="text"]::placeholder {
+.form-group input[type="text"]::placeholder,
+.form-group input[type="number"]::placeholder {
     color: #ccc;
     font-style: italic;
 }
@@ -330,18 +332,21 @@ body.dark .form-group label {
     color: #c4b5fd;
 }
 
-body.dark .form-group input[type="text"] {
+body.dark .form-group input[type="text"],
+body.dark .form-group input[type="number"] {
     background: #4a3660;
     color: #e8e0f0;
     border-color: #6c5ce7;
 }
 
-body.dark .form-group input[type="text"]:focus {
+body.dark .form-group input[type="text"]:focus,
+body.dark .form-group input[type="number"]:focus {
     border-color: #fd79a8;
     box-shadow: 4px 4px 0px #6c5ce7;
 }
 
-body.dark .form-group input[type="text"]::placeholder {
+body.dark .form-group input[type="text"]::placeholder,
+body.dark .form-group input[type="number"]::placeholder {
     color: #7f6b96;
 }
 

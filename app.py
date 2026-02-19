@@ -13,14 +13,17 @@ class Pattern(db.Model):
     subtype = db.Column(db.String(50))
     tool = db.Column(db.String(20))
     needle_size = db.Column(db.String(20))
-    designer = db.Column(db.String(50))
+    skeins = db.Column(db.String(20))
+    skeins_needed = db.Column(db.Integer)
     language = db.Column(db.String(50))
-    difficulty = db.Column(db.Integer)
+    designer = db.Column(db.String(50))
     yarn_bought = db.Column(db.String(3))
+    difficulty = db.Column(db.Integer)
     status = db.Column(db.String(50))
     completion = db.Column(db.Integer)
     rating = db.Column(db.Integer)
     notes = db.Column(db.String(500))
+
 
 # patterns=[
 #     {
@@ -86,14 +89,18 @@ def main_page():
             {'color': 'Niebieska', 'weight': 150},
             {'color': 'Zielona', 'weight': 200}
         ],
-        message='Witaj w świecie Jinja2!',
-        patterns=Pattern.query.all(), #give me all records from table - list[Objects]
     )
 
 @app.route('/pattern/<int:pattern_id>')
 def pattern_detail(pattern_id):
     pattern = db.get_or_404(Pattern, pattern_id)
     return render_template('pattern_detail.html', pattern=pattern)
+
+
+@app.route('/projects')
+def projects():
+    patterns=Pattern.query.all() #give me all records from table - list[Objects]
+    return render_template('projects.html', patterns=patterns)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_pattern():
@@ -102,15 +109,17 @@ def add_pattern():
             name=request.form['name'],
             type=request.form['type'],
             subtype=request.form['subtype'],
-            tool='needles',
-            needle_size='2.5mm',
-            yarn_bought=False,
+            tool=request.form['tool'],
+            needle_size=request.form['needle_size'],
+            skeins=request.form['skeins'],
+            skeins_needed=request.form.get('skeins_needed', type=int),
+            language=request.form['language'],
+            designer=request.form['designer'],
+            yarn_bought=request.form['yarn_bought'],
             difficulty=None,
             status='not started',
             completion=0,
             rating=None,
-            language='polish',
-            designer='Knitted moments',
             notes=request.form['notes']
         )
         db.session.add(new_pattern)

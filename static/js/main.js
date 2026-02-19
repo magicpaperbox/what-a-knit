@@ -18,7 +18,6 @@ if (saved === 'dark') {
 }
 
 
-
 const subcategories = {
     "sweater": ["raglan", "yoke", "set-in sleeve", "top-down", "bottom-up", "flat", "steek"],
     "cardigan": ["raglan", "yoke", "set-in sleeve", "top-down", "bottom-up", "flat", "steek"],
