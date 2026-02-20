@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Chart creator (SVG)</h3>
+
+<div class="chart-row">
+  <div class="chart-inputs-group">
+    <label>Rows: <input id="rows" type="number" min="1" max="200" value="12"></label>
+    <label>Columns: <input id="columns" type="number" min="1" max="200" value="12"></label>
+    <label>Box size (px): <input id="cellSize" type="number" min="10" max="80" value="32"></label>
+  </div>
+  <button id="build" class="btn-chart">Create</button>
+</div>
+<div class="chart-stage">
+  <svg id="chart" class="chart-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+{% endblock %}

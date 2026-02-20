@@ -3,6 +3,7 @@ from flask import Flask
 from extensions import db
 from modules.home.api import home_api
 from modules.projects.api import projects_api
+from modules.charts.charts import charts_api
 
 def create_app():
     # Calculate absolute paths to templates, static folder, and database
@@ -23,6 +24,7 @@ def create_app():
     # Register Blueprints
     app.register_blueprint(home_api)
     app.register_blueprint(projects_api)
+    app.register_blueprint(charts_api)
     
     with app.app_context():
         # Import models to ensure they are registered with SQLAlchemy

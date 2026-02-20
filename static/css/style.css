@@ -579,3 +579,111 @@ body.dark .icon-light {
 body.dark .icon-dark {
     display: inline;
 }
+
+.chart-row {
+    font-family: Fredoka, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding: 20px 30px;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    background: #fd79a8;
+    border: 3px solid #e84393;
+    border-radius: 30px;
+}
+
+.chart-inputs-group {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.chart-row input[type="text"],
+.chart-row input[type="number"] {
+    padding: 6px 12px;
+    font-family: Fredoka, sans-serif;
+    font-size: 16px;
+    border: 3px solid #badc58;
+    border-radius: 12px;
+    background: #fff;
+    color: #3a3a3a;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 80px;
+}
+
+.chart-row input[type="text"]:focus,
+.chart-row input[type="number"]:focus {
+    border-color: #e84393;
+    box-shadow: 4px 4px 0px #fdcb6e;
+}
+
+body.dark .chart-row input[type="text"],
+body.dark .chart-row input[type="number"] {
+    background: #4a3660;
+    color: #e8e0f0;
+    border-color: #6c5ce7;
+}
+
+body.dark .chart-row input[type="text"]:focus,
+body.dark .chart-row input[type="number"]:focus {
+    border-color: #fd79a8;
+    box-shadow: 4px 4px 0px #6c5ce7;
+}
+
+body.dark .chart-row input[type="text"]::placeholder,
+body.dark .chart-row input[type="number"]::placeholder {
+    color: #7f6b96;
+}
+
+body.dark .chart-row select {
+    background-color: #4a3660;
+    color: #e8e0f0;
+    border-color: #6c5ce7;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fd79a8' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+}
+
+
+
+
+.btn-chart {
+    color: #6c5ce7;
+    font-family: Fredoka, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 auto;
+    padding: 8px 20px;
+    background: #fdcb6e;
+    border-radius: 25px;
+    border: 3px solid #e84393;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+.chart-stage {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 12px;
+    display: inline-block;
+    background: #fff;
+}
+
+.btn-chart:hover {
+    color: #fff;
+    background: #6c5ce7;
+    border-color: #6c5ce7;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px #badc58;
+}
+
+.chart-svg {
+    display: block;
+}
