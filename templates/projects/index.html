@@ -3,7 +3,7 @@
 <div class="section">
     <h2>Your projects</h2>
     {% for project in projects %}
-    <h3><a href="{{ url_for('projects.detail', project_id=project.id) }}">{{ project.name }}</a></h3>
+    <h3><a href="/projects/{{ project.id }}">{{ project.name }}</a></h3>
     {% endfor %}
 </div>
 {% endblock %}

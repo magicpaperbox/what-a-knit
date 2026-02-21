@@ -1,18 +1,18 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, url_for
 from extensions import db
 from models import Project
 
-projects_api = Blueprint('projects', __name__)
+projects_api = Blueprint('projects', __name__, url_prefix="/projects")
 
-@projects_api.route('/projects')
+@projects_api.route('')
 def index():
     projects = Project.query.all()
-    return render_template('project/index.html', projects=projects)
+    return render_template('projects/index.html', projects=projects)
 
-@projects_api.route('/project/<int:project_id>')
-def detail(project_id):
+@projects_api.route('/<int:project_id>')
+def details(project_id: int):
     project = db.get_or_404(Project, project_id)
-    return render_template('project/detail.html', project=project)
+    return render_template('projects/details.html', project=project)
 
 @projects_api.route('/add', methods=['GET', 'POST'])
 def add():
@@ -36,17 +36,17 @@ def add():
         )
         db.session.add(new_project)
         db.session.commit()
-        return redirect(f'/project/{new_project.id}')
-    return render_template('project/add.html')
+        return redirect(f"/projects/{new_project.id}")
+    return render_template('projects/add.html')
 
-@projects_api.route('/project/<int:project_id>/delete', methods=['POST'])
+@projects_api.route('/<int:project_id>/delete', methods=['POST'])
 def delete(project_id):
     project = db.get_or_404(Project, project_id)
     db.session.delete(project)
     db.session.commit()
-    return redirect('/projects')
+    return redirect("/projects")
 
-@projects_api.route('/project/<int:project_id>/edit', methods=['GET', 'POST'])
+@projects_api.route('/<int:project_id>/edit', methods=['GET', 'POST'])
 def edit(project_id):
     project = db.get_or_404(Project, project_id)
     if request.method == 'POST':
@@ -67,4 +67,4 @@ def edit(project_id):
         project.notes = request.form.get('notes')
         db.session.commit()
         return redirect(f'/project/{project.id}')
-    return render_template('project/edit.html', project=project)
+    return render_template('projects/edit.html', project=project)

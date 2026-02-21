@@ -3,7 +3,7 @@
 <div class="section">
     <h2><img src="/static/icons/needles.png" class="icon-header" alt="Needle"> Edit project</h2>
 
-    <form method="POST" action="{{ url_for('projects.edit', project_id=project.id) }}">
+    <form method="POST" action="/projects/{{ project.id }}/edit">
 
         <div class="form-group">
             <label for="name">Project name:</label>

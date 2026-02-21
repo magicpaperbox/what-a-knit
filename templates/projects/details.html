@@ -61,7 +61,7 @@
         Frog
         project
     </button>
-    <a href="{{ url_for('projects.edit', project_id=project.id) }}" class="btn-submit">
+    <a href="/projects/{{ project.id }}/edit" class="btn-submit">
         ✏️ Edit project
     </a>
 </div>
@@ -75,8 +75,7 @@
         <div class="modal-buttons">
             <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
 
-            <form method="POST" action="{{ url_for('projects.delete', project_id=project.id) }}"
-                style="display:inline;">
+            <form method="POST" action="/projects/{{ project.id }}/delete" style="display:inline;">
                 <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
             </form>
         </div>
