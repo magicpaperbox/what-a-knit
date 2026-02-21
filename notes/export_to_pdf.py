@@ -12,7 +12,7 @@ except OSError as e:
     print(f"Error! Cannot fint path to: {PATH_TO_WKHTMLTOPDF}")
     exit(1)
 
-NOTES_DIR = ''
+NOTES_DIR = '.'
 
 print("Converting to PDF...\n")
 
@@ -24,7 +24,11 @@ for filename in os.listdir(NOTES_DIR):
     if filename.endswith(".md"):
         # Przygotuj dwie sciezki: wejsciowa dla starej i wyjsciowa dla nowego PDFa
         md_file_path = os.path.join(NOTES_DIR, filename)
-        pdf_file_path = os.path.join(NOTES_DIR, filename.replace('.md', '.pdf'))
+        pdf_file_path = os.path.join(NOTES_DIR, "pdfs", filename.replace('.md', '.pdf'))
+
+        if os.path.exists(pdf_file_path):
+            print(f"Skipping - {pdf_file_path} - already exists.")
+            continue
         
         print(f"🔎 Converting {filename} to PDF...")
         

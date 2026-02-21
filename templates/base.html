@@ -11,11 +11,11 @@
 <body>
     <h1><a href="/">What a knit!</a></h1>
     <nav>
-        <a href="{{ url_for('projects.index') }}"><img src="/static/icons/projects.png" class="icon" alt="projects">
+        <a href="/projects"><img src="/static/icons/projects.png" class="icon" alt="projects">
             Your projects</a>
-        <a href="{{ url_for('projects.add') }}"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Create
+        <a href="/projects/add"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Create
             project</a>
-        <a href="{{ url_for('charts.chart') }}"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Create
+        <a href="/charts"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Create
             chart</a>
         <button class="theme-toggle" onclick="toggleTheme()">
             <img src="/static/icons/moon.png" class="icon icon-light" alt="dark mode">
