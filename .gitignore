@@ -2,3 +2,4 @@
 .venv/
 instance/
 notes/pdfs
+__pycache__

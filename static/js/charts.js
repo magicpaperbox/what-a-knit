@@ -5,8 +5,8 @@ function buildGridSvg(rows, columns, cellSize) {
   const width = columns * cellSize;
   const height = rows * cellSize;
 
-  svg.setAttribute("width", width);
-  svg.setAttribute("height", height);
+  svg.setAttribute("width", width.toString());
+  svg.setAttribute("height", height.toString());
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
   svg.innerHTML = "";
@@ -19,10 +19,10 @@ function buildGridSvg(rows, columns, cellSize) {
   for (let c = 0; c <= columns; c++) {
     const x = c * cellSize;
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", x);
-    line.setAttribute("y1", 0);
-    line.setAttribute("x2", x);
-    line.setAttribute("y2", height);
+    line.setAttribute("x1", x.toString());
+    line.setAttribute("y1", "0");
+    line.setAttribute("x2", x.toString());
+    line.setAttribute("y2", height.toString());
     gridGroup.appendChild(line);
   }
 
