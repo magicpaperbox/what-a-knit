@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from core.db import get_db
+from infra.db import get_db
 from modules.projects.domain import Project
 
 

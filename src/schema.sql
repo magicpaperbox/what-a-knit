@@ -16,3 +16,28 @@ CREATE TABLE IF NOT EXISTS project (
     rating INTEGER,
     notes VARCHAR(500)
 );
+
+CREATE TABLE IF NOT EXISTS yarn (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    brand VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    color_shade VARCHAR(100) NOT NULL,
+    weight_category VARCHAR(20) NOT NULL,
+    full_weight_grams INTEGER NOT NULL,
+    full_length_meters REAL NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS yarn_fiber (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    yarn_id INTEGER NOT NULL,
+    fiber_type VARCHAR(20) NOT NULL,
+    percentage INTEGER NOT NULL,
+    FOREIGN KEY (yarn_id) REFERENCES yarn(id)
+);
+
+CREATE TABLE IF NOT EXISTS skein (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    yarn_id INTEGER NOT NULL,
+    current_weight_grams INTEGER NOT NULL,
+    FOREIGN KEY (yarn_id) REFERENCES yarn(id)
+);

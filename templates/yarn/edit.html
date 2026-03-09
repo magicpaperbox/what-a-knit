@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="section">
+    <h2><img src="/static/icons/yarn_ball.png" class="icon-header" alt="Yarn"> Edit yarn</h2>
+
+    {% if error %}
+    <div class="error-message" style="color: #e74c3c; background: #fdeaea; padding: 10px; border-radius: 8px; margin-bottom: 16px;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% set y = yarn %}
+    {% set f = form %}
+    <form method="POST" action="/yarn/{{ y.id.value }}/edit">
+        <div class="form-group">
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand" required
+                value="{{ f.brand if f else y.brand }}">
+        </div>
+
+        <div class="form-group">
+            <label for="name">Yarn name:</label>
+            <input type="text" id="name" name="name" required
+                value="{{ f.name if f else y.name }}">
+        </div>
+
+        <div class="form-group">
+            <label for="color_shade">Color / shade:</label>
+            <input type="text" id="color_shade" name="color_shade" required
+                value="{{ f.color_shade if f else y.color_shade }}">
+        </div>
+
+        <div class="form-group">
+            <label for="weight_category">Weight category:</label>
+            <select id="weight_category" name="weight_category" required>
+                <option value="" disabled hidden>select</option>
+                {% set selected_cat = f.weight_category if f else y.weight_category.name %}
+                {% for cat in weight_categories %}
+                <option value="{{ cat.name }}" {% if selected_cat == cat.name %}selected{% endif %}>
+                    {{ cat.value }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="full_weight">Full skein weight (g):</label>
+            <input type="number" id="full_weight" name="full_weight" min="1" required
+                value="{{ f.full_weight if f else y.full_weight.grams }}">
+        </div>
+
+        <div class="form-group">
+            <label for="full_length">Full skein length (m):</label>
+            <input type="number" id="full_length" name="full_length" min="1" step="0.1" required
+                value="{{ f.full_length if f else y.full_length.value }}">
+        </div>
+
+        <!-- Composition -->
+        <div class="form-group">
+            <label>Composition:</label>
+            <div id="fiber-rows">
+                {% if f %}
+                    {% for ft in f.getlist('fiber_type[]') %}
+                    <div class="fiber-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+                        <select name="fiber_type[]">
+                            <option value="" disabled hidden>fiber type</option>
+                            {% for ftype in fiber_types %}
+                            <option value="{{ ftype.name }}" {% if ft == ftype.name %}selected{% endif %}>
+                                {{ ftype.value }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="percentage[]" min="1" max="100" placeholder="%"
+                            style="width: 80px;" value="{{ f.getlist('percentage[]')[loop.index0] }}">
+                        <button type="button" onclick="this.parentElement.remove()" class="btn-delete"
+                            style="padding: 4px 8px; font-size: 0.9em;">x</button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    {% for fiber in y.composition %}
+                    <div class="fiber-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+                        <select name="fiber_type[]">
+                            <option value="" disabled hidden>fiber type</option>
+                            {% for ftype in fiber_types %}
+                            <option value="{{ ftype.name }}" {% if fiber.fiber_type.name == ftype.name %}selected{% endif %}>
+                                {{ ftype.value }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="percentage[]" min="1" max="100" placeholder="%"
+                            style="width: 80px;" value="{{ fiber.percentage }}">
+                        <button type="button" onclick="this.parentElement.remove()" class="btn-delete"
+                            style="padding: 4px 8px; font-size: 0.9em;">x</button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="button" onclick="addFiberRow()" class="btn-submit"
+                style="padding: 4px 12px; font-size: 0.9em; margin-top: 4px;">
+                + Add fiber
+            </button>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
+                style="width: 24px; vertical-align: middle; margin-right: 8px;">
+            Save changes
+        </button>
+    </form>
+</div>
+
+<script>
+function addFiberRow() {
+    const container = document.getElementById('fiber-rows');
+    const row = document.createElement('div');
+    row.className = 'fiber-row';
+    row.style = 'display: flex; gap: 10px; margin-bottom: 8px; align-items: center;';
+    row.innerHTML = `
+        <select name="fiber_type[]">
+            <option value="" disabled selected hidden>fiber type</option>
+            {% for ftype in fiber_types %}
+            <option value="{{ ftype.name }}">{{ ftype.value }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="percentage[]" min="1" max="100" placeholder="%" style="width: 80px;">
+        <button type="button" onclick="this.parentElement.remove()" class="btn-delete"
+            style="padding: 4px 8px; font-size: 0.9em;">x</button>
+    `;
+    container.appendChild(row);
+}
+</script>
+{% endblock %}

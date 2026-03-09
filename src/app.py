@@ -3,7 +3,8 @@ from flask import Flask
 from modules.home.api import home_api
 from modules.projects.api import projects_api
 from modules.charts.charts import charts_api
-import core.db
+from modules.yarn.api import yarn_api
+import infra.db
 
 def create_app():
     # Calculate absolute paths to templates, static folder, and database
@@ -18,16 +19,17 @@ def create_app():
     app.config['DATABASE_PATH'] = db_path
     
     # Inicjujemy nasz moduł bazy danych, żeby wiedział, że ma zamykać połączenie po HTTP
-    core.db.init_app(app)
+    infra.db.init_app(app)
     
     # Register Blueprints
     app.register_blueprint(home_api)
     app.register_blueprint(projects_api)
     app.register_blueprint(charts_api)
+    app.register_blueprint(yarn_api)
     
     with app.app_context():
         # Tworzy schemat bazy, jeśli nie istnieje (zastępuje wywołanie SQLAlchemy)
-        core.db.init_db()
+        infra.db.init_db()
     
     return app
 
