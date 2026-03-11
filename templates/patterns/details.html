@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ pattern.name }}</h2>
+<div class="section">
+    <p><strong>Category:</strong> {{ pattern.category.value }}</p>
+
+    {% if pattern.subcategory %}
+    <p><strong>Subcategory:</strong> {{ pattern.subcategory }}</p>
+    {% endif %}
+
+    {% if pattern.tool %}
+    <p><strong>Tool:</strong> {{ pattern.tool }}</p>
+    {% endif %}
+
+    {% if pattern.gauge %}
+    <p><strong>Gauge:</strong> {{ pattern.gauge }}</p>
+    {% endif %}
+
+    {% if pattern.tool_size %}
+    <p><strong>Tool size:</strong> {{ pattern.tool_size }}</p>
+    {% endif %}
+
+    {% if pattern.yarn_type %}
+    <p><strong>Yarn type:</strong> {{ pattern.yarn_type }}</p>
+    {% endif %}
+
+    {% if pattern.skeins_needed %}
+    <p><strong>Skeins needed:</strong> {{ pattern.skeins_needed }}</p>
+    {% endif %}
+
+    {% if pattern.pattern_language %}
+    <p><strong>Pattern language:</strong> {{ pattern.pattern_language }}</p>
+    {% endif %}
+
+    {% if pattern.designer %}
+    <p><strong>Designer:</strong> {{ pattern.designer }}</p>
+    {% endif %}
+
+    {% if pattern.difficulty %}
+    <p><strong>Difficulty level:</strong> {{ pattern.difficulty }}</p>
+    {% endif %}
+</div>
+
+<div class="action-buttons">
+    <button class="btn-delete" onclick="openDeleteModal()">
+        <img src="/static/icons/frog.png" alt="Frog" style="width: 24px; vertical-align: middle; margin-right: 8px;">
+        Frog
+        pattern
+    </button>
+    <a href="/patterns/{{ pattern.id.value }}/edit" class="btn-submit">
+        ✏️ Edit pattern
+    </a>
+</div>
+
+<!-- CUSTOM MODAL -->
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>🐸 Frog it?</h3>
+        <p>Are you sure you want to delete <strong>{{ pattern.name }}</strong>?<br>This cannot be undone!</p>
+
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
+
+            <form method="POST" action="/patterns/{{ pattern.id.value }}/delete" style="display:inline;">
+                <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

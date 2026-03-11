@@ -5,10 +5,35 @@
 Aplikacja jest podzielona na warstwy — każda ma swoją odpowiedzialność.
 Żądanie "przepływa" przez nie od góry do dołu, a odpowiedź wraca w górę:
 
-```
-Przeglądarka → API → Service → Repository → Baza danych
-                                                  ↓
-Przeglądarka ← API ← Service ← Repository ← dane z bazy
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Przeglądarka
+    participant API as API (Kelner)
+    participant Mappers as Mappers (Tłumacz)
+    participant Service as Service (Szef Kuchni)
+    participant Domain as Domain (Zasady)
+    participant Repo as Repository (Magazynier)
+    participant DB as SQLite (Baza Danych)
+    participant TPL as Templates (Szablony)
+
+    User->>API: Wpisuje adres URL w przeglądarkę
+    API->>Mappers: Przekazuje surowe pola formularza (opcjonalne)
+    Mappers-->>API: Zwraca "czysty" i złożony Obiekt
+    
+    API->>Service: Prosi o realizację zadania (np. dodaj, wypisz)
+    Service->>Domain: Korzysta z reguł by zweryfikować poprawność danych (validate)
+    
+    Service->>Repo: Prosi magazyn o zapisanie/odczytanie danych
+    Repo->>DB: Strzela natywnym zapytaniem (SQL)
+    DB-->>Repo: Odpowiada surowymi wierszami
+    Repo-->>Service: Tłumaczy wiersze na pytonowskie Obiekty i je oddaje
+    
+    Service-->>API: Zwraca zrealizowane zamówienie (np. listę włóczek)
+    
+    API->>TPL: Przekazuje dane celem podłożenia w szablon
+    TPL-->>API: Tworzy i oddaje gotową, zbudowaną stronę WWW
+    API-->>User: Wyświetla Użytkownikowi wynikową stronę HTML
 ```
 
 ### Analogia restauracyjna:

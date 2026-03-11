@@ -3,109 +3,24 @@
 <div class="section">
     <h2><img src="/static/icons/needles.png" class="icon-header" alt="Needle"> Edit project</h2>
 
-    <form method="POST" action="/projects/{{ project.id }}/edit">
+    <form method="POST" action="/projects/{{ project.id.value }}/edit">
 
         <div class="form-group">
             <label for="name">Project name:</label>
             <input type="text" id="name" name="name" value="{{ project.name }}" required>
         </div>
 
-        <!-- SELECT CATEGORY -->
         <div class="form-group">
-            <label for="type">Category:</label>
-            <select id="type" name="type" required>
-                <option value="" disabled hidden>select</option>
-                <option value="sweater" {% if project.type=='sweater' %}selected{% endif %}>sweater</option>
-                <option value="cardigan" {% if project.type=='cardigan' %}selected{% endif %}>cardigan</option>
-                <option value="blouse" {% if project.type=='blouse' %}selected{% endif %}>blouse</option>
-                <option value="vest" {% if project.type=='vest' %}selected{% endif %}>vest</option>
-                <option value="dress" {% if project.type=='dress' %}selected{% endif %}>dress</option>
-                <option value="skirt" {% if project.type=='skirt' %}selected{% endif %}>skirt</option>
-                <option value="pants" {% if project.type=='pants' %}selected{% endif %}>pants</option>
-                <option value="socks" {% if project.type=='socks' %}selected{% endif %}>socks</option>
-                <option value="gloves" {% if project.type=='gloves' %}selected{% endif %}>gloves</option>
-                <option value="hat" {% if project.type=='hat' %}selected{% endif %}>hat</option>
-                <option value="scarf" {% if project.type=='scarf' %}selected{% endif %}>scarf</option>
-                <option value="bag" {% if project.type=='bag' %}selected{% endif %}>bag</option>
-                <option value="accessories" {% if project.type=='accessories' %}selected{% endif %}>accessories</option>
-                <option value="plushies" {% if project.type=='plushies' %}selected{% endif %}>plushies</option>
-            </select>
+            <label for="my_tool_size">My tool size:</label>
+            <input type="text" id="my_tool_size" name="my_tool_size" value="{{ project.my_tool_size or '' }}"
+                placeholder="e.g. 4.0 mm">
         </div>
 
-        <!-- SELECT SUBCATEGORY -->
-        <!-- Tutaj dodajemy atrybut data-selected, żeby JS wiedział, co wybrać -->
         <div class="form-group">
-            <label for="subtype">Subcategory:</label>
-            <select id="subtype" name="subtype" data-selected="{{ project.subtype }}">
-                <option value="" disabled selected hidden>select category first</option>
-                <option value="{{ project.subtype }}" selected>{{ project.subtype }}</option>
-            </select>
+            <label for="my_gauge">My gauge:</label>
+            <input type="text" id="my_gauge" name="my_gauge" value="{{ project.my_gauge or '' }}"
+                placeholder="e.g. 22 sts x 30 rows">
         </div>
-
-        <!-- SELECT TOOLS -->
-        <div class="form-group">
-            <label for="tool">Tool:</label>
-            <select id="tool" name="tool" required>
-                <option value="" disabled hidden>select</option>
-                <option value="knitting needles" {% if project.tool=='knitting needles' %}selected{% endif %}>knitting
-                    needles</option>
-                <option value="crochet hook" {% if project.tool=='crochet hook' %}selected{% endif %}>crochet hook
-                </option>
-            </select>
-        </div>
-
-        <!-- SELECT TOOL SIZE -->
-        <div class="form-group">
-            <label for="needle_size">Needle/hook size (mm):</label>
-            <input type="number" id="needle_size" name="needle_size" min="0" max="25" step="0.05"
-                value="{{ project.needle_size }}" placeholder="choose size between 0 and 25 mm">
-        </div>
-
-        <!-- SELECT YARN TYPE -->
-        <div class="form-group">
-            <label for="skeins">Yarn name:</label>
-            <input type="text" id="skeins" name="skeins" value="{{ project.skeins or '' }}"
-                placeholder="e.g. Drops Alpaca">
-        </div>
-
-        <!-- SELECT YARN AMOUNT -->
-        <div class="form-group">
-            <label for="skeins_needed">Skeins needed:</label>
-            <input type="number" id="skeins_needed" name="skeins_needed" min="0"
-                value="{{ project.skeins_needed or '' }}" placeholder="0">
-        </div>
-
-        <!-- SELECT HAS PATTERN -->
-        {% set has_pattern = 'yes' if (project.pattern_language or project.designer) else 'no' %}
-        <div class="form-group">
-            <label for="has_pattern">Using a pattern?</label>
-            <select id="has_pattern" name="has_pattern">
-                <option value="" disabled hidden>select</option>
-                <option value="yes" {% if has_pattern=='yes' %}selected{% endif %}>Yes</option>
-                <option value="no" {% if has_pattern=='no' %}selected{% endif %}>No</option>
-            </select>
-        </div>
-
-        <div id="pattern-details" style="display: {{ 'block' if has_pattern == 'yes' else 'none' }};">
-            <div class="form-group">
-                <label for="pattern_language">Pattern language:</label>
-                <select id="pattern_language" name="pattern_language">
-                    <option value="" disabled hidden>select</option>
-                    <option value="polish" {% if project.pattern_language=='polish' %}selected{% endif %}>polish
-                    </option>
-                    <option value="english" {% if project.pattern_language=='english' %}selected{% endif %}>english
-                    </option>
-                    <option value="other" {% if project.pattern_language=='other' %}selected{% endif %}>other</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="designer">Designer:</label>
-                <input type="text" id="designer" name="designer" value="{{ project.designer or '' }}"
-                    placeholder="e.g. Petite Knit">
-            </div>
-        </div>
-
 
         <div class="form-group">
             <label for="yarn_bought">Yarn bought?</label>
@@ -121,6 +36,7 @@
             <input type="text" id="notes" name="notes" value="{{ project.notes or '' }}"
                 placeholder="Any extra notes...">
         </div>
+
         <button type="submit" class="btn-submit">
             <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
                 style="width: 24px; vertical-align: middle; margin-right: 8px;">

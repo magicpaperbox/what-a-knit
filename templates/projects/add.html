@@ -5,94 +5,18 @@
     <form method="POST" action="/projects/add">
         <div class="form-group">
             <label for="name">Project name:</label>
-            <input type="text" id="name" name="name" placeholder="pattern name" required>
+            <input type="text" id="name" name="name" placeholder="project name" required>
         </div>
 
-        <!-- SELECT CATEGORY -->
         <div class="form-group">
-            <label for="type">Category:</label>
-            <select id="type" name="type" required>
-                <option value="" disabled selected hidden>select</option>
-                <option value="sweater">sweater</option>
-                <option value="cardigan">cardigan</option>
-                <option value="blouse">blouse</option>
-                <option value="vest">vest</option>
-                <option value="dress">dress</option>
-                <option value="skirt">skirt</option>
-                <option value="pants">pants</option>
-                <option value="socks">socks</option>
-                <option value="gloves">gloves</option>
-                <option value="hat">hat</option>
-                <option value="scarf">scarf</option>
-                <option value="bag">bag</option>
-                <option value="accessories">accessories</option>
-                <option value="plushies">plushies</option>
-            </select>
+            <label for="my_tool_size">My tool size:</label>
+            <input type="text" id="my_tool_size" name="my_tool_size" placeholder="e.g. 4.0 mm">
         </div>
 
-        <!-- SELECT SUBCATEGORY -->
         <div class="form-group">
-            <label for="subtype">Subcategory:</label>
-            <select id="subtype" name="subtype">
-                <option value="" disabled selected hidden>select category first</option>
-            </select>
+            <label for="my_gauge">My gauge:</label>
+            <input type="text" id="my_gauge" name="my_gauge" placeholder="e.g. 22 sts x 30 rows">
         </div>
-
-        <!-- SELECT TOOLS -->
-        <div class="form-group">
-            <label for="tool">Tool:</label>
-            <select id="tool" name="tool" required>
-                <option value="" disabled selected hidden>select</option>
-                <option value="knitting needles">knitting needles</option>
-                <option value="crochet hook">crochet hook</option>
-            </select>
-        </div>
-
-        <!-- SELECT TOOL SIZE -->
-        <div class="form-group">
-            <label for="needle_size">Needle/hook size (mm):</label>
-            <input type="number" id="needle_size" name="needle_size" min="0" max="25" step="0.05"
-                placeholder="choose size between 0 and 25 mm">
-        </div>
-
-        <!-- SELECT YARN TYPE -->
-        <div class="form-group">
-            <label for="skeins">Yarn name:</label>
-            <input type="text" id="skeins" name="skeins" placeholder="e.g. Drops Alpaca">
-        </div>
-
-        <!-- SELECT YARN AMOUNT -->
-        <div class="form-group">
-            <label for="skeins_needed">Skeins needed:</label>
-            <input type="number" id="skeins_needed" name="skeins_needed" min="0" placeholder="0">
-        </div>
-
-        <!-- SELECT HAS PATTERN -->
-        <div class="form-group">
-            <label for="has_pattern">Using a pattern?</label>
-            <select id="has_pattern" name="has_pattern">
-                <option value="" disabled selected hidden>select</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-            </select>
-        </div>
-        <div id="pattern-details" style="display: none;">
-            <div class="form-group">
-                <label for="pattern_language">Pattern language:</label>
-                <select id="pattern_language" name="pattern_language">
-                    <option value="" disabled selected hidden>select</option>
-                    <option value="polish">polish</option>
-                    <option value="english">english</option>
-                    <option value="other">other</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="designer">Designer:</label>
-                <input type="text" id="designer" name="designer" placeholder="e.g. Petite Knit">
-            </div>
-        </div>
-
 
         <div class="form-group">
             <label for="yarn_bought">Yarn bought?</label>
@@ -107,8 +31,12 @@
             <label for="notes">Notes:</label>
             <input type="text" id="notes" name="notes" placeholder="Any extra notes...">
         </div>
-        <button type="submit" class="btn-submit"><img src="/static/icons/yarn_ball.png" alt="Yarn ball"
-                style="width: 24px; vertical-align: middle"> Add project</button>
+
+        <button type="submit" class="btn-submit">
+            <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
+                style="width: 24px; vertical-align: middle; margin-right: 8px;">
+            Add project
+        </button>
     </form>
 </div>
 {% endblock %}

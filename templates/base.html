@@ -9,20 +9,19 @@
 </head>
 
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <img src="/static/icons/moon.png" class="icon icon-light" alt="dark mode">
+        <img src="/static/icons/sun.png" class="icon icon-dark" alt="light mode">
+    </button>
     <h1><a href="/">What a knit!</a></h1>
     <nav>
+        <a href="/patterns"><img src="/static/icons/patterns.png" class="icon" alt="patterns">
+            Patterns</a>
         <a href="/projects"><img src="/static/icons/projects.png" class="icon" alt="projects">
-            Your projects</a>
-        <a href="/projects/add"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Create
-            project</a>
-        <a href="/yarn"><img src="/static/icons/yarn_ball.png" class="icon" alt="yarn"> Your yarn</a>
-        <a href="/charts"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Create
-            chart</a>
-        <button class="theme-toggle" onclick="toggleTheme()">
-            <img src="/static/icons/moon.png" class="icon icon-light" alt="dark mode">
-            <img src="/static/icons/sun.png" class="icon icon-dark" alt="light mode">
-            <span class="toggle-text">Dark mode</span>
-        </button>
+            Projects</a>
+        <a href="/yarn"><img src="/static/icons/yarn_ball.png" class="icon" alt="yarn"> Yarn</a>
+        <a href="/tools"><img src="/static/icons/needles.png" class="icon" alt="tools"> Tools</a>
+        <a href="/charts"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Charts</a>
     </nav>
     {% block content %}
     {% endblock %}

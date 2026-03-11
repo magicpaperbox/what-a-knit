@@ -1,8 +1,9 @@
 import os
 from flask import Flask
 from modules.home.api import home_api
+from modules.patterns.api import patterns_api
 from modules.projects.api import projects_api
-from modules.charts.charts import charts_api
+from modules.charts.api import charts_api
 from modules.yarn.api import yarn_api
 import infra.db
 
@@ -23,6 +24,7 @@ def create_app():
     
     # Register Blueprints
     app.register_blueprint(home_api)
+    app.register_blueprint(patterns_api)
     app.register_blueprint(projects_api)
     app.register_blueprint(charts_api)
     app.register_blueprint(yarn_api)

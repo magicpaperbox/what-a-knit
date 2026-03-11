@@ -1,16 +1,24 @@
-CREATE TABLE IF NOT EXISTS project (
+CREATE TABLE IF NOT EXISTS pattern (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(100) NOT NULL,
-    type VARCHAR(50),
-    subtype VARCHAR(50),
+    category VARCHAR(50),
     tool VARCHAR(20),
-    needle_size VARCHAR(20),
-    skeins VARCHAR(20),
+    gauge VARCHAR(50),
+    subcategory VARCHAR(50),
+    tool_size VARCHAR(50),
+    yarn_type VARCHAR(20),
     skeins_needed INTEGER,
     pattern_language VARCHAR(50),
     designer VARCHAR(50),
+    difficulty INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS project (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL,
+    my_tool_size VARCHAR(50),
+    my_gauge VARCHAR(50),
     yarn_bought VARCHAR(3),
-    difficulty INTEGER,
     status VARCHAR(50) DEFAULT 'not started',
     completion INTEGER DEFAULT 0,
     rating INTEGER,

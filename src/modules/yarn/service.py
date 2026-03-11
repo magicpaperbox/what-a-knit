@@ -1,4 +1,3 @@
-from modules.units.meters import Meters
 from modules.yarn.domain import Skein, Yarn, YarnId, SkeinId
 from modules.yarn.repository import YarnRepository, SkeinRepository
 
