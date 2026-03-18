@@ -7,14 +7,17 @@
             <label for="name">Pattern name:</label>
             <input type="text" id="name" name="name" placeholder="pattern name" required>
         </div>
-
+        <div class="form-group">
+            <label for="description">Pattern description:</label>
+            <input type="text" id="description" name="description" placeholder="pattern description" required>
+        </div>
         <!-- SELECT CATEGORY -->
         <div class="form-group">
             <label for="category">Category:</label>
             <select id="category" name="category" required>
                 <option value="" disabled selected hidden>select</option>
                 {% for category in pattern_categories %}
-                <option value="{{ category.name }}" {% if form and form.category==category.name %}selected{% endif %}>
+                <option value="{{ category.name }}">
                     {{ category.value }}
                 </option>
                 {% endfor %}
@@ -32,33 +35,14 @@
             </script>
         </div>
 
-        <!-- SELECT TOOLS -->
-        <div class="form-group">
-            <label for="tool">Tool:</label>
-            <select id="tool" name="tool" required>
-                <option value="" disabled selected hidden>select</option>
-                <option value="knitting needles">knitting needles</option>
-                <option value="crochet hook">crochet hook</option>
-            </select>
-        </div>
 
-        <!-- SELECT TOOL SIZE -->
         <div class="form-group">
-            <label for="needle_size">Needle/hook size (mm):</label>
-            <input type="number" id="needle_size" name="needle_size" min="0" max="25" step="0.05"
-                placeholder="choose size between 0 and 25 mm">
-        </div>
-
-        <!-- SELECT YARN TYPE -->
-        <div class="form-group">
-            <label for="skeins">Yarn name:</label>
-            <input type="text" id="skeins" name="skeins" placeholder="e.g. Drops Alpaca">
-        </div>
-
-        <!-- SELECT YARN AMOUNT -->
-        <div class="form-group">
-            <label for="skeins_needed">Skeins needed:</label>
-            <input type="number" id="skeins_needed" name="skeins_needed" min="0" placeholder="0">
+            <label for="gauge_stitches">Gauge stitches:</label>
+            <input type="number" id="gauge_stitches" name="gauge_stitches" min="0" max="100" step="0.5"
+                placeholder="stitches in 10 cm">
+            <label for="gauge_rows">Gauge rows:</label>
+            <input type="number" id="gauge_rows" name="gauge_rows" min="0" max="100" step="0.5"
+                placeholder="rows in 10 cm">
         </div>
 
         <!-- SELECT HAS PATTERN -->
@@ -82,15 +66,23 @@
             </div>
 
             <div class="form-group">
-                <label for="designer">Designer:</label>
-                <input type="text" id="designer" name="designer" placeholder="e.g. Petite Knit">
+                <label for="author">Designer:</label>
+                <input type="text" id="author" name="author" placeholder="e.g. Petite Knit">
+            </div>
+
+            <div class="form-group">
+                <label for="difficulty_level">Difficulty level:</label>
+                <select id="difficulty_level" name="difficulty_level">
+                    <option value="" disabled selected hidden>select</option>
+                    {% for difficulty_level in difficulty_levels %}
+                    <option value="{{ difficulty_level.value }}">
+                        {{ difficulty_level.value }}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="notes">Notes:</label>
-            <input type="text" id="notes" name="notes" placeholder="Any extra notes...">
-        </div>
         <button type="submit" class="btn-submit"><img src="/static/icons/yarn_ball.png" alt="Yarn ball"
                 style="width: 24px; vertical-align: middle"> Add pattern</button>
     </form>

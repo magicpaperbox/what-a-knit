@@ -36,41 +36,71 @@
             </script>
         </div>
 
-        <!-- SELECT TOOLS -->
         <div class="form-group">
-            <label for="tool">Tool:</label>
-            <select id="tool" name="tool" required>
-                <option value="" disabled hidden>select</option>
-                <option value="knitting needles" {% if pattern.tool=='knitting needles' %}selected{% endif %}>knitting
-                    needles</option>
-                <option value="crochet hook" {% if pattern.tool=='crochet hook' %}selected{% endif %}>crochet hook
-                </option>
-            </select>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" value="{{ pattern.description or '' }}"
+                placeholder="Any extra notes...">
         </div>
 
-        <!-- SELECT TOOL SIZE -->
         <div class="form-group">
-            <label for="needle_size">Needle/hook size (mm):</label>
-            <input type="number" id="needle_size" name="needle_size" min="0" max="25" step="0.05"
-                value="{{ pattern.needle_size }}" placeholder="choose size between 0 and 25 mm">
+            <label for="gauge_stitches">Gauge stitches:</label>
+
+            <input
+                value="{{ pattern.target_gauge.stitches if pattern.target_gauge else '' }}"
+                type="number"
+                id="gauge_stitches"
+                name="gauge_stitches"
+                min="0"
+                max="100"
+                step="0.5"
+                placeholder="stitches in 10 cm">
+            <label for="gauge_rows">Gauge rows:</label>
+            <input
+                value="{{ pattern.target_gauge.rows if pattern.target_gauge else '' }}"
+                type="number"
+                id="gauge_rows"
+                name="gauge_rows"
+                min="0"
+                max="100"
+                step="0.5"
+                placeholder="rows in 10 cm">
         </div>
 
-        <!-- SELECT YARN TYPE -->
-        <div class="form-group">
-            <label for="skeins">Yarn name:</label>
-            <input type="text" id="skeins" name="skeins" value="{{ pattern.skeins or '' }}"
-                placeholder="e.g. Drops Alpaca">
-        </div>
-
-        <!-- SELECT YARN AMOUNT -->
-        <div class="form-group">
-            <label for="skeins_needed">Skeins needed:</label>
-            <input type="number" id="skeins_needed" name="skeins_needed" min="0"
-                value="{{ pattern.skeins_needed or '' }}" placeholder="0">
-        </div>
+{#        <!-- SELECT TOOLS -->#}
+{#        <div class="form-group">#}
+{#            <label for="tool">Tool:</label>#}
+{#            <select id="tool" name="tool" required>#}
+{#                <option value="" disabled hidden>select</option>#}
+{#                <option value="knitting needles" {% if pattern.tool=='knitting needles' %}selected{% endif %}>knitting#}
+{#                    needles</option>#}
+{#                <option value="crochet hook" {% if pattern.tool=='crochet hook' %}selected{% endif %}>crochet hook#}
+{#                </option>#}
+{#            </select>#}
+{#        </div>#}
+{##}
+{#        <!-- SELECT TOOL SIZE -->#}
+{#        <div class="form-group">#}
+{#            <label for="needle_size">Needle/hook size (mm):</label>#}
+{#            <input type="number" id="needle_size" name="needle_size" min="0" max="25" step="0.05"#}
+{#                value="{{ pattern.needle_size }}" placeholder="choose size between 0 and 25 mm">#}
+{#        </div>#}
+{##}
+{#        <!-- SELECT YARN TYPE -->#}
+{#        <div class="form-group">#}
+{#            <label for="skeins">Yarn name:</label>#}
+{#            <input type="text" id="skeins" name="skeins" value="{{ pattern.skeins or '' }}"#}
+{#                placeholder="e.g. Drops Alpaca">#}
+{#        </div>#}
+{##}
+{#        <!-- SELECT YARN AMOUNT -->#}
+{#        <div class="form-group">#}
+{#            <label for="skeins_needed">Skeins needed:</label>#}
+{#            <input type="number" id="skeins_needed" name="skeins_needed" min="0"#}
+{#                value="{{ pattern.skeins_needed or '' }}" placeholder="0">#}
+{#        </div>#}
 
         <!-- SELECT HAS PATTERN -->
-        {% set has_pattern = 'yes' if (pattern.pattern_language or pattern.designer) else 'no' %}
+        {% set has_pattern = 'yes' if (pattern.pattern_language or pattern.author) else 'no' %}
         <div class="form-group">
             <label for="has_pattern">Using a pattern?</label>
             <select id="has_pattern" name="has_pattern">
@@ -94,27 +124,40 @@
             </div>
 
             <div class="form-group">
-                <label for="designer">Designer:</label>
-                <input type="text" id="designer" name="designer" value="{{ pattern.designer or '' }}"
+                <label for="author">Designer:</label>
+                <input type="text" id="author" name="author" value="{{ pattern.author or '' }}"
                     placeholder="e.g. Petite Knit">
             </div>
         </div>
 
+    <div class="form-group">
+        <label for="difficulty_level">Difficulty level:</label>
+        <select id="difficulty_level" name="difficulty_level">
+            <option value="" {% if not pattern.difficulty_level %}selected{% endif %}> - </option>
+            {% for difficulty_level in difficulty_levels %}
+            <option value="{{ difficulty_level.value }}" {% if pattern.difficulty_level and pattern.difficulty_level.value==difficulty_level.value %}selected{% endif %}>
+            {{ difficulty_level.value }}
+            </option>
+        {% endfor %}
+        </select>
+    </div>
 
-        <div class="form-group">
-            <label for="yarn_bought">Yarn bought?</label>
-            <select id="yarn_bought" name="yarn_bought">
-                <option value="" disabled hidden>select</option>
-                <option value="yes" {% if pattern.yarn_bought=='yes' %}selected{% endif %}>yes</option>
-                <option value="no" {% if pattern.yarn_bought=='no' %}selected{% endif %}>no</option>
-            </select>
-        </div>
 
-        <div class="form-group">
-            <label for="notes">Notes:</label>
-            <input type="text" id="notes" name="notes" value="{{ pattern.notes or '' }}"
-                placeholder="Any extra notes...">
-        </div>
+
+{#        <div class="form-group">#}
+{#            <label for="yarn_bought">Yarn bought?</label>#}
+{#            <select id="yarn_bought" name="yarn_bought">#}
+{#                <option value="" disabled hidden>select</option>#}
+{#                <option value="yes" {% if pattern.yarn_bought=='yes' %}selected{% endif %}>yes</option>#}
+{#                <option value="no" {% if pattern.yarn_bought=='no' %}selected{% endif %}>no</option>#}
+{#            </select>#}
+{#        </div>#}
+{##}
+{#        <div class="form-group">#}
+{#            <label for="notes">Notes:</label>#}
+{#            <input type="text" id="notes" name="notes" value="{{ pattern.notes or '' }}"#}
+{#                placeholder="Any extra notes...">#}
+{#        </div>#}
         <button type="submit" class="btn-submit">
             <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
                 style="width: 24px; vertical-align: middle; margin-right: 8px;">

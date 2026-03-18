@@ -8,36 +8,29 @@
     <p><strong>Subcategory:</strong> {{ pattern.subcategory }}</p>
     {% endif %}
 
-    {% if pattern.tool %}
-    <p><strong>Tool:</strong> {{ pattern.tool }}</p>
+    {% if pattern.description %}
+    <p><strong>Description:</strong> {{ pattern.description }}</p>
     {% endif %}
 
-    {% if pattern.gauge %}
-    <p><strong>Gauge:</strong> {{ pattern.gauge }}</p>
-    {% endif %}
-
-    {% if pattern.tool_size %}
-    <p><strong>Tool size:</strong> {{ pattern.tool_size }}</p>
-    {% endif %}
-
-    {% if pattern.yarn_type %}
-    <p><strong>Yarn type:</strong> {{ pattern.yarn_type }}</p>
-    {% endif %}
-
-    {% if pattern.skeins_needed %}
-    <p><strong>Skeins needed:</strong> {{ pattern.skeins_needed }}</p>
+    {% if pattern.target_gauge %}
+    <p>
+        <strong>Gauge:</strong>
+        {{ pattern.target_gauge.stitches }} sts /
+        {{ pattern.target_gauge.rows }} rows
+    per {{ pattern.target_gauge.width.value }} x {{ pattern.target_gauge.height.value }} cm
+    </p>
     {% endif %}
 
     {% if pattern.pattern_language %}
     <p><strong>Pattern language:</strong> {{ pattern.pattern_language }}</p>
     {% endif %}
 
-    {% if pattern.designer %}
-    <p><strong>Designer:</strong> {{ pattern.designer }}</p>
+    {% if pattern.author %}
+    <p><strong>Designer:</strong> {{ pattern.author }}</p>
     {% endif %}
 
-    {% if pattern.difficulty %}
-    <p><strong>Difficulty level:</strong> {{ pattern.difficulty }}</p>
+    {% if pattern.difficulty_level %}
+    <p><strong>Difficulty level:</strong> {{ pattern.difficulty_level.value }}</p>
     {% endif %}
 </div>
 

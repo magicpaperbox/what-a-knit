@@ -1,25 +1,34 @@
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, auto, StrEnum
 from typing import Optional
 
+from modules.units.centimeters import Centimeters
+from modules.units.mass import Mass
+from modules.units.meters import Meters
 from modules.yarn.domain import YarnWeightCategory
 
+class PatternDifficultyLevel(StrEnum):
+    BEGINNER = auto()
+    INTERMEDIATE = auto()
+    ADVANCED = auto()
+    EXPERT = auto()
 
 class PatternCategory(Enum):
-    SWEATER = "Sweater"
-    CARDIGAN = "Cardigan"
-    BLOUSE = "Blouse"
-    VEST = "Vest"
-    DRESS = "Dress"
-    SKIRT = "Skirt"
-    PANTS = "Pants"
-    SOCKS = "Socks"
-    GLOVES = "Gloves"
-    HAT = "Hat"
-    SCARF = "Scarf"
-    BAG = "Bag"
-    ACCESSORIES = "Accessories"
-    PLUSHIES = "Plushies"
+    SWEATER = "sweater"
+    CARDIGAN = "cardigan"
+    BLOUSE = "blouse"
+    VEST = "vest"
+    DRESS = "dress"
+    SKIRT = "skirt"
+    PANTS = "pants"
+    SOCKS = "socks"
+    GLOVES = "gloves"
+    HAT = "hat"
+    SCARF = "scarf"
+    BAG = "bag"
+    ACCESSORIES = "accessories"
+    PLUSHIES = "plushies"
+
 
     def subcategories(self) -> list[str]:
         global _SUBCATEGORY_MAPPING
@@ -43,20 +52,37 @@ _SUBCATEGORY_MAPPING = {
 }
 
 @dataclass(frozen=True)
+class Gauge:
+    stitches: float | None
+    rows: float | None
+    width: Centimeters = Centimeters(10.0)
+    height: Centimeters = Centimeters(10.0)
+    #TODO validate stitches or rows are provided
+
+@dataclass(frozen=True)
 class PatternId:
     value: int
+
+@dataclass(frozen=True)
+class PatternRequirements:
+    possible_yarn_weights: list[YarnWeightCategory]
+    allow_multicolor: bool = False
+    total_weight: Optional[Mass] = None
+    total_length: Optional[Meters] = None
 
 @dataclass
 class Pattern:
     id: Optional[PatternId]
     name: str
-    tool: str
-    gauge: str
+    description: str
+    # requirements: PatternRequirements
+
+    target_gauge: Optional[Gauge]
+
     category: PatternCategory
     subcategory: Optional[str]
-    tool_size: Optional[list[str]]
-    yarn_type: Optional[YarnWeightCategory]
-    skeins_needed: Optional[int]
+
     pattern_language: Optional[str]
-    designer: Optional[str]
-    difficulty: Optional[int]
+    author: Optional[str]
+    difficulty_level: Optional[PatternDifficultyLevel]
+    # charts: list[Chart] = field(default_factory=list)
