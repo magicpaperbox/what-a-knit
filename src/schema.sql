@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS pattern (
     subcategory VARCHAR(50),
     pattern_language VARCHAR(50),
     author VARCHAR(50),
-    difficulty_level INTEGER
+    difficulty_level VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS pattern_gauge (

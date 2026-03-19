@@ -11,6 +11,17 @@ def parse_pattern_from_form() -> Pattern:
     else:
         target_gauge = None
     difficulty_level = request.form.get('difficulty_level')
+    has_pattern = request.form.get('has_pattern')
+    if has_pattern == "no":
+        pattern_language=None
+        author=None
+        difficulty_level=None
+    else:
+        pattern_language=request.form.get('pattern_language')
+        author=request.form.get('author')
+        difficulty_level=PatternDifficultyLevel(difficulty_level) if difficulty_level else None
+    subcategory=request.form.get('subcategory') or None
+
     return Pattern(
         id=None,
         name=request.form['name'],
@@ -18,8 +29,8 @@ def parse_pattern_from_form() -> Pattern:
         # requirements=PatternRequirements[request.form.get('requirements')],
         target_gauge=target_gauge,
         category=PatternCategory[request.form['category']],
-        subcategory=request.form.get('subcategory'),
-        pattern_language=request.form.get('pattern_language'),
-        author=request.form.get('author'),
-        difficulty_level=PatternDifficultyLevel(difficulty_level) if difficulty_level else None,
+        subcategory=subcategory,
+        pattern_language=pattern_language,
+        author=author,
+        difficulty_level=difficulty_level,
     )

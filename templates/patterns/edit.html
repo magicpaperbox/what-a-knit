@@ -100,7 +100,7 @@
 {#        </div>#}
 
         <!-- SELECT HAS PATTERN -->
-        {% set has_pattern = 'yes' if (pattern.pattern_language or pattern.author) else 'no' %}
+        {% set has_pattern = 'yes' if (pattern.pattern_language or pattern.author or pattern.difficulty_level) else 'no' %}
         <div class="form-group">
             <label for="has_pattern">Using a pattern?</label>
             <select id="has_pattern" name="has_pattern">
@@ -128,19 +128,19 @@
                 <input type="text" id="author" name="author" value="{{ pattern.author or '' }}"
                     placeholder="e.g. Petite Knit">
             </div>
-        </div>
 
-    <div class="form-group">
-        <label for="difficulty_level">Difficulty level:</label>
-        <select id="difficulty_level" name="difficulty_level">
-            <option value="" {% if not pattern.difficulty_level %}selected{% endif %}> - </option>
-            {% for difficulty_level in difficulty_levels %}
-            <option value="{{ difficulty_level.value }}" {% if pattern.difficulty_level and pattern.difficulty_level.value==difficulty_level.value %}selected{% endif %}>
-            {{ difficulty_level.value }}
-            </option>
-        {% endfor %}
-        </select>
-    </div>
+             <div class="form-group">
+                <label for="difficulty_level">Difficulty level:</label>
+                <select id="difficulty_level" name="difficulty_level">
+                    <option value="" {% if not pattern.difficulty_level %}selected{% endif %}> - </option>
+                    {% for difficulty_level in difficulty_levels %}
+                    <option value="{{ difficulty_level.value }}" {% if pattern.difficulty_level and pattern.difficulty_level.value==difficulty_level.value %}selected{% endif %}>
+                    {{ difficulty_level.value }}
+                    </option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
 
 
 

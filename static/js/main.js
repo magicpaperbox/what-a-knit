@@ -30,12 +30,16 @@ if (categorySelect) {
         if (!chosen || !subcategories[chosen]) return;
 
         subcategorySelect.innerHTML = "";
-
+        const optional = document.createElement("option");
+        optional.value = "";
+        optional.textContent = "-";
+        subcategorySelect.appendChild(optional);
         for (const sub of subcategories[chosen]) {
             const option = document.createElement("option");
             option.value = sub;
             option.textContent = sub;
             subcategorySelect.appendChild(option);
+
         }
 
         // If we are editing, check if there is a saved subtype to select
