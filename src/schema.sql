@@ -22,13 +22,11 @@ CREATE TABLE IF NOT EXISTS pattern_gauge (
 CREATE TABLE IF NOT EXISTS project (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(100) NOT NULL,
-    my_tool_size VARCHAR(50),
-    my_gauge VARCHAR(50),
-    yarn_bought VARCHAR(3),
-    status VARCHAR(50) DEFAULT ' not started',
-    completion INTEGER DEFAULT 0,
+    status VARCHAR(50),
+    actual_gauge VARCHAR(50),
+    progress_percent INTEGER DEFAULT 0,
     rating INTEGER,
-    notes VARCHAR(500)
+    notes VARCHAR(200)
 );
 
 CREATE TABLE IF NOT EXISTS yarn (

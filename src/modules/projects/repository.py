@@ -1,18 +1,16 @@
 from dataclasses import dataclass
 from typing import Optional
 from infra.db import get_db
-from modules.projects.domain import Project, ProjectId
+from modules.projects.domain import Project, ProjectId, ProjectStatus
 
 
 @dataclass
 class ProjectRow:
     id: int
     name: str
-    my_tool_size: Optional[str]
-    my_gauge: Optional[str]
-    yarn_bought: Optional[str]
     status: Optional[str]
-    completion: Optional[int]
+    actual_gauge: Optional[str]
+    progress_percent: Optional[int]
     rating: Optional[int]
     notes: Optional[str]
 
@@ -21,11 +19,9 @@ class ProjectRepository:
         return Project(
             id=ProjectId(row.id),
             name=row.name,
-            my_tool_size=row.my_tool_size,
-            my_gauge=row.my_gauge,
-            yarn_bought=row.yarn_bought,
-            status=row.status if row.status else 'not started',
-            completion=row.completion if row.completion is not None else 0,
+            status=ProjectStatus(row.status),
+            actual_gauge=row.actual_gauge,
+            progress_percent=row.progress_percent if row.progress_percent is not None else 0,
             rating=row.rating,
             notes=row.notes
         )

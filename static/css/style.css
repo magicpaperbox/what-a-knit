@@ -182,7 +182,8 @@ code {
 }
 
 .form-group input[type="text"],
-.form-group input[type="number"] {
+.form-group input[type="number"],
+.form-group input[type="date"] {
     width: 100%;
     padding: 12px 16px;
     font-family: Fredoka, sans-serif;
@@ -197,15 +198,27 @@ code {
 }
 
 .form-group input[type="text"]:focus,
-.form-group input[type="number"]:focus {
+.form-group input[type="number"]:focus,
+.form-group input[type="date"]:focus {
     border-color: #e84393;
     box-shadow: 4px 4px 0px #fdcb6e;
 }
 
 .form-group input[type="text"]::placeholder,
-.form-group input[type="number"]::placeholder {
+.form-group input[type="number"]::placeholder,
+.form-group input[type="date"]::placeholder {
     color: #ccc;
     font-style: italic;
+}
+
+.form-group input[type="date"] {
+    color-scheme: light;
+    cursor: pointer;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.85;
 }
 
 .form-group select {
@@ -540,21 +553,33 @@ body.dark .form-group label {
 }
 
 body.dark .form-group input[type="text"],
-body.dark .form-group input[type="number"] {
+body.dark .form-group input[type="number"],
+body.dark .form-group input[type="date"] {
     background: #4a3660;
     color: #e8e0f0;
     border-color: #6c5ce7;
 }
 
 body.dark .form-group input[type="text"]:focus,
-body.dark .form-group input[type="number"]:focus {
+body.dark .form-group input[type="number"]:focus,
+body.dark .form-group input[type="date"]:focus {
     border-color: #fd79a8;
     box-shadow: 4px 4px 0px #6c5ce7;
 }
 
 body.dark .form-group input[type="text"]::placeholder,
-body.dark .form-group input[type="number"]::placeholder {
+body.dark .form-group input[type="number"]::placeholder,
+body.dark .form-group input[type="date"]::placeholder {
     color: #7f6b96;
+}
+
+body.dark .form-group input[type="date"] {
+    color-scheme: dark;
+}
+
+body.dark .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.9) hue-rotate(180deg);
+    opacity: 0.9;
 }
 
 body.dark .form-group select {

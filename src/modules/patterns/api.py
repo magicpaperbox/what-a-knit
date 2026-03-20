@@ -44,16 +44,6 @@ def delete(pattern_id: int):
     repo.delete(PatternId(pattern_id))
     return redirect("/patterns")
 
-@patterns_api.post('/<int:pattern_id>/edit')
-def edit_pattern(pattern_id: int):
-    get_pattern_or_404(PatternId(pattern_id))
-
-    edited_pattern = parse_pattern_from_form()
-    edited_pattern.id = PatternId(pattern_id)
-
-    repo.update(edited_pattern)
-    return redirect(f'/patterns/{pattern_id}')
-
 @patterns_api.get('/<int:pattern_id>/edit')
 def edit_pattern_form(pattern_id: int):
     pattern = get_pattern_or_404(PatternId(pattern_id))
@@ -68,3 +58,13 @@ def edit_pattern_form(pattern_id: int):
         subcategories_map=subcategories_map,
         difficulty_levels=PatternDifficultyLevel
     )
+
+@patterns_api.post('/<int:pattern_id>/edit')
+def edit_pattern(pattern_id: int):
+    get_pattern_or_404(PatternId(pattern_id))
+
+    edited_pattern = parse_pattern_from_form()
+    edited_pattern.id = PatternId(pattern_id)
+
+    repo.update(edited_pattern)
+    return redirect(f'/patterns/{pattern_id}')

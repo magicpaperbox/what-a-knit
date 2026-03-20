@@ -3,33 +3,52 @@
 <div class="section">
     <h2><img src="/static/icons/needles.png" class="icon-header" alt="Needle"> New project</h2>
     <form method="POST" action="/projects/add">
+
         <div class="form-group">
             <label for="name">Project name:</label>
             <input type="text" id="name" name="name" placeholder="project name" required>
         </div>
 
         <div class="form-group">
-            <label for="my_tool_size">My tool size:</label>
-            <input type="text" id="my_tool_size" name="my_tool_size" placeholder="e.g. 4.0 mm">
-        </div>
-
-        <div class="form-group">
-            <label for="my_gauge">My gauge:</label>
-            <input type="text" id="my_gauge" name="my_gauge" placeholder="e.g. 22 sts x 30 rows">
-        </div>
-
-        <div class="form-group">
-            <label for="yarn_bought">Yarn bought?</label>
-            <select id="yarn_bought" name="yarn_bought">
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
                 <option value="" disabled selected hidden>select</option>
-                <option value="yes">yes</option>
-                <option value="no">no</option>
+                {% for current_status in status %}
+                <option value="{{ current_status.name }}">
+                {{ current_status.value }}
+                </option>
+                {% endfor %}
             </select>
         </div>
 
         <div class="form-group">
+        <label for="progress_percent">Progress percent:</label>
+        <input type="number" id="progress_percent" name="progress_percent" min="0" max="100" step="1">
+        </div>
+
+        <div class="form-group">
+            <label for="gauge_stitches">Gauge stitches:</label>
+            <input type="number" id="gauge_stitches" name="gauge_stitches" min="0" max="100" step="0.5"
+                placeholder="stitches in 10 cm">
+            <label for="gauge_rows">Gauge rows:</label>
+            <input type="number" id="gauge_rows" name="gauge_rows" min="0" max="100" step="0.5"
+                placeholder="rows in 10 cm">
+        </div>
+
+
+        <div class="form-group">
             <label for="notes">Notes:</label>
             <input type="text" id="notes" name="notes" placeholder="Any extra notes...">
+        </div>
+
+        <div class="form-group">
+            <label for="start_date">Start date:</label>
+            <input type="date" id="start_date" name="start_date">
+        </div>
+
+        <div class="form-group">
+            <label for="end_date">End date:</label>
+            <input type="date" id="end_date" name="end_date">
         </div>
 
         <button type="submit" class="btn-submit">
