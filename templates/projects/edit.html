@@ -11,24 +11,55 @@
         </div>
 
         <div class="form-group">
-            <label for="my_tool_size">My tool size:</label>
-            <input type="text" id="my_tool_size" name="my_tool_size" value="{{ project.my_tool_size or '' }}"
-                placeholder="e.g. 4.0 mm">
-        </div>
-
-        <div class="form-group">
-            <label for="my_gauge">My gauge:</label>
-            <input type="text" id="my_gauge" name="my_gauge" value="{{ project.my_gauge or '' }}"
-                placeholder="e.g. 22 sts x 30 rows">
-        </div>
-
-        <div class="form-group">
-            <label for="yarn_bought">Yarn bought?</label>
-            <select id="yarn_bought" name="yarn_bought">
-                <option value="" disabled hidden>select</option>
-                <option value="yes" {% if project.yarn_bought=='yes' %}selected{% endif %}>yes</option>
-                <option value="no" {% if project.yarn_bought=='no' %}selected{% endif %}>no</option>
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                {% for current_status in status %}
+                <option value="{{ current_status.name }}"
+                {% if current_status == project.status %} selected {% endif %}>
+                    {{ current_status.value }}
+                </option>
+                {% endfor %}
             </select>
+        </div>
+
+        <div class="form-group">
+        <label for="progress_percent">Progress percent:</label>
+            <input type="number" id="progress_percent" name="progress_percent" min="0" max="100" step="1" value="{{ project.progress_percent if project.progress_percent is not none else '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="gauge_stitches">Gauge stitches:</label>
+
+            <input
+                value="{{ project.actual_gauge.stitches if project.actual_gauge else '' }}"
+                type="number"
+                id="gauge_stitches"
+                name="gauge_stitches"
+                min="0"
+                max="100"
+                step="0.5"
+                placeholder="stitches in 10 cm">
+            <label for="gauge_rows">Gauge rows:</label>
+            <input
+                value="{{ project.actual_gauge.rows if project.actual_gauge else '' }}"
+                type="number"
+                id="gauge_rows"
+                name="gauge_rows"
+                min="0"
+                max="100"
+                step="0.5"
+                placeholder="rows in 10 cm">
+        </div>
+
+
+        <div class="form-group">
+        <label for="start_date">Start date:</label>
+            <input type="date" id="start_date" name="start_date" value="{{ project.start_date or ''}}">
+        </div>
+
+        <div class="form-group">
+        <label for="end_date">End date:</label>
+            <input type="date" id="end_date" name="end_date" value="{{ project.end_date or ''}}">
         </div>
 
         <div class="form-group">

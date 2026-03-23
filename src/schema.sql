@@ -19,14 +19,27 @@ CREATE TABLE IF NOT EXISTS pattern_gauge (
     FOREIGN KEY (pattern_id) REFERENCES pattern(id)
 );
 
+
 CREATE TABLE IF NOT EXISTS project (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(100) NOT NULL,
     status VARCHAR(50),
-    actual_gauge VARCHAR(50),
     progress_percent INTEGER DEFAULT 0,
+    actual_gauge VARCHAR(50),
+    start_date VARCHAR(20),
+    end_date VARCHAR(20),
     rating INTEGER,
     notes VARCHAR(200)
+);
+
+CREATE TABLE IF NOT EXISTS project_gauge (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL,
+    stitches REAL,
+    rows REAL,
+    width_cm REAL DEFAULT 10.0,
+    height_cm REAL DEFAULT 10.0,
+    FOREIGN KEY (project_id) REFERENCES project(id)
 );
 
 CREATE TABLE IF NOT EXISTS yarn (

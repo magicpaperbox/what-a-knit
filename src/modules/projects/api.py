@@ -44,7 +44,7 @@ def delete(project_id: int):
 @projects_api.get('/<int:project_id>/edit')
 def edit_project_form(project_id: int):
     project = get_project_or_404(ProjectId(project_id))
-    return render_template('projects/edit.html', project=project)
+    return render_template('projects/edit.html', project=project, status=ProjectStatus)
 
 
 @projects_api.post('/<int:project_id>/edit')

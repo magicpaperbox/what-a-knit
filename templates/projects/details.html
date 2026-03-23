@@ -2,22 +2,37 @@
 {% block content %}
 <h2>{{ project.name }}</h2>
 <div class="section">
-    {% if project.my_tool_size %}
-    <p><strong>My tool size:</strong> {{ project.my_tool_size }}</p>
-    {% endif %}
-
-    {% if project.my_gauge %}
-    <p><strong>My gauge:</strong> {{ project.my_gauge }}</p>
-    {% endif %}
-
-    {% if project.yarn_bought %}
-    <p><strong>Yarn bought:</strong> {{ project.yarn_bought }}</p>
-    {% endif %}
-
+    {% if project.status %}
     <p><strong>Status:</strong> {{ project.status }}</p>
+    {% endif %}
 
-    {% if project.completion > 0 %}
-    <p><strong>Completion:</strong> {{ project.completion }}%</p>
+    {% if project.actual_gauge %}
+    <p>
+        <strong>My gauge:</strong>
+        {% if project.actual_gauge.stitches is not none and project.actual_gauge.rows is not none %}
+        {{ project.actual_gauge.stitches }} sts /
+        {{ project.actual_gauge.rows }} rows
+        per {{ project.actual_gauge.width.value }} x {{ project.actual_gauge.height.value }} cm
+
+        {% elif project.actual_gauge.stitches is not none %}
+        {{ project.actual_gauge.stitches }} sts per {{ project.actual_gauge.width.value }} cm
+
+        {% elif project.actual_gauge.rows is not none %}
+        {{ project.actual_gauge.rows }} rows per {{ project.actual_gauge.height.value }} cm
+    {% endif %}
+    </p>
+    {% endif %}
+
+    {% if project.progress_percent > 0 %}
+    <p><strong>Progress:</strong> {{ project.progress_percent }}</p>
+    {% endif %}
+
+    {% if project.start_date %}
+    <p><strong>Started:</strong> {{ project.start_date }}</p>
+    {% endif %}
+
+    {% if project.end_date %}
+    <p><strong>Finished:</strong> {{ project.end_date }}</p>
     {% endif %}
 
     {% if project.rating %}
