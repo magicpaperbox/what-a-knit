@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from enum import Enum, auto, StrEnum
+from dataclasses import dataclass, field
+from enum import StrEnum
 from typing import Optional
 
 from datetime import date
@@ -24,7 +24,7 @@ class Project:
     status: ProjectStatus
     progress_percent: int
 
-    pattern_id: Optional[PatternId] = None
+    pattern_ids: list[PatternId] = field(default_factory=list)
     actual_gauge: Optional[Gauge] = None
 
     start_date: Optional[date] = None

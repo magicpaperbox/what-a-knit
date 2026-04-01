@@ -11,7 +11,7 @@ def get_db():
             db_path,
             detect_types=sqlite3.PARSE_DECLTYPES
         )
-        
+        g.db.execute("PRAGMA foreign_keys = ON")
         # Ustawiamy row_factory na sqlite3.Row, co m.in. pozwala na
         # dostęp do kolumn po nazwach (jak w słownikach: row['name'])
         g.db.row_factory = sqlite3.Row

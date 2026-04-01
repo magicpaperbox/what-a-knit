@@ -169,6 +169,18 @@ code {
 }
 
 /* ---------- FORMS ---------- */
+.project-form--narrow {
+    width: 80%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .project-form--narrow {
+        width: 100%;
+    }
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -221,6 +233,60 @@ code {
     opacity: 0.85;
 }
 
+.form-group input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.form-group input[type="number"]::-webkit-inner-spin-button,
+.form-group input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.number-stepper {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.number-stepper input[type="number"] {
+    flex: 1;
+    min-width: 0;
+}
+
+.number-stepper-controls {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 3px solid #badc58;
+    border-radius: 12px;
+    background: #fffdf5;
+}
+
+.number-stepper-button {
+    width: 44px;
+    height: 100%;
+    padding: 0;
+    font-family: Fredoka, sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #e84393;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.number-stepper-button + .number-stepper-button {
+    border-left: 2px solid #badc58;
+}
+
+.number-stepper-button:hover {
+    background: #ffeaa7;
+}
+
 .form-group select {
     width: 100%;
     padding: 12px 16px;
@@ -254,6 +320,101 @@ code {
 
 #pattern-details {
     margin-top: 20px;
+}
+
+#selected-patterns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#pattern-search-results {
+    margin-top: 10px;
+}
+
+.form-group:has(#pattern-search-results:not(:empty)) #patterns-search {
+    border-color: #e84393;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+}
+
+#pattern-search-results:not(:empty) {
+    overflow: hidden;
+    margin-top: -3px;
+    border: 2px solid #6c5ce7;
+    border-top: none;
+    border-radius: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background: #fffdf5;
+}
+
+#pattern-search-results > div {
+    padding: 10px 14px;
+    background: transparent;
+    color: #6c5ce7;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+#pattern-search-results > div + div {
+    border-top: 1px solid #a29bfe;
+}
+
+#pattern-search-results > div:hover {
+    background: #ffeaa7;
+    color: #4a3660;
+}
+
+#selected-patterns > div {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #ffeaa7;
+    border: 2px solid #fdcb6e;
+    border-radius: 20px;
+    color: #6c5ce7;
+    font-weight: 600;
+}
+
+#selected-patterns button {
+    display: inline-grid;
+    place-items: center;
+    position: relative;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    font-size: 0;
+    color: #e84393;
+    background: #fffdf5;
+    border: 2px solid #e84393;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#selected-patterns button::before {
+    content: "\00d7";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-family: Fredoka, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    transform: translate(-50%, -57%);
+}
+
+#selected-patterns button:hover {
+    color: #fffdf5;
+    background: #e84393;
+    box-shadow: 3px 3px 0 #fdcb6e;
+    transform: translateY(-1px);
 }
 
 .btn-submit {
@@ -578,8 +739,32 @@ body.dark .form-group input[type="date"] {
 }
 
 body.dark .form-group input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.9) hue-rotate(180deg);
-    opacity: 0.9;
+    filter: brightness(0) saturate(100%) invert(83%) sepia(23%) saturate(2322%) hue-rotate(291deg) brightness(103%) contrast(101%);
+    opacity: 1;
+}
+
+body.dark .form-group input[type="number"]::-webkit-inner-spin-button,
+body.dark .form-group input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+body.dark .number-stepper-controls {
+    border-color: #6c5ce7;
+    background: #2d1b3d;
+}
+
+body.dark .number-stepper-button {
+    color: #fd79a8;
+}
+
+body.dark .number-stepper-button + .number-stepper-button {
+    border-left-color: #6c5ce7;
+}
+
+body.dark .number-stepper-button:hover {
+    color: #2d1b3d;
+    background: #fd79a8;
 }
 
 body.dark .form-group select {
@@ -597,6 +782,48 @@ body.dark .form-group select:focus {
 body.dark .form-group select option {
     background: #4a3660;
     color: #e8e0f0;
+}
+
+body.dark #pattern-search-results:not(:empty) {
+    background: #4a3660;
+    border-color: #6c5ce7;
+    border-top: none;
+}
+
+body.dark .form-group:has(#pattern-search-results:not(:empty)) #patterns-search {
+    border-color: #fd79a8;
+    box-shadow: none;
+}
+
+body.dark #pattern-search-results > div {
+    color: #e8e0f0;
+}
+
+body.dark #pattern-search-results > div + div {
+    border-top-color: #6c5ce7;
+}
+
+body.dark #pattern-search-results > div:hover {
+    background: #5a4475;
+    color: #fff8e7;
+}
+
+body.dark #selected-patterns > div {
+    background: #4a3660;
+    border-color: #6c5ce7;
+    color: #e8e0f0;
+}
+
+body.dark #selected-patterns button {
+    color: #fd79a8;
+    background: #2d1b3d;
+    border-color: #fd79a8;
+}
+
+body.dark #selected-patterns button:hover {
+    color: #2d1b3d;
+    background: #fd79a8;
+    box-shadow: 3px 3px 0 #6c5ce7;
 }
 
 body.dark .btn-submit {

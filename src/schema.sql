@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS project (
     name VARCHAR(100) NOT NULL,
     status VARCHAR(50),
     progress_percent INTEGER DEFAULT 0,
-    actual_gauge VARCHAR(50),
     start_date VARCHAR(20),
     end_date VARCHAR(20),
     rating INTEGER,
@@ -40,6 +39,14 @@ CREATE TABLE IF NOT EXISTS project_gauge (
     width_cm REAL DEFAULT 10.0,
     height_cm REAL DEFAULT 10.0,
     FOREIGN KEY (project_id) REFERENCES project(id)
+);
+
+CREATE TABLE IF NOT EXISTS project_patterns (
+    project_id INTEGER NOT NULL,
+    pattern_id INTEGER NOT NULL,
+    PRIMARY KEY (project_id, pattern_id),
+    FOREIGN KEY (project_id) REFERENCES project(id),
+    FOREIGN KEY (pattern_id) REFERENCES pattern(id)
 );
 
 CREATE TABLE IF NOT EXISTS yarn (

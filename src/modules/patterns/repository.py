@@ -90,8 +90,8 @@ class PatternRepository:
         patterns = []
         for pattern_row in pattern_rows:
             gauge_row = gauge_rows_by_id.get(pattern_row.id)
-            gauge = self._row_to_domain(pattern_row, gauge_row)
-            patterns.append(gauge)
+            pattern = self._row_to_domain(pattern_row, gauge_row)
+            patterns.append(pattern)
         return patterns
 
     def get_by_id(self, pattern_id: PatternId) -> Optional[Pattern]:

@@ -1,7 +1,7 @@
 from flask import request
 from datetime import date
 
-from modules.patterns.domain import Gauge
+from modules.patterns.domain import Gauge, PatternId
 from modules.projects.domain import Project, ProjectStatus
 
 
@@ -24,14 +24,21 @@ def parse_project_from_form() -> Project:
     else:
         end_date = date.fromisoformat(request.form['end_date'])
 
+    pattern_ids = []
+    pattern_ids_form = request.form.getlist('pattern_id', type=int)
+    for pattern_id in pattern_ids_form:
+        pattern_id = PatternId(pattern_id)
+        pattern_ids.append(pattern_id)
+
+
+
     return Project(
         id=None,
         name=request.form['name'],
         status=ProjectStatus[request.form['status']],
         progress_percent=request.form.get('progress_percent', type=int),
-        pattern_id=None,
+        pattern_ids=pattern_ids,
         actual_gauge=actual_gauge,
-
         start_date=start_date,
         end_date=end_date,
         rating=request.form.get('rating', type=int),
