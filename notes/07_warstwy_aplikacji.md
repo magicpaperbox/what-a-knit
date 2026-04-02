@@ -212,6 +212,59 @@ class Yarn:
 
 To tutaj mieści się **najczystsza logika biznesowa**, bo obiekty potrafią "same o sobie pomyśleć" przy wywołaniu metody `validate()` i samodzielnie sprawdzić własne właściwości (np. czy waga motka nie przekracza pełnej wagi włóczki).
 
+### `dataclass` i pusta lista jako domyślna wartość
+
+Przy `@dataclass` trzeba uważać na **mutowalne** wartości domyślne, np.:
+- listy `[]`
+- słowniki `{}`
+
+Ten zapis wygląda niewinnie:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Project:
+    patterns: list[int] = []
+```
+
+ale jest błędny.
+
+### Dlaczego?
+
+Bo lista jest mutowalna, czyli można ją później zmieniać (`append`, `remove`, itd.).
+Gdyby taka lista była wpisana jako zwykły default, różne obiekty mogłyby współdzielić tę samą jedną listę.
+
+Czyli mogłaby się wydarzyć niebezpieczna sytuacja:
+- tworzysz `project_a`
+- tworzysz `project_b`
+- dodajesz pattern do `project_a.patterns`
+- a potem okazuje się, że `project_b.patterns` też się zmieniło
+
+Dlatego `dataclass` każe użyć `field(default_factory=...)`.
+
+Poprawny zapis:
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class Project:
+    patterns: list[int] = field(default_factory=list)
+```
+
+### Co robi `default_factory=list`?
+
+To znaczy:
+- nie używaj jednej wspólnej listy dla wszystkich obiektów
+- tylko przy tworzeniu każdego nowego obiektu utwórz nową pustą listę
+
+Czyli:
+- `Project()` dostaje swoją własną listę
+- następny `Project()` dostaje inną, osobną listę
+
+To jest bardzo częsty wzorzec w Pythonie przy `dataclass`.
+
 ---
 
 ## Mappers (`mappers.py`) — tłumacz formularzy HTML na obiekty

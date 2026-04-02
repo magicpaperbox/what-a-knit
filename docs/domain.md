@@ -98,16 +98,34 @@ class ToolMaterial(Enum):
 class ToolId:
     value: int
 
+class Tool:
+    id: ToolId
+    
+# Crochet hooks
 @dataclass(frozen=True)
-class CrochetHook:
+class ShortCrochetHook(Tool):
     id: ToolId
     size_mm: float
     material: ToolMaterial
 
 @dataclass(frozen=True)
+class StraightTunisianCrochetHook:
+    id: ToolId
+    size_mm: float
+    material: ToolMaterial
+
+@dataclass(frozen=True)
+class FixedCircularTunisianCrochetHook:
+    id: ToolId
+    size_mm: float
+    material: ToolMaterial
+
+# Needles
+@dataclass(frozen=True)
 class StraightNeedles:
     id: ToolId
     size_mm: float
+    length: Centimeters
     material: ToolMaterial
 
 @dataclass(frozen=True)
@@ -118,17 +136,18 @@ class FixedCircularNeedles:
     material: ToolMaterial
 
 @dataclass(frozen=True)
-class InterchangeableTips:
+class InterchangeableCircularNeedleTips:
     id: ToolId
     size_mm: float
     material: ToolMaterial
 
 @dataclass(frozen=True)
-class DPNs:
+class DoublePointedNeedles:
     id: ToolId
     size_mm: float
     material: ToolMaterial
 
+# Needles accessories
 @dataclass(frozen=True)
 class Cable:
     id: ToolId
@@ -136,8 +155,8 @@ class Cable:
     material: ToolMaterial
 
 Tool = Union[
-    CrochetHook, StraightNeedles, FixedCircularNeedles, 
-    InterchangeableTips, DPNs, Cable
+    ShortCrochetHook, StraightNeedles, FixedCircularNeedles, 
+    InterchangeableCircularNeedleTips, DoublePointedNeedles, Cable
 ]
 
 
@@ -171,7 +190,7 @@ class Gauge:
 class CircularNeedleRequirement:
     size_mm: float
     min_length: Centimeters
-    max_length: Centimeters
+    max_length: Centimeters | None
 
 @dataclass(frozen=True)
 class StraightNeedleRequirement:
@@ -182,12 +201,16 @@ class CrochetHookRequirement:
     size_mm: float
 
 @dataclass(frozen=True)
-class DPNRequirement:
+class TunisianCrochetHookRequirement:
+    size_mm: float
+
+@dataclass(frozen=True)
+class DoublePointedNeedleRequirement:
     size_mm: float
 
 ToolRequirement = Union[
     CircularNeedleRequirement, StraightNeedleRequirement, 
-    CrochetHookRequirement, DPNRequirement
+    CrochetHookRequirement, TunisianCrochetHookRequirement, DoublePointedNeedleRequirement
 ]
 
 @dataclass(frozen=True)

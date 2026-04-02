@@ -113,9 +113,16 @@ if (patternsDataElement) {
         }
     }
 
+
+    function isPatternSelected(pattern) {
+        const existingHiddenInput = hiddenInputContainer.querySelector(`input[name="pattern_id"][value="${pattern.id}"]`);
+        return !!existingHiddenInput;
+    }
+
     showHideLabel();
     searchInput.addEventListener("input", function () {
         const query = searchInput.value.trim().toLowerCase();
+
 
         resultsContainer.innerHTML = "";
 
@@ -124,7 +131,7 @@ if (patternsDataElement) {
         }
 
         const matchingPatterns = patterns.filter(function (pattern) {
-            return pattern.name.toLowerCase().includes(query);
+            return pattern.name.toLowerCase().includes(query) && !isPatternSelected(pattern);
         });
 
         if (matchingPatterns.length === 0) {
@@ -179,6 +186,12 @@ if (patternsDataElement) {
             selectedElement.remove();
             hiddenResultElement.remove();
             showHideLabel();
+        }
+    });
+
+    searchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Escape"){
+            resultsContainer.innerHTML = ""
         }
     });
 }
