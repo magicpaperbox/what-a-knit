@@ -1,11 +1,15 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, redirect
 from werkzeug.exceptions import abort
-from .domain import Pattern, PatternCategory, PatternId, Gauge, PatternDifficultyLevel
-from .mappers import parse_pattern_from_form
-from .repository import PatternRepository
+
+from use_cases.delete_pattern_use_case import DeletePatternUseCase
+from modules.patterns.domain import PatternCategory, PatternId, PatternDifficultyLevel
+from modules.patterns.mappers import parse_pattern_from_form
+from modules.patterns.repository import PatternRepository
+from modules.projects.repository import ProjectRepository
 
 patterns_api = Blueprint('patterns', __name__, url_prefix="/patterns")
 repo = PatternRepository()
+delete_pattern_use_case = DeletePatternUseCase(ProjectRepository(), repo)
 
 def get_pattern_or_404(pattern_id: PatternId):
     pattern = repo.get_by_id(pattern_id)
@@ -41,7 +45,7 @@ def create_pattern():
 @patterns_api.post('/<int:pattern_id>/delete')
 def delete(pattern_id: int):
     get_pattern_or_404(PatternId(pattern_id))
-    repo.delete(PatternId(pattern_id))
+    delete_pattern_use_case.delete_pattern(PatternId(pattern_id))
     return redirect("/patterns")
 
 @patterns_api.get('/<int:pattern_id>/edit')

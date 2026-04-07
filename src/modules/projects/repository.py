@@ -200,3 +200,8 @@ class ProjectRepository:
         db.execute('DELETE FROM project_patterns WHERE project_id = ?', (project_id.value,))
         db.execute('DELETE FROM project WHERE id = ?', (project_id.value,))
         db.commit()
+
+    def unlink_pattern(self, pattern_id: PatternId) -> None:
+        db = get_db()
+        db.execute('DELETE FROM project_patterns WHERE pattern_id = ?', (pattern_id.value,))
+        db.commit()

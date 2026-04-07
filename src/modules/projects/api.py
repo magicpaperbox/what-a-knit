@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, render_template, redirect
 from werkzeug.exceptions import abort
 
@@ -28,7 +26,8 @@ def index():
 @projects_api.get('/<int:project_id>')
 def details(project_id: int):
     project = get_project_or_404(ProjectId(project_id))
-    return render_template('projects/details.html', project=project)
+    patterns = pattern_repo.get_by_ids(project.pattern_ids)
+    return render_template('projects/details.html', project=project, patterns=patterns)
 
 
 def patterns_to_dicts(patterns: list[Pattern]) -> list[dict]:

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Iterable
 
 from infra.db import get_db
 from modules.patterns.domain import Pattern, PatternId, PatternCategory, Gauge, PatternDifficultyLevel
@@ -82,6 +82,24 @@ class PatternRepository:
     def get_all(self) -> list[Pattern]:
         db = get_db()
         cursor = db.execute('SELECT * FROM pattern')
+
+        pattern_rows = [PatternRow(**dict(row)) for row in cursor.fetchall()]
+        pattern_ids = {row.id for row in pattern_rows}
+        gauge_rows_by_id = self._get_gauge_batch(pattern_ids)
+
+        patterns = []
+        for pattern_row in pattern_rows:
+            gauge_row = gauge_rows_by_id.get(pattern_row.id)
+            pattern = self._row_to_domain(pattern_row, gauge_row)
+            patterns.append(pattern)
+        return patterns
+
+    def get_by_ids(self, pattern_ids: Iterable[PatternId]) -> list[Pattern]:
+        if not pattern_ids:
+            return []
+        db = get_db()
+        placeholders = ','.join('?' for _ in pattern_ids)
+        cursor = db.execute(f'SELECT * FROM pattern WHERE id IN ({placeholders})', tuple(pattern_id.value for pattern_id in pattern_ids))
 
         pattern_rows = [PatternRow(**dict(row)) for row in cursor.fetchall()]
         pattern_ids = {row.id for row in pattern_rows}
