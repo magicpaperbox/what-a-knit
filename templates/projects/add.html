@@ -36,6 +36,7 @@
 
             <script id="patterns-data" type="application/json">
                 {{ patterns_dicts | tojson }}
+
             </script>
 
             <div class="form-group">
@@ -43,8 +44,12 @@
                 <div class="number-stepper">
                     <input type="number" id="progress_percent" name="progress_percent" min="0" max="100" step="1">
                     <div class="number-stepper-controls">
-                        <button type="button" class="number-stepper-button" data-stepper-action="decrement" aria-label="Decrease progress percent">-</button>
-                        <button type="button" class="number-stepper-button" data-stepper-action="increment" aria-label="Increase progress percent">+</button>
+                        <button type="button" class="number-stepper-button" data-stepper-action="decrement"
+                                aria-label="Decrease progress percent">-
+                        </button>
+                        <button type="button" class="number-stepper-button" data-stepper-action="increment"
+                                aria-label="Increase progress percent">+
+                        </button>
                     </div>
                 </div>
             </div>
@@ -55,8 +60,12 @@
                     <input type="number" id="gauge_stitches" name="gauge_stitches" min="0" max="100" step="0.5"
                            placeholder="stitches in 10 cm">
                     <div class="number-stepper-controls">
-                        <button type="button" class="number-stepper-button" data-stepper-action="decrement" aria-label="Decrease gauge stitches">-</button>
-                        <button type="button" class="number-stepper-button" data-stepper-action="increment" aria-label="Increase gauge stitches">+</button>
+                        <button type="button" class="number-stepper-button" data-stepper-action="decrement"
+                                aria-label="Decrease gauge stitches">-
+                        </button>
+                        <button type="button" class="number-stepper-button" data-stepper-action="increment"
+                                aria-label="Increase gauge stitches">+
+                        </button>
                     </div>
                 </div>
                 <label for="gauge_rows">Gauge rows:</label>
@@ -64,8 +73,12 @@
                     <input type="number" id="gauge_rows" name="gauge_rows" min="0" max="100" step="0.5"
                            placeholder="rows in 10 cm">
                     <div class="number-stepper-controls">
-                        <button type="button" class="number-stepper-button" data-stepper-action="decrement" aria-label="Decrease gauge rows">-</button>
-                        <button type="button" class="number-stepper-button" data-stepper-action="increment" aria-label="Increase gauge rows">+</button>
+                        <button type="button" class="number-stepper-button" data-stepper-action="decrement"
+                                aria-label="Decrease gauge rows">-
+                        </button>
+                        <button type="button" class="number-stepper-button" data-stepper-action="increment"
+                                aria-label="Increase gauge rows">+
+                        </button>
                     </div>
                 </div>
             </div>
@@ -93,4 +106,9 @@
             </button>
         </form>
     </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/number-stepper.js"></script>
+    <script src="/static/js/project-pattern-search.js"></script>
 {% endblock %}

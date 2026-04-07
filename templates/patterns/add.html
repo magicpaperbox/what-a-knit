@@ -88,3 +88,7 @@
     </form>
 </div>
 {% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/pattern-form.js"></script>
+{% endblock %}

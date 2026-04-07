@@ -189,6 +189,82 @@ Template ma się zajmować **wyświetlaniem**, nie obliczeniami.
 
 ---
 
+## 6. Dziedziczenie template i własne bloki na skrypty
+
+To jest bardzo praktyczna rzecz, gdy jedna strona potrzebuje dodatkowego JavaScriptu, a inna nie.
+
+Przykład z `base.html`:
+
+```html
+{% block content %}{% endblock %}
+
+<script src="/static/js/theme.js"></script>
+{% block scripts %}{% endblock %}
+```
+
+Jak to czytać:
+
+- `base.html` definiuje miejsce, które dziecko może później uzupełnić
+- `{% block scripts %}` nie ładuje nic samo z siebie
+- to jest tylko "gniazdko", w które inny template może wstawić własne skrypty
+
+Po co to jest:
+
+- `theme.js` może zostać globalny dla całej aplikacji
+- a konkretna strona może dołożyć swój własny plik JS
+- dzięki temu nie wrzucasz wszystkiego do jednego wielkiego `theme.js`
+
+Przykład w template potomnym, np. `templates/patterns/add.html`:
+
+```html
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/pattern-form.js"></script>
+{% endblock %}
+```
+
+### Co robi `{{ super() }}`
+
+To jest bardzo ważne.
+
+`{{ super() }}` znaczy:
+
+- "zachowaj też zawartość tego samego bloku z template rodzica"
+
+Czyli:
+
+- rodzic `base.html` ma w bloku `scripts` swoją zawartość
+- dziecko dodaje coś od siebie
+- `{{ super() }}` mówi Jinja: nie nadpisuj wszystkiego, tylko dołóż to do tego, co już było
+
+Jak jest teraz:
+
+- dziecko definiuje własny `{% block scripts %}`
+
+Jak powinno być, jeśli chcesz rozszerzyć blok rodzica:
+
+- w środku dajesz `{{ super() }}`
+- a dopiero potem swoje dodatkowe `<script ...>`
+
+Dlaczego bez `{{ super() }}` łatwo coś zepsuć:
+
+- jeśli dziecko nadpisze blok i nie użyje `{{ super() }}`, to zawartość z rodzica przepada
+- czyli możesz przypadkiem przestać ładować skrypt globalny z `base.html`
+
+Najkrótsza wersja do zapamiętania:
+
+- `{% block scripts %}` = miejsce na skrypty strony
+- `{{ super() }}` = zachowaj też to, co było w rodzicu
+- dodatkowy `<script src="..."></script>` = doładuj JS tylko dla tej jednej strony
+
+To jest dobry pierwszy krok do porządkowania frontendu:
+
+- kod globalny zostaje globalny
+- kod dla jednej strony trafia do osobnego pliku
+- template tej strony jawnie mówi, jaki skrypt jest jej potrzebny
+
+---
+
 ## FAQ — pytania i odpowiedzi
 
 ### Co to `{% raw %}` i `{% endraw %}`?

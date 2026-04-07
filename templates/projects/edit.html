@@ -112,3 +112,8 @@
         </form>
     </div>
 {% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/number-stepper.js"></script>
+    <script src="/static/js/project-pattern-search.js"></script>
+{% endblock %}

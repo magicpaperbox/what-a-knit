@@ -106,3 +106,7 @@ function closeSkeinDeleteModal() {
 </script>
 
 {% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/delete-modal.js"></script>
+{% endblock %}

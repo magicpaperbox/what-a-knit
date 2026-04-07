@@ -141,23 +141,6 @@
                 </select>
             </div>
         </div>
-
-
-
-{#        <div class="form-group">#}
-{#            <label for="yarn_bought">Yarn bought?</label>#}
-{#            <select id="yarn_bought" name="yarn_bought">#}
-{#                <option value="" disabled hidden>select</option>#}
-{#                <option value="yes" {% if pattern.yarn_bought=='yes' %}selected{% endif %}>yes</option>#}
-{#                <option value="no" {% if pattern.yarn_bought=='no' %}selected{% endif %}>no</option>#}
-{#            </select>#}
-{#        </div>#}
-{##}
-{#        <div class="form-group">#}
-{#            <label for="notes">Notes:</label>#}
-{#            <input type="text" id="notes" name="notes" value="{{ pattern.notes or '' }}"#}
-{#                placeholder="Any extra notes...">#}
-{#        </div>#}
         <button type="submit" class="btn-submit">
             <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
                 style="width: 24px; vertical-align: middle; margin-right: 8px;">
@@ -165,4 +148,8 @@
         </button>
     </form>
 </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/pattern-form.js"></script>
 {% endblock %}
