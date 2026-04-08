@@ -4,13 +4,21 @@
     <div class="section-header">
         <h2>Your patterns</h2>
         <a href="/patterns/add" class="btn-submit">
-            <img src="/static/icons/patterns.png" alt="Patterns"
-                style="width: 24px; vertical-align: middle; margin-right: 8px;">
+            <img src="/static/icons/patterns.png" alt="Patterns" class="button-icon">
             Create pattern
         </a>
     </div>
-    {% for pattern in patterns %}
-    <h3><a href="/patterns/{{ pattern.id.value }}">{{ pattern.name }}</a></h3>
-    {% endfor %}
+    {% if patterns %}
+    <div class="resource-list">
+        {% for pattern in patterns %}
+        <a class="resource-card" href="/patterns/{{ pattern.id.value }}">
+            <p class="resource-card__eyebrow">Pattern</p>
+            <h3>{{ pattern.name }}</h3>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-state">No patterns yet. Add your first one!</p>
+    {% endif %}
 </div>
 {% endblock %}

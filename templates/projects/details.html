@@ -1,64 +1,67 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>{{ project.name }}</h2>
-    <div class="section">
-        {% if project.status %}
-            <p><strong>Status:</strong> {{ project.status }}</p>
-        {% endif %}
-
-        {% if patterns %}
-            <p><strong>Patterns used:</strong>
-                {% for pattern in patterns %}
-                    <a href="/patterns/{{ pattern.id.value }}">{{ pattern.name }}</a>
-                    {% if not loop.last %}
-                    ,
-                    {% endif %}
-                {% endfor %}
-            </p>
-        {% endif %}
-
-        {% if project.actual_gauge %}
-            <p>
-                <strong>My gauge:</strong>
-                {% if project.actual_gauge.stitches is not none and project.actual_gauge.rows is not none %}
-                    {{ project.actual_gauge.stitches }} sts /
-                    {{ project.actual_gauge.rows }} rows
-                    per {{ project.actual_gauge.width.value }} x {{ project.actual_gauge.height.value }} cm
-
-                {% elif project.actual_gauge.stitches is not none %}
-                    {{ project.actual_gauge.stitches }} sts per {{ project.actual_gauge.width.value }} cm
-
-                {% elif project.actual_gauge.rows is not none %}
-                    {{ project.actual_gauge.rows }} rows per {{ project.actual_gauge.height.value }} cm
+    <div class="titled-section">
+        <h2 class="page-title">{{ project.name }}</h2>
+        <div class="section section--with-page-title">
+            <div class="detail-list">
+                {% if project.status %}
+                    <p><strong>Status:</strong> {{ project.status }}</p>
                 {% endif %}
-            </p>
-        {% endif %}
 
-        {% if project.progress_percent > 0 %}
-            <p><strong>Progress:</strong> {{ project.progress_percent }} %</p>
-        {% endif %}
+                {% if patterns %}
+                    <p><strong>Patterns used:</strong>
+                        {% for pattern in patterns %}
+                            <a href="/patterns/{{ pattern.id.value }}">{{ pattern.name }}</a>
+                            {% if not loop.last %}
+                            ,
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
 
-        {% if project.start_date %}
-            <p><strong>Started:</strong> {{ project.start_date }}</p>
-        {% endif %}
+                {% if project.actual_gauge %}
+                    <p>
+                        <strong>My gauge:</strong>
+                        {% if project.actual_gauge.stitches is not none and project.actual_gauge.rows is not none %}
+                            {{ project.actual_gauge.stitches }} sts /
+                            {{ project.actual_gauge.rows }} rows
+                            per {{ project.actual_gauge.width.value }} x {{ project.actual_gauge.height.value }} cm
 
-        {% if project.end_date %}
-            <p><strong>Finished:</strong> {{ project.end_date }}</p>
-        {% endif %}
+                        {% elif project.actual_gauge.stitches is not none %}
+                            {{ project.actual_gauge.stitches }} sts per {{ project.actual_gauge.width.value }} cm
 
-        {% if project.rating %}
-            <p><strong>Rating:</strong> {{ project.rating }}/5</p>
-        {% endif %}
+                        {% elif project.actual_gauge.rows is not none %}
+                            {{ project.actual_gauge.rows }} rows per {{ project.actual_gauge.height.value }} cm
+                        {% endif %}
+                    </p>
+                {% endif %}
 
-        {% if project.notes %}
-            <p><strong>Notes:</strong> {{ project.notes }}</p>
-        {% endif %}
+                {% if project.progress_percent > 0 %}
+                    <p><strong>Progress:</strong> {{ project.progress_percent }} %</p>
+                {% endif %}
+
+                {% if project.start_date %}
+                    <p><strong>Started:</strong> {{ project.start_date }}</p>
+                {% endif %}
+
+                {% if project.end_date %}
+                    <p><strong>Finished:</strong> {{ project.end_date }}</p>
+                {% endif %}
+
+                {% if project.rating %}
+                    <p><strong>Rating:</strong> {{ project.rating }}/5</p>
+                {% endif %}
+
+                {% if project.notes %}
+                    <p><strong>Notes:</strong> {{ project.notes }}</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     <div class="action-buttons">
         <button class="btn-delete" onclick="openDeleteModal()">
-            <img src="/static/icons/frog.png" alt="Frog"
-                 style="width: 24px; vertical-align: middle; margin-right: 8px;">
+            <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
             Frog project
         </button>
         <a href="/projects/{{ project.id.value }}/edit" class="btn-submit">
@@ -75,7 +78,7 @@
             <div class="modal-buttons">
                 <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
 
-                <form method="POST" action="/projects/{{ project.id.value }}/delete" style="display:inline;">
+                <form method="POST" action="/projects/{{ project.id.value }}/delete" class="inline-form">
                     <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
                 </form>
             </div>

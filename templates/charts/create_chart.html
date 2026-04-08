@@ -1,18 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Chart creator (SVG)</h2>
+<div class="section">
+  <h2>Chart creator (SVG)</h2>
+  <p class="section-copy">Build a simple knitting chart grid and preview it comfortably on both large and small screens.</p>
 
-<div class="chart-row">
-  <div class="chart-inputs-group">
-    <label>Rows: <input id="rows" type="number" min="1" max="200" value="12"></label>
-    <label>Columns: <input id="columns" type="number" min="1" max="200" value="12"></label>
-    <label>Box size (px): <input id="cellSize" type="number" min="10" max="80" value="32"></label>
+  <div class="chart-layout">
+    <div class="chart-row">
+      <div class="chart-inputs-group">
+        <label class="chart-field">
+          <span>Rows</span>
+          <input id="rows" type="number" min="1" max="200" value="12">
+        </label>
+        <label class="chart-field">
+          <span>Columns</span>
+          <input id="columns" type="number" min="1" max="200" value="12">
+        </label>
+        <label class="chart-field">
+          <span>Box size (px)</span>
+          <input id="cellSize" type="number" min="10" max="80" value="32">
+        </label>
+      </div>
+      <button id="build" class="btn-chart">Create</button>
+    </div>
+
+    <div class="chart-stage">
+      <svg id="chart" class="chart-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
   </div>
-  <button id="build" class="btn-chart">Create</button>
-</div>
-<div class="chart-stage">
-  <svg id="chart" class="chart-svg" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
 
 <script src="/static/js/charts.js"></script>

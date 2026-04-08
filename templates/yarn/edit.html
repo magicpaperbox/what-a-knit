@@ -4,14 +4,14 @@
     <h2><img src="/static/icons/yarn_ball.png" class="icon-header" alt="Yarn"> Edit yarn</h2>
 
     {% if error %}
-    <div class="error-message" style="color: #e74c3c; background: #fdeaea; padding: 10px; border-radius: 8px; margin-bottom: 16px;">
+    <div class="error-message">
         {{ error }}
     </div>
     {% endif %}
 
     {% set y = yarn %}
     {% set f = form %}
-    <form method="POST" action="/yarn/{{ y.id.value }}/edit">
+    <form method="POST" action="/yarn/{{ y.id.value }}/edit" class="form-shell">
         <div class="form-group">
             <label for="brand">Brand:</label>
             <input type="text" id="brand" name="brand" required
@@ -58,10 +58,10 @@
         <!-- Composition -->
         <div class="form-group">
             <label>Composition:</label>
-            <div id="fiber-rows">
+            <div id="fiber-rows" class="fiber-rows">
                 {% if f %}
                     {% for ft in f.getlist('fiber_type[]') %}
-                    <div class="fiber-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+                    <div class="fiber-row">
                         <select name="fiber_type[]">
                             <option value="" disabled hidden>fiber type</option>
                             {% for ftype in fiber_types %}
@@ -71,14 +71,13 @@
                             {% endfor %}
                         </select>
                         <input type="number" name="percentage[]" min="1" max="100" placeholder="%"
-                            style="width: 80px;" value="{{ f.getlist('percentage[]')[loop.index0] }}">
-                        <button type="button" onclick="this.parentElement.remove()" class="btn-delete"
-                            style="padding: 4px 8px; font-size: 0.9em;">x</button>
+                            value="{{ f.getlist('percentage[]')[loop.index0] }}">
+                        <button type="button" onclick="this.parentElement.remove()" class="btn-delete btn-delete--small">x</button>
                     </div>
                     {% endfor %}
                 {% else %}
                     {% for fiber in y.composition %}
-                    <div class="fiber-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+                    <div class="fiber-row">
                         <select name="fiber_type[]">
                             <option value="" disabled hidden>fiber type</option>
                             {% for ftype in fiber_types %}
@@ -88,22 +87,19 @@
                             {% endfor %}
                         </select>
                         <input type="number" name="percentage[]" min="1" max="100" placeholder="%"
-                            style="width: 80px;" value="{{ fiber.percentage }}">
-                        <button type="button" onclick="this.parentElement.remove()" class="btn-delete"
-                            style="padding: 4px 8px; font-size: 0.9em;">x</button>
+                            value="{{ fiber.percentage }}">
+                        <button type="button" onclick="this.parentElement.remove()" class="btn-delete btn-delete--small">x</button>
                     </div>
                     {% endfor %}
                 {% endif %}
             </div>
-            <button type="button" onclick="addFiberRow()" class="btn-submit"
-                style="padding: 4px 12px; font-size: 0.9em; margin-top: 4px;">
+            <button type="button" onclick="addFiberRow()" class="btn-submit btn-submit--small">
                 + Add fiber
             </button>
         </div>
 
         <button type="submit" class="btn-submit">
-            <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
-                style="width: 24px; vertical-align: middle; margin-right: 8px;">
+            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
             Save changes
         </button>
     </form>
@@ -114,7 +110,6 @@ function addFiberRow() {
     const container = document.getElementById('fiber-rows');
     const row = document.createElement('div');
     row.className = 'fiber-row';
-    row.style = 'display: flex; gap: 10px; margin-bottom: 8px; align-items: center;';
     row.innerHTML = `
         <select name="fiber_type[]">
             <option value="" disabled selected hidden>fiber type</option>
@@ -122,9 +117,8 @@ function addFiberRow() {
             <option value="{{ ftype.name }}">{{ ftype.value }}</option>
             {% endfor %}
         </select>
-        <input type="number" name="percentage[]" min="1" max="100" placeholder="%" style="width: 80px;">
-        <button type="button" onclick="this.parentElement.remove()" class="btn-delete"
-            style="padding: 4px 8px; font-size: 0.9em;">x</button>
+        <input type="number" name="percentage[]" min="1" max="100" placeholder="%">
+        <button type="button" onclick="this.parentElement.remove()" class="btn-delete btn-delete--small">x</button>
     `;
     container.appendChild(row);
 }

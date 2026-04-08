@@ -1,27 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="section">
-        <h2>Witaj, {{ username }}!</h2>
-        <h3>Co nowego?</h3>
-        <p>Dzisiaj jest: {{ current_date }}</p>
-        {% if is_logged_in %}
-            <p>✅ Jesteś zalogowany!</p>
-        {% else %}
-            <p>❌ Nie jesteś zalogowany.</p>
-        {% endif %}
+        <h2>Keep projects, patterns, yarn and charts together in one playful space.</h2>
+        <div class="detail-list">
+            <p><strong>Today:</strong> {{ current_date }}</p>
+            {% if is_logged_in %}
+                <p><strong>Account:</strong> ✅ You are logged in, {{ username }}.</p>
+            {% else %}
+                <p><strong>Account:</strong> ❌ You are not logged in.</p>
+            {% endif %}
 
-        {% if yarn_count > 5 %}
-            <p>🎉 Masz dużo włóczek! ({{ yarn_count }} sztuk)</p>
-        {% elif yarn_count > 0 %}
-            <p>📦 Masz trochę włóczek: {{ yarn_count }}</p>
-        {% else %}
-            <p>😢 Nie masz żadnych włóczek.</p>
-        {% endif %}
+            {% if yarn_count > 5 %}
+                <p><strong>Yarn stash:</strong> 🎉 You have a big stash already ({{ yarn_count }} skeins).</p>
+            {% elif yarn_count > 0 %}
+                <p><strong>Yarn stash:</strong> 📦 You have {{ yarn_count }} skeins waiting.</p>
+            {% else %}
+                <p><strong>Yarn stash:</strong> 😢 No yarn yet.</p>
+            {% endif %}
+        </div>
     </div>
 
     <div class="section">
         <h2>Twoje włóczki:</h2>
-        <ul>
+        <ul class="yarn-pill-list">
             {% for yarn in yarns %}
                 <li class="yarn">
                     {{ loop.index }}. {{ yarn.color }} - {{ yarn.weight }}g
@@ -32,7 +33,7 @@
         </ul>
 
         {% if yarns|length == 0 %}
-            <p><em>Lista jest pusta</em></p>
+            <p class="empty-state"><em>Lista jest pusta</em></p>
         {% endif %}
     </div>
 

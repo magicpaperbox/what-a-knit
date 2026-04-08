@@ -1,25 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{ yarn.brand }} — {{ yarn.name }}</h2>
-<div class="section">
-    <p><strong>Color:</strong> {{ yarn.color_shade }}</p>
-    <p><strong>Weight category:</strong> {{ yarn.weight_category.value }}</p>
-    <p><strong>Full skein weight:</strong> {{ yarn.full_weight.grams }} g</p>
-    <p><strong>Full skein length:</strong> {{ yarn.full_length.value }} m</p>
+<div class="titled-section">
+    <h2 class="page-title">{{ yarn.brand }} — {{ yarn.name }}</h2>
+    <div class="section section--with-page-title">
+        <div class="detail-list">
+            <p><strong>Color:</strong> {{ yarn.color_shade }}</p>
+            <p><strong>Weight category:</strong> {{ yarn.weight_category.value }}</p>
+            <p><strong>Full skein weight:</strong> {{ yarn.full_weight.grams }} g</p>
+            <p><strong>Full skein length:</strong> {{ yarn.full_length.value }} m</p>
+        </div>
 
-    {% if yarn.composition %}
-    <p><strong>Composition:</strong></p>
-    <ul>
-        {% for fiber in yarn.composition %}
-        <li>{{ fiber.fiber_type.value }} — {{ fiber.percentage }}%</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        {% if yarn.composition %}
+        <div class="detail-subsection">
+            <h3>Composition</h3>
+            <ul class="fiber-summary">
+                {% for fiber in yarn.composition %}
+                <li>{{ fiber.fiber_type.value }} — {{ fiber.percentage }}%</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
 </div>
 
 <div class="action-buttons">
     <button class="btn-delete" onclick="openDeleteModal()">
-        <img src="/static/icons/frog.png" alt="Frog" style="width: 24px; vertical-align: middle; margin-right: 8px;">
+        <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
         Frog yarn
     </button>
     <a href="/yarn/{{ yarn.id.value }}/edit" class="btn-submit">
@@ -29,40 +35,46 @@
 
 <!-- Skeins section -->
 <div class="section">
-    <h3>Skeins</h3>
-    <a href="/yarn/{{ yarn.id.value }}/skeins/add" class="btn-submit" style="display: inline-block; margin-bottom: 20px;">
-        <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
-            style="width: 24px; vertical-align: middle; margin-right: 8px;">
-        Add skein
-    </a>
+    <div class="section-header">
+        <h3>Skeins</h3>
+        <a href="/yarn/{{ yarn.id.value }}/skeins/add" class="btn-submit">
+            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
+            Add skein
+        </a>
+    </div>
     {% if skeins %}
-    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-        <tr>
-            <th style="text-align: left; padding: 8px;">Skein #</th>
-            <th style="text-align: left; padding: 8px;">Current weight</th>
-            <th style="text-align: left; padding: 8px;">Estimated remaining length</th>
-            <th style="text-align: left; padding: 8px;">Actions</th>
-        </tr>
-        {% for skein in skeins %}
-        <tr>
-            <td style="padding: 8px;">{{ skein.id.value }}</td>
-            <td style="padding: 8px;">{{ skein.current_weight.grams }} g</td>
-            <td style="padding: 8px;">{{ skein.remaining_length(yarn) }}</td>
-            <td style="padding: 8px;">
-                <a href="/yarn/skeins/{{ skein.id.value }}/edit" class="btn-submit" style="padding: 4px 12px; font-size: 0.9em;">
-                    ✏️ Edit
-                </a>
-                <button class="btn-delete" style="padding: 4px 12px; font-size: 0.9em;"
-                    onclick="openSkeinDeleteModal({{ skein.id.value }})">
-                    <img src="/static/icons/frog.png" alt="Frog" style="width: 16px; vertical-align: middle;">
-                    Frog
-                </button>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="table-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Skein #</th>
+                    <th>Current weight</th>
+                    <th>Estimated remaining length</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for skein in skeins %}
+                <tr>
+                    <td data-label="Skein #">{{ skein.id.value }}</td>
+                    <td data-label="Current weight">{{ skein.current_weight.grams }} g</td>
+                    <td data-label="Estimated remaining length">{{ skein.remaining_length(yarn) }}</td>
+                    <td data-label="Actions" class="table-actions">
+                        <a href="/yarn/skeins/{{ skein.id.value }}/edit" class="btn-submit btn-submit--small">
+                            ✏️ Edit
+                        </a>
+                        <button class="btn-delete btn-delete--small" onclick="openSkeinDeleteModal({{ skein.id.value }})">
+                            <img src="/static/icons/frog.png" alt="Frog" class="button-icon button-icon--small">
+                            Frog
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
-    <p>No skeins yet. Add your first one!</p>
+    <p class="empty-state">No skeins yet. Add your first one!</p>
     {% endif %}
 </div>
 
@@ -74,7 +86,7 @@
             This will also delete all skeins. This cannot be undone!</p>
         <div class="modal-buttons">
             <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
-            <form method="POST" action="/yarn/{{ yarn.id.value }}/delete" style="display:inline;">
+            <form method="POST" action="/yarn/{{ yarn.id.value }}/delete" class="inline-form">
                 <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
             </form>
         </div>
@@ -88,7 +100,7 @@
         <p>Are you sure you want to delete this skein?<br>This cannot be undone!</p>
         <div class="modal-buttons">
             <button class="btn-cancel" onclick="closeSkeinDeleteModal()">No, keep it</button>
-            <form id="skeinDeleteForm" method="POST" action="" style="display:inline;">
+            <form id="skeinDeleteForm" method="POST" action="" class="inline-form">
                 <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
             </form>
         </div>

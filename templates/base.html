@@ -3,30 +3,71 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}What a knit!{% endblock %}</title>
     <link rel="icon" type="image/png" href="/static/icons/yarn_ball.png">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle color theme">
         <img src="/static/icons/moon.png" class="icon icon-light" alt="dark mode">
         <img src="/static/icons/sun.png" class="icon icon-dark" alt="light mode">
     </button>
-    <h1><a href="/">What a knit!</a></h1>
-    <nav>
-        <a href="/projects"><img src="/static/icons/projects.png" class="icon" alt="projects">Projects</a>
-        <a href="/patterns"><img src="/static/icons/patterns.png" class="icon" alt="patterns">Patterns</a>
-        <a href="/yarn"><img src="/static/icons/yarn_ball.png" class="icon" alt="yarn"> Yarn</a>
-        <a href="/tools"><img src="/static/icons/needles.png" class="icon" alt="tools"> Tools</a>
-        <a href="/charts"><img src="/static/icons/yarn_ball.png" class="icon" alt="create"> Charts</a>
-    </nav>
-    {% block content %}
-    {% endblock %}
-    <footer
-        style="margin-top: 40px; text-align: center; color: #9b84b8; font-family: LaBelleAurore, sans-serif; font-size: 14px;">
-        <p>@magicpaperbox 2026 <img src="/static/icons/yarn_ball.png" class="icon-footer" alt="yarn"></p>
-    </footer>
+
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="brand-lockup">
+                <h1 class="site-title"><a href="/">What a knit!</a></h1>
+                <p class="eyebrow">Your cozy knitting planner</p>
+            </div>
+
+            {% set current_path = request.path %}
+            <div class="site-nav-shell">
+                <nav class="site-nav">
+                    <a href="/projects" aria-label="Projects"
+                       class="{% if current_path.startswith('/projects') %}is-active{% endif %}"
+                       {% if current_path.startswith('/projects') %}aria-current="page"{% endif %}>
+                        <img src="/static/icons/projects.png" class="site-nav__icon" alt="">
+                        <span class="site-nav__label">Projects</span>
+                    </a>
+                    <a href="/patterns" aria-label="Patterns"
+                       class="{% if current_path.startswith('/patterns') %}is-active{% endif %}"
+                       {% if current_path.startswith('/patterns') %}aria-current="page"{% endif %}>
+                        <img src="/static/icons/patterns.png" class="site-nav__icon" alt="">
+                        <span class="site-nav__label">Patterns</span>
+                    </a>
+                    <a href="/yarn" aria-label="Yarn"
+                       class="{% if current_path.startswith('/yarn') %}is-active{% endif %}"
+                       {% if current_path.startswith('/yarn') %}aria-current="page"{% endif %}>
+                        <img src="/static/icons/yarn_ball.png" class="site-nav__icon" alt="">
+                        <span class="site-nav__label">Yarn</span>
+                    </a>
+                    <a href="/tools" aria-label="Tools"
+                       class="{% if current_path.startswith('/tools') %}is-active{% endif %}"
+                       {% if current_path.startswith('/tools') %}aria-current="page"{% endif %}>
+                        <img src="/static/icons/needles.png" class="site-nav__icon" alt="">
+                        <span class="site-nav__label">Tools</span>
+                    </a>
+                    <a href="/charts" aria-label="Charts"
+                       class="{% if current_path.startswith('/charts') %}is-active{% endif %}"
+                       {% if current_path.startswith('/charts') %}aria-current="page"{% endif %}>
+                        <img src="/static/icons/yarn_ball.png" class="site-nav__icon" alt="">
+                        <span class="site-nav__label">Charts</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="page-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="site-footer">
+            <p>@magicpaperbox 2026 <img src="/static/icons/yarn_ball.png" class="icon-footer" alt="yarn"></p>
+        </footer>
+    </div>
     <script src="/static/js/theme.js"></script>
     {% block scripts %}{% endblock %}
 </body>

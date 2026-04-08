@@ -4,18 +4,22 @@
     <div class="section-header">
         <h2>Your yarn</h2>
         <a href="/yarn/add" class="btn-submit">
-            <img src="/static/icons/yarn_ball.png" alt="Yarn ball"
-                style="width: 24px; vertical-align: middle; margin-right: 8px;">
+            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
             Add yarn
         </a>
     </div>
-    {% for yarn in yarns %}
-    <h3>
-        <a href="/yarn/{{ yarn.id.value }}">{{ yarn.brand }} — {{ yarn.name }} — {{ yarn.color_shade }}</a>
-    </h3>
-    {% endfor %}
-    {% if not yarns %}
-    <p>No yarn yet. Add your first one!</p>
+    {% if yarns %}
+    <div class="resource-list">
+        {% for yarn in yarns %}
+        <a class="resource-card" href="/yarn/{{ yarn.id.value }}">
+            <p class="resource-card__eyebrow">{{ yarn.brand }}</p>
+            <h3>{{ yarn.name }}</h3>
+            <p class="resource-card__meta">{{ yarn.color_shade }}</p>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-state">No yarn yet. Add your first one!</p>
     {% endif %}
 </div>
 {% endblock %}

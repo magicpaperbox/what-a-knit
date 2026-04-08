@@ -43,9 +43,9 @@ if (categorySelect) {
 
     hasPatternSelect.addEventListener("change", function () {
         if (hasPatternSelect.value === "yes") {
-            patternDetails.style.display = "block";
+            patternDetails.hidden = false;
         } else {
-            patternDetails.style.display = "none";
+            patternDetails.hidden = true;
         }
     });
 }
