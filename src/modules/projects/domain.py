@@ -22,7 +22,7 @@ class Project:
     id: Optional[ProjectId]
     name: str
     status: ProjectStatus
-    progress_percent: int
+    progress_percent: int | None
 
     pattern_ids: list[PatternId] = field(default_factory=list)
     actual_gauge: Optional[Gauge] = None
@@ -32,4 +32,12 @@ class Project:
 
     rating: Optional[int] = None
     notes: Optional[str] = None
+
+    def normalize(self):
+        if self.progress_percent is None or self.progress_percent == 0:
+            self.status = ProjectStatus.NOT_STARTED
+        elif self.progress_percent == 100:
+            self.status = ProjectStatus.FINISHED
+        elif 100 > self.progress_percent > 0:
+            self.status = ProjectStatus.IN_PROGRESS
 

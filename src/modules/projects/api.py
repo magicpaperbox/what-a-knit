@@ -42,6 +42,7 @@ def create_project_form():
 @projects_api.post('/add')
 def create_project():
     new_project = parse_project_from_form()
+    new_project.normalize()
     new_project = repo.add(new_project)
     return redirect(f"/projects/{new_project.id.value}")
 
@@ -64,7 +65,7 @@ def edit_project(project_id: int):
     get_project_or_404(ProjectId(project_id))
     edited_project = parse_project_from_form()
     edited_project.id = ProjectId(project_id)
-
+    edited_project.normalize()
     repo.update(edited_project)
     return redirect(f'/projects/{project_id}')
 

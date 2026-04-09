@@ -32,7 +32,7 @@ def parse_project_from_form() -> Project:
 
 
 
-    return Project(
+    project = Project(
         id=None,
         name=request.form['name'],
         status=ProjectStatus[request.form['status']],
@@ -43,5 +43,6 @@ def parse_project_from_form() -> Project:
         end_date=end_date,
         rating=request.form.get('rating', type=int),
         notes=request.form['notes'],
-
     )
+
+    return project

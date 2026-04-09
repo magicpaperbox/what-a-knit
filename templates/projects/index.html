@@ -1,24 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="section">
-    <div class="section-header">
-        <h2>Your projects</h2>
-        <a href="/projects/add" class="btn-submit">
-            <img src="/static/icons/projects.png" alt="Projects" class="button-icon">
-            Create project
-        </a>
+    <div class="section">
+        <div class="section-header">
+            <h2>Your projects</h2>
+            <a href="/projects/add" class="btn-submit">
+                <img src="/static/icons/projects.png" alt="Projects" class="button-icon">
+                Create project
+            </a>
+        </div>
+        {% if projects %}
+            <div class="resource-list">
+                {% for project in projects %}
+                    <a class="resource-card" href="/projects/{{ project.id.value }}">
+                    <h3>{{ project.name }}</h3>
+                        <p class="resource-card__eyebrow">
+                            {% if 0 < project.progress_percent < 100 %}
+                                {{ project.progress_percent }}%
+                            {% else %}
+                                {{ project.status.value }}
+                            {% endif %}
+                        </p>
+
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No projects yet. Create your first one!</p>
+        {% endif %}
     </div>
-    {% if projects %}
-    <div class="resource-list">
-        {% for project in projects %}
-        <a class="resource-card" href="/projects/{{ project.id.value }}">
-            <p class="resource-card__eyebrow">Project</p>
-            <h3>{{ project.name }}</h3>
-        </a>
-        {% endfor %}
-    </div>
-    {% else %}
-    <p class="empty-state">No projects yet. Create your first one!</p>
-    {% endif %}
-</div>
 {% endblock %}
