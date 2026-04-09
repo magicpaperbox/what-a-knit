@@ -60,13 +60,15 @@
                     <td data-label="Current weight">{{ skein.current_weight.grams }} g</td>
                     <td data-label="Estimated remaining length">{{ skein.remaining_length(yarn) }}</td>
                     <td data-label="Actions" class="table-actions">
-                        <a href="/yarn/skeins/{{ skein.id.value }}/edit" class="btn-submit btn-submit--small">
-                            ✏️ Edit
-                        </a>
-                        <button class="btn-delete btn-delete--small" onclick="openSkeinDeleteModal({{ skein.id.value }})">
-                            <img src="/static/icons/frog.png" alt="Frog" class="button-icon button-icon--small">
-                            Frog
-                        </button>
+                        <div class="table-actions-row">
+                            <a href="/yarn/skeins/{{ skein.id.value }}/edit" class="btn-submit btn-submit--small">
+                                ✏️ Edit
+                            </a>
+                            <button class="btn-delete btn-delete--small" onclick="openSkeinDeleteModal({{ skein.id.value }})">
+                                <img src="/static/icons/frog.png" alt="Frog" class="button-icon button-icon--small">
+                                Frog
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
