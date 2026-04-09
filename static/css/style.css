@@ -247,7 +247,7 @@ code {
 
 .site-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 80px;
     padding: 0;
 }
@@ -1363,7 +1363,7 @@ body.dark .icon-dark {
 
     .theme-toggle {
         top: 12px;
-        right: 12px;
+        right: 15px;
         width: 48px;
         height: 48px;
     }

@@ -12,8 +12,8 @@
     <div class="resource-list">
         {% for yarn in yarns %}
         <a class="resource-card" href="/yarn/{{ yarn.id.value }}">
-            <p class="resource-card__eyebrow">{{ yarn.brand }}</p>
             <h3>{{ yarn.name }}</h3>
+            <p class="resource-card__eyebrow">{{ yarn.brand }}</p>
             <p class="resource-card__meta">{{ yarn.color_shade }}</p>
         </a>
         {% endfor %}

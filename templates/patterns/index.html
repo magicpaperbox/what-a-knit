@@ -12,8 +12,8 @@
     <div class="resource-list">
         {% for pattern in patterns %}
         <a class="resource-card" href="/patterns/{{ pattern.id.value }}">
-            <p class="resource-card__eyebrow">Pattern</p>
             <h3>{{ pattern.name }}</h3>
+            <p class="resource-card__eyebrow">{{ pattern.category.value }}</p>
         </a>
         {% endfor %}
     </div>

@@ -6,6 +6,8 @@ from modules.projects.api import projects_api
 from modules.charts.api import charts_api
 from modules.yarn.api import yarn_api
 import infra.db
+from tools.api import tools_api
+
 
 def create_app():
     # Calculate absolute paths to templates, static folder, and database
@@ -28,7 +30,8 @@ def create_app():
     app.register_blueprint(projects_api)
     app.register_blueprint(charts_api)
     app.register_blueprint(yarn_api)
-    
+    app.register_blueprint(tools_api)
+
     with app.app_context():
         # Tworzy schemat bazy, jeśli nie istnieje (zastępuje wywołanie SQLAlchemy)
         infra.db.init_db()
