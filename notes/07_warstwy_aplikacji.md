@@ -91,18 +91,18 @@ Service to **"mózg" modułu**. Wie jakie są reguły i pilnuje ich.
 ```python
 class YarnService:
     def get_all_yarns(self) -> list[Yarn]:
-        return self._yarn_repo.get_all()     # prosty przypadek — przekaż dalej
+        return self._yarn_repo.get_all()  # prosty przypadek — przekaż dalej
 
     def add_yarn(self, yarn: Yarn) -> Yarn:
-        yarn.validate()                      # sprawdź reguły!
-        return self._yarn_repo.add(yarn)     # dopiero potem zapisz
+        yarn.validate()  # sprawdź reguły!
+        return self._yarn_repo.add_straight_needles(yarn)  # dopiero potem zapisz
 
     def delete_yarn(self, yarn_id: YarnId) -> None:
-        self.get_yarn(yarn_id)               # sprawdź czy istnieje
+        self.get_yarn(yarn_id)  # sprawdź czy istnieje
         skeins = self._skein_repo.get_by_yarn_id(yarn_id)
         for skein in skeins:
             self._skein_repo.delete(skein.id)  # usuń powiązane motki
-        self._yarn_repo.delete(yarn_id)        # dopiero teraz usuń włóczkę
+        self._yarn_repo.delete(yarn_id)  # dopiero teraz usuń włóczkę
 ```
 
 ### Co robi Service:

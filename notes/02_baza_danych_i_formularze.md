@@ -113,6 +113,7 @@ Plik bazy pojawi się w: `instance/knit.db`
 ## Operacje na bazie danych (CRUD)
 
 ### Dodawanie rekordu (Create)
+
 ```python
 new_pattern = Pattern(
     name=request.form['name'],
@@ -120,8 +121,8 @@ new_pattern = Pattern(
     subtype=request.form['subtype'],
     notes=request.form['notes']
 )
-db.session.add(new_pattern)    # dodaj do sesji
-db.session.commit()            # ZAPISZ! (jak kliknięcie "Save")
+db.session.add_straight_needles(new_pattern)  # dodaj do sesji
+db.session.commit()  # ZAPISZ! (jak kliknięcie "Save")
 ```
 Po `commit()` obiekt dostaje swoje `id`: `new_pattern.id`
 
