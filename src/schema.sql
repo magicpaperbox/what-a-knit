@@ -19,6 +19,13 @@ CREATE TABLE IF NOT EXISTS pattern_gauge (
     FOREIGN KEY (pattern_id) REFERENCES pattern(id)
 );
 
+CREATE TABLE IF NOT EXISTS tool (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category VARCHAR(80) NOT NULL,
+    size_mm REAL,
+    length_cm REAL,
+    material VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS project (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

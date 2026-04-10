@@ -1,15 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="section">
-    <div class="section-header">
-        <h2>Your tools</h2>
-        <a href="/tool/add" class="btn-submit">
-            <img src="/static/icons/needles.png" alt="Needles" class="button-icon">
-            Add tool
-        </a>
+    <div class="section">
+        <div class="section-header">
+            <h2>Your tools</h2>
+            <a href="/tools/add" class="btn-submit">
+                <img src="/static/icons/needles.png" alt="Needles" class="button-icon">
+                Add tool
+            </a>
+        </div>
+        {% if tools %}
+            <div class="resource-list">
+                {% for tool in tools %}
+                    <a class="resource-card" href="/tools/{{ tool.id.value }}">
+                        <h3>{{ tool.category.value }}</h3>
+                        {% if tool.length is defined %}
+                            <p class="resource-card__eyebrow">Size: {{ tool.size_mm }} mm x {{ tool.length.value }}
+                                cm</p>
+                        {% else %}
+                            <p class="resource-card__eyebrow">Size: {{ tool.size_mm }} mm</p>
+                        {% endif %}
+                        <p class="resource-card__meta">Material: {{ tool.material.value }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No tool yet. Add your first one!</p>
+        {% endif %}
     </div>
-
-    <p class="empty-state">No tool yet. Add your first one!</p>
-
-</div>
 {% endblock %}
