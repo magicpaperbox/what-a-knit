@@ -1,95 +1,189 @@
+import dataclasses
 from dataclasses import dataclass
 
 from infra.db import get_db
 from modules.units.centimeters import Centimeters
-from tools.domain import ToolId, StraightNeedles, ToolCategory, ToolMaterial, ShortCrochetHook
+from modules.units.thickness import Thickness
+from tools.domain import (
+    Cable,
+    DoublePointedNeedles,
+    FixedCircularNeedles,
+    FixedCircularTunisianCrochetHook,
+    InterchangeableCircularNeedleTips,
+    ShortCrochetHook,
+    StraightNeedles,
+    StraightTunisianCrochetHook,
+    Tool,
+    ToolId,
+    ToolKind,
+    ToolMaterial,
+)
 
 
 @dataclass
 class ToolRow:
-    id: int
-    category: str
+    id: int | None
+    kind: str
     size_mm: float | None
     length_cm: float | None
     material: str
 
-class ToolsRepository:
-    def _row_to_domain(self, tool_row: ToolRow):
-        category = ToolCategory[tool_row.category]
 
-        if category == ToolCategory.SHORT_CROCHET_HOOK:
+class ToolsRepository:
+    def _row_to_domain(self, tool_row: ToolRow) -> Tool:
+        kind = ToolKind[tool_row.kind]
+        tool_id = ToolId(tool_row.id) if tool_row.id is not None else None
+
+        if kind == ToolKind.SHORT_CROCHET_HOOK:
             return ShortCrochetHook(
-                id=ToolId(tool_row.id),
-                category=category,
-                size_mm=tool_row.size_mm,
+                id=tool_id,
+                size=Thickness(tool_row.size_mm),
                 material=ToolMaterial[tool_row.material]
             )
-        elif category == ToolCategory.STRAIGHT_NEEDLES:
+        if kind == ToolKind.STRAIGHT_TUNISIAN_CROCHET_HOOK:
+            return StraightTunisianCrochetHook(
+                id=tool_id,
+                size=Thickness(tool_row.size_mm),
+                material=ToolMaterial[tool_row.material]
+            )
+        if kind == ToolKind.FIXED_CIRCULAR_TUNISIAN_CROCHET_HOOK:
+            return FixedCircularTunisianCrochetHook(
+                id=tool_id,
+                size=Thickness(tool_row.size_mm),
+                material=ToolMaterial[tool_row.material]
+            )
+        if kind == ToolKind.STRAIGHT_NEEDLES:
             return StraightNeedles(
-                id=ToolId(tool_row.id),
-                category=category,
-                size_mm=tool_row.size_mm,
+                id=tool_id,
+                size=Thickness(tool_row.size_mm),
+                length=Centimeters(tool_row.length_cm),
+                material=ToolMaterial[tool_row.material]
+            )
+        if kind == ToolKind.FIXED_CIRCULAR_NEEDLES:
+            return FixedCircularNeedles(
+                id=tool_id,
+                size=Thickness(tool_row.size_mm),
+                length=Centimeters(tool_row.length_cm),
+                material=ToolMaterial[tool_row.material]
+            )
+        if kind == ToolKind.INTERCHANGEABLE_CIRCULAR_NEEDLE_TIPS:
+            return InterchangeableCircularNeedleTips(
+                id=tool_id,
+                size=Thickness(tool_row.size_mm),
+                material=ToolMaterial[tool_row.material]
+            )
+        if kind == ToolKind.DOUBLE_POINTED_NEEDLES:
+            return DoublePointedNeedles(
+                id=tool_id,
+                size=Thickness(tool_row.size_mm),
+                material=ToolMaterial[tool_row.material]
+            )
+        if kind == ToolKind.CABLE:
+            return Cable(
+                id=tool_id,
                 length=Centimeters(tool_row.length_cm),
                 material=ToolMaterial[tool_row.material]
             )
 
-        raise ValueError(f"Unsupported tool category: {category}")
+        raise ValueError(f"Unsupported tool kind: {kind}")
 
-    def add(self, tool):
+    def _domain_to_row(self, tool: Tool) -> ToolRow:
+        tool_id = tool.id.value if tool.id else None
+
         if isinstance(tool, ShortCrochetHook):
-            return self.add_short_crochet_hook(tool)
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=tool.size.millimeters,
+                length_cm=None,
+                material=tool.material.name,
+            )
+
+        if isinstance(tool, StraightTunisianCrochetHook):
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=tool.size.millimeters,
+                length_cm=None,
+                material=tool.material.name,
+            )
+
+        if isinstance(tool, FixedCircularTunisianCrochetHook):
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=tool.size.millimeters,
+                length_cm=None,
+                material=tool.material.name,
+            )
 
         if isinstance(tool, StraightNeedles):
-            return self.add_straight_needles(tool)
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=tool.size.millimeters,
+                length_cm=tool.length.value,
+                material=tool.material.name,
+            )
+
+        if isinstance(tool, FixedCircularNeedles):
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=tool.size.millimeters,
+                length_cm=tool.length.value,
+                material=tool.material.name,
+            )
+
+        if isinstance(tool, InterchangeableCircularNeedleTips):
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=tool.size.millimeters,
+                length_cm=None,
+                material=tool.material.name,
+            )
+
+        if isinstance(tool, DoublePointedNeedles):
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=tool.size.millimeters,
+                length_cm=None,
+                material=tool.material.name,
+            )
+
+        if isinstance(tool, Cable):
+            return ToolRow(
+                id=tool_id,
+                kind=tool.kind.name,
+                size_mm=None,
+                length_cm=tool.length.value,
+                material=tool.material.name,
+            )
 
         raise ValueError(f"Unsupported tool type: {type(tool)}")
 
-    def add_short_crochet_hook(self, tool: ShortCrochetHook) -> ShortCrochetHook:
-        db = get_db()
-        cursor = db.execute(
-            '''INSERT INTO tool (
-            category, size_mm, material)
-            VALUES (?, ?, ?)''',
-            (
-            tool.category.name,
-            tool.size_mm,
-            tool.material.name,
-            )
-        )
-        db.commit()
-        return ShortCrochetHook(
-            id=ToolId(cursor.lastrowid),
-            category=tool.category,
-            size_mm=tool.size_mm,
-            material=tool.material,
-        )
 
-    def add_straight_needles(self, tool: StraightNeedles) -> StraightNeedles:
+    def add(self, tool: Tool) -> Tool:
+        row = self._domain_to_row(tool)
         db = get_db()
         cursor = db.execute(
             '''INSERT INTO tool (
-            category, size_mm, length_cm, material)
+            kind, size_mm, length_cm, material)
             VALUES (?, ?, ?, ?)''',
             (
-            tool.category.name,
-            tool.size_mm,
-            tool.length.value,
-            tool.material.name,
+            row.kind,
+            row.size_mm,
+            row.length_cm,
+            row.material,
             )
         )
         db.commit()
-        return StraightNeedles(
-            id=ToolId(cursor.lastrowid),
-            category=tool.category,
-            size_mm=tool.size_mm,
-            length=tool.length,
-            material=tool.material,
-        )
+        tool_id = ToolId(cursor.lastrowid)
+        return dataclasses.replace(tool, id=tool_id)
 
-
-
-
-    def get_all(self) -> list[StraightNeedles]:
+    def get_all(self) -> list[Tool]:
         db = get_db()
         cursor = db.execute('SELECT * FROM tool')
 

@@ -11,13 +11,13 @@
         {% if tools %}
             <div class="resource-list">
                 {% for tool in tools %}
-                    <a class="resource-card" href="/tools/{{ tool.id.value }}">
-                        <h3>{{ tool.category.value }}</h3>
+                        <a class="resource-card" href="/tools/{{ tool.id.value }}">
+                        <h3>{{ tool.kind.value }}</h3>
                         {% if tool.length is defined %}
-                            <p class="resource-card__eyebrow">Size: {{ tool.size_mm }} mm x {{ tool.length.value }}
+                            <p class="resource-card__eyebrow">Size: {{ tool.size.millimeters }} mm x {{ tool.length.value }}
                                 cm</p>
                         {% else %}
-                            <p class="resource-card__eyebrow">Size: {{ tool.size_mm }} mm</p>
+                            <p class="resource-card__eyebrow">Size: {{ tool.size.millimeters }} mm</p>
                         {% endif %}
                         <p class="resource-card__meta">Material: {{ tool.material.value }}</p>
                     </a>

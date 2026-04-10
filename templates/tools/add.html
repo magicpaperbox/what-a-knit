@@ -12,28 +12,28 @@
         <form method="POST" action="/tools/add" class="form-shell">
 
             <div class="form-group">
-                <label for="type">Tool type:</label>
-                <select id="type" name="type" required>
+                <label for="kind">Tool type:</label>
+                <select id="kind" name="kind" required>
                     <option value="" disabled selected hidden>select</option>
-                    {% for cat in tool_categories %}
-                        <option value="{{ cat.name }}"
-                                {% if form and form.tool_category == cat.name %}selected{% endif %}>
-                            {{ cat.value }}
+                    {% for kind in tool_kinds %}
+                        <option value="{{ kind.name }}"
+                                {% if form and form.kind == kind.name %}selected{% endif %}>
+                            {{ kind.value }}
                         </option>
                     {% endfor %}
                 </select>
             </div>
 
 
-            <div class="form-group">
-                <label for="size_mm">Size (mm):</label>
-                <input type="number" id="size_mm" name="size_mm"
-                       value="{{ form.size_mm if form else '' }}">
+            <div class="form-group" id="size-field">
+                <label for="size">Size (mm):</label>
+                <input type="number" id="size" name="size" min="0.5" step="0.25" placeholder="e.g. 4.0"
+                       value="{{ form.size if form else '' }}">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="length-field">
                 <label for="length">Length (cm):</label>
-                <input type="number" id="length" name="length" min="1" step="0.5" placeholder="e.g. 167" required
+                <input type="number" id="length" name="length" min="1" step="0.5" placeholder="e.g. 80"
                        value="{{ form.length if form else '' }}">
             </div>
 
@@ -57,5 +57,36 @@
             </button>
         </form>
     </div>
+
+    <script>
+        const kindsWithSize = new Set({{ tool_kinds_with_size | tojson }});
+        const kindsWithLength = new Set({{ tool_kinds_with_length | tojson }});
+
+        const kindSelect = document.getElementById("kind");
+
+        const sizeField = document.getElementById("size-field");
+        const sizeInput = document.getElementById("size");
+
+        const lengthField = document.getElementById("length-field");
+        const lengthInput = document.getElementById("length");
+
+        function updateMeasurementFields() {
+            const selectedKind = kindSelect.value;
+            updateField(sizeField, sizeInput, kindsWithSize.has(selectedKind));
+            updateField(lengthField, lengthInput, kindsWithLength.has(selectedKind));
+        }
+
+        function updateField(field, input, shouldShow) {
+            field.hidden = !shouldShow;
+            input.required = shouldShow;
+
+            if (!shouldShow) {
+                input.value = "";
+            }
+        }
+
+        kindSelect.addEventListener("change", updateMeasurementFields);
+        updateMeasurementFields();
+    </script>
 
 {% endblock %}
