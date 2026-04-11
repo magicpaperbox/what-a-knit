@@ -48,8 +48,8 @@ if (patternsDataElement) {
         selectedElement.textContent = pattern.name;
 
         const deleteButton = document.createElement("button");
-        deleteButton.textContent = "x";
         deleteButton.type = "button";
+        deleteButton.setAttribute("aria-label", `Remove pattern ${pattern.name}`);
         deleteButton.addEventListener("click", function () {
             deleteSelectedPattern(selectedElement, hiddenResultElement);
         });

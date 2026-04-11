@@ -50,6 +50,7 @@
     --input-bg: #ffffff;
     --input-border: #badc58;
     --input-placeholder: #b9a8ba;
+    --input-focus-shadow: 4px 4px 0 var(--shadow-soft);
     --modal-backdrop: rgba(45, 27, 61, 0.72);
     --table-border: rgba(108, 92, 231, 0.16);
     --chart-panel: linear-gradient(135deg, #ffd0df 0%, #ffc6b0 100%);
@@ -70,6 +71,17 @@
     --title-tab-border: #b8d856;
     --title-tab-text: rgb(107, 91, 229);
     --title-tab-shadow: rgba(255, 93, 206, 0.73);
+    --tag-bg: rgba(255, 234, 167, 0.75);
+    --tag-border: rgba(253, 203, 110, 0.72);
+    --tag-text: var(--heading);
+    --tag-remove-bg: var(--accent);
+    --tag-remove-border: var(--accent);
+    --tag-remove-text: #ffffff;
+    --tag-remove-hover-bg: var(--accent-secondary);
+    --tag-remove-hover-border: var(--accent-secondary);
+    --search-results-bg: var(--surface-strong);
+    --search-results-hover-bg: rgba(253, 203, 110, 0.35);
+    --search-results-hover-text: var(--text);
 }
 
 body.dark {
@@ -99,6 +111,7 @@ body.dark {
     --input-bg: #4a3660;
     --input-border: #6c5ce7;
     --input-placeholder: #8d7da1;
+    --input-focus-shadow: 0 0 0 3px rgba(162, 155, 254, 0.18);
     --modal-backdrop: rgba(16, 11, 24, 0.78);
     --table-border: rgba(162, 155, 254, 0.24);
     --chart-panel: linear-gradient(135deg, #523b6c 0%, #422f56 100%);
@@ -119,6 +132,17 @@ body.dark {
     --title-tab-border: #b9e35c;
     --title-tab-text: rgba(78, 34, 237, 0.73);
     --title-tab-shadow: rgba(177, 35, 193, 0.34);
+    --tag-bg: rgba(216, 190, 118, 0.16);
+    --tag-border: rgba(241, 203, 104, 0.58);
+    --tag-text: #f3dd9f;
+    --tag-remove-bg: #8b7cff;
+    --tag-remove-border: #8b7cff;
+    --tag-remove-text: #ffffff;
+    --tag-remove-hover-bg: #6c5ce7;
+    --tag-remove-hover-border: #6c5ce7;
+    --search-results-bg: rgba(58, 40, 79, 0.98);
+    --search-results-hover-bg: rgba(162, 155, 254, 0.14);
+    --search-results-hover-text: #f0e9f8;
 }
 
 *,
@@ -680,7 +704,7 @@ li + li {
 .chart-row input[type="text"]:focus,
 .chart-row input[type="number"]:focus {
     border-color: var(--accent);
-    box-shadow: 4px 4px 0 var(--shadow-soft);
+    box-shadow: var(--input-focus-shadow);
 }
 
 .form-group input[type="text"]::placeholder,
@@ -815,10 +839,10 @@ body.dark .form-group select {
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    border: 2px solid rgba(253, 203, 110, 0.72);
+    border: 2px solid var(--tag-border);
     border-radius: 999px;
-    background: rgba(255, 234, 167, 0.75);
-    color: var(--heading);
+    background: var(--tag-bg);
+    color: var(--tag-text);
     font-weight: 600;
 }
 
@@ -826,36 +850,51 @@ body.dark .form-group select {
     position: relative;
     display: inline-grid;
     place-items: center;
-    width: 28px;
-    height: 28px;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
     padding: 0;
-    border: 2px solid var(--accent);
+    border: 2px solid var(--tag-remove-border);
     border-radius: 999px;
-    background: var(--surface-strong);
+    background: var(--tag-remove-bg);
     color: transparent;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    overflow: hidden;
+    box-shadow: 2px 2px 0 rgba(18, 10, 25, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+#selected-patterns button::before,
+#selected-patterns button::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--tag-remove-text);
+    transform-origin: center;
 }
 
 #selected-patterns button::before {
-    content: "\00d7";
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    color: var(--accent);
-    font-size: 1.1rem;
-    font-weight: 700;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+#selected-patterns button::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 #selected-patterns button:hover {
     transform: translateY(-1px);
-    background: var(--accent);
+    background: var(--tag-remove-hover-bg);
+    border-color: var(--tag-remove-hover-border);
     box-shadow: 3px 3px 0 var(--shadow-soft);
 }
 
-#selected-patterns button:hover::before {
-    color: #fff;
+#selected-patterns button:hover::before,
+#selected-patterns button:hover::after {
+    background: #fff;
 }
 
 #pattern-search-results {
@@ -877,7 +916,7 @@ body.dark .form-group select {
     border-radius: 18px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    background: var(--surface-strong);
+    background: var(--search-results-bg);
 }
 
 #pattern-search-results > div {
@@ -892,8 +931,8 @@ body.dark .form-group select {
 }
 
 #pattern-search-results > div:hover {
-    background: rgba(253, 203, 110, 0.35);
-    color: var(--text);
+    background: var(--search-results-hover-bg);
+    color: var(--search-results-hover-text);
 }
 
 .fiber-rows {
