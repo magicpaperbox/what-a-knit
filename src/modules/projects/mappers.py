@@ -1,48 +1,108 @@
-from flask import request
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 from datetime import date
 
-from modules.patterns.domain import Gauge, PatternId
-from modules.projects.domain import Project, ProjectStatus
+from modules.patterns.domain import Gauge, Pattern, PatternId
+from modules.projects.domain import Project, ProjectId, ProjectStatus
 
 
-def parse_project_from_form() -> Project:
-    stitches = request.form.get('gauge_stitches', type=float)
-    rows = request.form.get('gauge_rows', type=float)
-    if stitches is not None or rows is not None:
-        actual_gauge=Gauge(stitches=stitches, rows=rows)
-    else:
-        actual_gauge = None
-
-    start_date=request.form['start_date']
-    if start_date == "":
-        start_date = None
-    else:
-        start_date = date.fromisoformat(request.form['start_date'])
-    end_date=request.form['end_date']
-    if end_date == "":
-        end_date = None
-    else:
-        end_date = date.fromisoformat(request.form['end_date'])
-
-    pattern_ids = []
-    pattern_ids_form = request.form.getlist('pattern_id', type=int)
-    for pattern_id in pattern_ids_form:
-        pattern_id = PatternId(pattern_id)
-        pattern_ids.append(pattern_id)
+@dataclass(frozen=True)
+class SelectedPatternFormData:
+    id: int
+    name: str
 
 
+@dataclass
+class ProjectFormData:
+    name: str = ""
+    status: str = ""
+    progress_percent: str = ""
+    gauge_stitches: str = ""
+    gauge_rows: str = ""
+    start_date: str = ""
+    end_date: str = ""
+    notes: str = ""
+    selected_patterns: list[SelectedPatternFormData] = field(default_factory=list)
 
-    project = Project(
-        id=None,
-        name=request.form['name'],
-        status=ProjectStatus[request.form['status']],
-        progress_percent=request.form.get('progress_percent', type=int),
-        pattern_ids=pattern_ids,
-        actual_gauge=actual_gauge,
-        start_date=start_date,
-        end_date=end_date,
-        rating=request.form.get('rating', type=int),
-        notes=request.form['notes'],
-    )
+    @classmethod
+    def empty(cls) -> ProjectFormData:
+        return ProjectFormData()
 
-    return project
+    @classmethod
+    def from_domain(cls, project: Project, selected_patterns: list[Pattern]) -> ProjectFormData:
+        return ProjectFormData(
+            name=project.name,
+            status=project.status.name,
+            progress_percent="" if project.progress_percent is None else str(project.progress_percent),
+            gauge_stitches="" if project.actual_gauge is None or project.actual_gauge.stitches is None else str(project.actual_gauge.stitches),
+            gauge_rows="" if project.actual_gauge is None or project.actual_gauge.rows is None else str(project.actual_gauge.rows),
+            start_date="" if project.start_date is None else project.start_date.isoformat(),
+            end_date="" if project.end_date is None else project.end_date.isoformat(),
+            notes=project.notes or "",
+            selected_patterns=[
+                SelectedPatternFormData(id=pattern.id.value, name=pattern.name)
+                for pattern in selected_patterns
+                if pattern.id is not None
+            ],
+        )
+
+    def to_domain(self, project_id: ProjectId | None = None) -> Project:
+        stitches = float(self.gauge_stitches) if self.gauge_stitches else None
+        rows = float(self.gauge_rows) if self.gauge_rows else None
+        if stitches is not None or rows is not None:
+            actual_gauge = Gauge(stitches=stitches, rows=rows)
+        else:
+            actual_gauge = None
+
+        start_date = None if self.start_date == "" else date.fromisoformat(self.start_date)
+        end_date = None if self.end_date == "" else date.fromisoformat(self.end_date)
+
+        pattern_ids = [
+            PatternId(selected_pattern.id)
+            for selected_pattern in self.selected_patterns
+        ]
+
+        return Project(
+            id=project_id,
+            name=self.name,
+            status=ProjectStatus[self.status],
+            progress_percent=int(self.progress_percent) if self.progress_percent else None,
+            pattern_ids=pattern_ids,
+            actual_gauge=actual_gauge,
+            start_date=start_date,
+            end_date=end_date,
+            rating=None,
+            notes=self.notes,
+        )
+
+    @classmethod
+    def from_request_form(cls, form, available_patterns: list[Pattern]) -> ProjectFormData:
+        patterns_by_id = {
+            pattern.id.value: pattern
+            for pattern in available_patterns
+            if pattern.id is not None
+        }
+        selected_patterns = []
+        for pattern_id in form.getlist('pattern_id', type=int):
+            pattern = patterns_by_id.get(pattern_id)
+            if pattern is None:
+                continue
+            selected_patterns.append(
+                SelectedPatternFormData(id=pattern_id, name=pattern.name)
+            )
+
+        return ProjectFormData(
+            name=form.get('name', ''),
+            status=form.get('status', ''),
+            progress_percent=form.get('progress_percent', ''),
+            gauge_stitches=form.get('gauge_stitches', ''),
+            gauge_rows=form.get('gauge_rows', ''),
+            start_date=form.get('start_date', ''),
+            end_date=form.get('end_date', ''),
+            notes=form.get('notes', ''),
+            selected_patterns=selected_patterns,
+        )
+
+    def selected_patterns_to_dicts(self) -> list[dict]:
+        return [{"id": pattern.id, "name": pattern.name} for pattern in self.selected_patterns]

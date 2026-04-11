@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="section">
+    <h2>
+        <img src="/static/icons/yarn_ball.png" class="icon-header" alt="Yarn">
+        {% if mode == "edit" %}Edit skein{% else %}Add skein{% endif %} - {{ yarn.brand }} {{ yarn.name }}
+    </h2>
+
+    {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{{ form_action }}" class="form-shell">
+        <div class="form-group">
+            <label for="current_weight">Current weight (g):</label>
+            <input type="number" id="current_weight" name="current_weight" min="0" max="{{ yarn.full_weight.grams }}"
+                value="{{ form_data.current_weight }}" required>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
+            {% if mode == "edit" %}Save changes{% else %}Add skein{% endif %}
+        </button>
+    </form>
+</div>
+{% endblock %}

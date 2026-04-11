@@ -95,7 +95,7 @@ class YarnService:
 
     def add_yarn(self, yarn: Yarn) -> Yarn:
         yarn.validate()  # sprawdź reguły!
-        return self._yarn_repo.add_straight_needles(yarn)  # dopiero potem zapisz
+        return self._yarn_repo._add_straight_needles(yarn)  # dopiero potem zapisz
 
     def delete_yarn(self, yarn_id: YarnId) -> None:
         self.get_yarn(yarn_id)  # sprawdź czy istnieje
