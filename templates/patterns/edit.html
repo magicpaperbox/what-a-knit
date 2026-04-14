@@ -3,11 +3,17 @@
 <div class="section">
     <h2><img src="/static/icons/needles.png" class="icon-header" alt="Needle"> Edit pattern</h2>
 
-    <form method="POST" action="/patterns/{{ pattern.id.value }}/edit" class="form-shell">
+    {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{{ form_action }}" class="form-shell">
 
         <div class="form-group">
             <label for="name">Pattern name:</label>
-            <input type="text" id="name" name="name" value="{{ pattern.name }}" required>
+            <input type="text" id="name" name="name" value="{{ form_data.name }}" required>
         </div>
 
         <!-- SELECT CATEGORY -->
@@ -16,7 +22,7 @@
             <select id="category" name="category" required>
                 <option value="" disabled hidden>select</option>
                 {% for category in pattern_categories %}
-                <option value="{{ category.name }}" {% if pattern.category==category %}selected{% endif %}>
+                <option value="{{ category.name }}" {% if form_data.category == category.name %}selected{% endif %}>
                     {{ category.value }}
                 </option>
                 {% endfor %}
@@ -27,9 +33,11 @@
         <!-- data-selected lets JS know which subcategory to pre-select -->
         <div class="form-group">
             <label for="subcategory">Subcategory:</label>
-            <select id="subcategory" name="subcategory" data-selected="{{ pattern.subcategory }}">
-                <option value="" disabled selected hidden>select category first</option>
-                <option value="{{ pattern.subcategory }}" selected>{{ pattern.subcategory }}</option>
+            <select id="subcategory" name="subcategory" data-selected="{{ form_data.subcategory }}">
+                <option value="" disabled hidden {% if not form_data.subcategory %}selected{% endif %}>select category first</option>
+                {% if form_data.subcategory %}
+                    <option value="{{ form_data.subcategory }}" selected>{{ form_data.subcategory }}</option>
+                {% endif %}
             </select>
             <script>
                 const subcategories = {{ subcategories_map | tojson }};
@@ -39,7 +47,7 @@
         <div class="form-group">
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="5"
-                placeholder="Any extra notes...">{{ pattern.description or '' }}</textarea>
+                placeholder="Any extra notes...">{{ form_data.description }}</textarea>
         </div>
 
         <div class="form-group">
@@ -48,7 +56,7 @@
                     <label for="gauge_stitches">Gauge stitches:</label>
                     <div class="number-stepper">
                         <input
-                            value="{{ pattern.target_gauge.stitches if pattern.target_gauge else '' }}"
+                            value="{{ form_data.gauge_stitches }}"
                             type="number"
                             id="gauge_stitches"
                             name="gauge_stitches"
@@ -68,7 +76,7 @@
                     <label for="gauge_rows">Gauge rows:</label>
                     <div class="number-stepper">
                         <input
-                            value="{{ pattern.target_gauge.rows if pattern.target_gauge else '' }}"
+                            value="{{ form_data.gauge_rows }}"
                             type="number"
                             id="gauge_rows"
                             name="gauge_rows"
@@ -121,41 +129,40 @@
 {#        </div>#}
 
         <!-- SELECT HAS PATTERN -->
-        {% set has_pattern = 'yes' if (pattern.pattern_language or pattern.author or pattern.difficulty_level) else 'no' %}
         <div class="form-group">
             <label for="has_pattern">Using a pattern?</label>
             <select id="has_pattern" name="has_pattern">
                 <option value="" disabled hidden>select</option>
-                <option value="yes" {% if has_pattern=='yes' %}selected{% endif %}>Yes</option>
-                <option value="no" {% if has_pattern=='no' %}selected{% endif %}>No</option>
+                <option value="yes" {% if form_data.has_pattern == 'yes' %}selected{% endif %}>Yes</option>
+                <option value="no" {% if form_data.has_pattern == 'no' %}selected{% endif %}>No</option>
             </select>
         </div>
 
-        <div id="pattern-details" class="toggle-panel" {% if has_pattern != 'yes' %}hidden{% endif %}>
+        <div id="pattern-details" class="toggle-panel" {% if form_data.has_pattern != 'yes' %}hidden{% endif %}>
             <div class="form-group">
                 <label for="pattern_language">Pattern language:</label>
                 <select id="pattern_language" name="pattern_language">
                     <option value="" disabled hidden>select</option>
-                    <option value="polish" {% if pattern.pattern_language=='polish' %}selected{% endif %}>polish
+                    <option value="polish" {% if form_data.pattern_language == 'polish' %}selected{% endif %}>polish
                     </option>
-                    <option value="english" {% if pattern.pattern_language=='english' %}selected{% endif %}>english
+                    <option value="english" {% if form_data.pattern_language == 'english' %}selected{% endif %}>english
                     </option>
-                    <option value="other" {% if pattern.pattern_language=='other' %}selected{% endif %}>other</option>
+                    <option value="other" {% if form_data.pattern_language == 'other' %}selected{% endif %}>other</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="author">Designer:</label>
-                <input type="text" id="author" name="author" value="{{ pattern.author or '' }}"
+                <input type="text" id="author" name="author" value="{{ form_data.author }}"
                     placeholder="e.g. Petite Knit">
             </div>
 
              <div class="form-group">
                 <label for="difficulty_level">Difficulty level:</label>
                 <select id="difficulty_level" name="difficulty_level">
-                    <option value="" {% if not pattern.difficulty_level %}selected{% endif %}> - </option>
+                    <option value="" {% if not form_data.difficulty_level %}selected{% endif %}> - </option>
                     {% for difficulty_level in difficulty_levels %}
-                    <option value="{{ difficulty_level.value }}" {% if pattern.difficulty_level and pattern.difficulty_level.value==difficulty_level.value %}selected{% endif %}>
+                    <option value="{{ difficulty_level.value }}" {% if form_data.difficulty_level == difficulty_level.value %}selected{% endif %}>
                     {{ difficulty_level.value }}
                     </option>
                 {% endfor %}

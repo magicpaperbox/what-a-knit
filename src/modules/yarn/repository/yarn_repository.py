@@ -138,6 +138,6 @@ class YarnRepository:
 
     def delete(self, yarn_id: YarnId) -> None:
         db = get_db()
-        db.execute('DELETE FROM yarn_fiber WHERE yarn_id = ?', (yarn_id,))
+        db.execute('DELETE FROM yarn_fiber WHERE yarn_id = ?', (yarn_id.value,))
         db.execute('DELETE FROM yarn WHERE id = ?', (yarn_id.value,))
         db.commit()

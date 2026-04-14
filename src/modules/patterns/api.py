@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, request
 from werkzeug.exceptions import abort
 
 from use_cases.delete_pattern_use_case import DeletePatternUseCase
 from modules.patterns.domain import PatternCategory, PatternId, PatternDifficultyLevel
-from modules.patterns.mappers import parse_pattern_from_form
+from modules.patterns.mappers import PatternFormData
 from modules.patterns.repository import PatternRepository
 from modules.projects.repository import ProjectRepository
 
@@ -28,19 +28,52 @@ def details(pattern_id: int):
     pattern = get_pattern_or_404(PatternId(pattern_id))
     return render_template('patterns/details.html', pattern=pattern)
 
-@patterns_api.get('/add')
-def create_pattern_form():
+
+def _build_pattern_form_context(
+    form_data: PatternFormData,
+    pattern_id: int | None = None,
+    error: str | None = None,
+):
     subcategories_map = {}
     for category in PatternCategory:
         subcategories_map[category.name] = category.subcategories()
 
-    return render_template('patterns/add.html', pattern_categories=PatternCategory, subcategories_map=subcategories_map, difficulty_levels=PatternDifficultyLevel)
+    mode = "edit" if pattern_id else "add"
+    form_action = f"/patterns/{pattern_id}/edit" if pattern_id else "/patterns/add"
+    return {
+        "mode": mode,
+        "form_action": form_action,
+        "form_data": form_data,
+        "pattern_id": pattern_id,
+        "error": error,
+        "pattern_categories": PatternCategory,
+        "subcategories_map": subcategories_map,
+        "difficulty_levels": PatternDifficultyLevel,
+    }
+
+
+def _render_pattern_form(
+    template_name: str,
+    form_data: PatternFormData,
+    pattern_id: int | None = None,
+    error: str | None = None,
+):
+    return render_template(template_name, **_build_pattern_form_context(form_data, pattern_id, error))
+
+
+@patterns_api.get('/add')
+def create_pattern_form():
+    return _render_pattern_form("patterns/add.html", PatternFormData.empty())
 
 @patterns_api.post('/add')
 def create_pattern():
-    new_pattern = parse_pattern_from_form()
-    new_pattern = repo.add(new_pattern)
-    return redirect(f"/patterns/{new_pattern.id.value}")
+    form_data = PatternFormData.from_request_form(request.form)
+    try:
+        new_pattern = form_data.to_domain()
+        new_pattern = repo.add(new_pattern)
+        return redirect(f"/patterns/{new_pattern.id.value}")
+    except Exception as error:
+        return _render_pattern_form("patterns/add.html", form_data, error=str(error))
 
 @patterns_api.post('/<int:pattern_id>/delete')
 def delete(pattern_id: int):
@@ -51,24 +84,16 @@ def delete(pattern_id: int):
 @patterns_api.get('/<int:pattern_id>/edit')
 def edit_pattern_form(pattern_id: int):
     pattern = get_pattern_or_404(PatternId(pattern_id))
-    subcategories_map = {}
-    for category in PatternCategory:
-        subcategories_map[category.name] = category.subcategories()
-
-    return render_template(
-        'patterns/edit.html',
-        pattern=pattern,
-        pattern_categories=PatternCategory,
-        subcategories_map=subcategories_map,
-        difficulty_levels=PatternDifficultyLevel
-    )
+    form_data = PatternFormData.from_domain(pattern)
+    return _render_pattern_form("patterns/edit.html", form_data, pattern_id=pattern_id)
 
 @patterns_api.post('/<int:pattern_id>/edit')
 def edit_pattern(pattern_id: int):
     get_pattern_or_404(PatternId(pattern_id))
-
-    edited_pattern = parse_pattern_from_form()
-    edited_pattern.id = PatternId(pattern_id)
-
-    repo.update(edited_pattern)
-    return redirect(f'/patterns/{pattern_id}')
+    form_data = PatternFormData.from_request_form(request.form)
+    try:
+        edited_pattern = form_data.to_domain(PatternId(pattern_id))
+        repo.update(edited_pattern)
+        return redirect(f'/patterns/{pattern_id}')
+    except Exception as error:
+        return _render_pattern_form("patterns/edit.html", form_data, pattern_id=pattern_id, error=str(error))
