@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, redirect, request
-from werkzeug.exceptions import abort
+from flask import Blueprint, render_template, redirect, request, abort
 
 from modules.patterns.domain import Pattern
 from modules.patterns.repository import PatternRepository

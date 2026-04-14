@@ -1,5 +1,6 @@
 import dataclasses
 from dataclasses import dataclass
+from typing import Optional
 
 from infra.db import get_db
 from modules.units.centimeters import Centimeters
@@ -183,6 +184,28 @@ class ToolsRepository:
         tool_id = ToolId(cursor.lastrowid)
         return dataclasses.replace(tool, id=tool_id)
 
+    def update(self, tool: Tool) -> None:
+        row = self._domain_to_row(tool)
+        db = get_db()
+        db.execute(
+            '''UPDATE tool
+            SET kind = ?, size_mm = ?, length_cm = ?, material = ?
+            WHERE id = ?''',
+            (
+                row.kind,
+                row.size_mm,
+                row.length_cm,
+                row.material,
+                row.id,
+            )
+        )
+        db.commit()
+
+    def delete(self, tool_id: ToolId) -> None:
+        db = get_db()
+        db.execute('DELETE FROM tool WHERE id = ?', (tool_id.value,))
+        db.commit()
+
     def get_all(self) -> list[Tool]:
         db = get_db()
         cursor = db.execute('SELECT * FROM tool')
@@ -194,3 +217,14 @@ class ToolsRepository:
             tools.append(tool)
 
         return tools
+
+    def get_by_id(self, tool_id: ToolId) -> Optional[Tool]:
+        db = get_db()
+        cursor = db.execute('SELECT * FROM tool WHERE id = ?', (tool_id.value,))
+        row = cursor.fetchone()
+
+        if row is None:
+            return None
+
+        tool_row = ToolRow(**dict(row))
+        return self._row_to_domain(tool_row)

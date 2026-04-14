@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="titled-section">
+    <h2 class="page-title">{{ tool.kind.value }}</h2>
+    <div class="section section--with-page-title">
+        <div class="detail-list">
+            <p><strong>Type:</strong> {{ tool.kind.value }}</p>
+            <p><strong>Material:</strong> {{ tool.material.value }}</p>
+
+            {% if tool.size is defined %}
+            <p><strong>Size:</strong> {{ tool.size }} </p>
+            {% endif %}
+
+            {% if tool.length is defined %}
+            <p><strong>Length:</strong> {{ tool.length }} </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="action-buttons">
+    <button class="btn-delete" onclick="openDeleteModal()">
+        <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
+        Frog tool
+    </button>
+    <a href="/tools/{{ tool.id.value }}/edit" class="btn-submit">
+        ✏️ Edit tool
+    </a>
+</div>
+
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>🐸 Frog it?</h3>
+        <p>Are you sure you want to delete <strong>{{ tool.kind.value }}</strong>?<br>This cannot be undone!</p>
+
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
+
+            <form method="POST" action="/tools/{{ tool.id.value }}/delete" class="inline-form">
+                <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/delete-modal.js"></script>
+{% endblock %}
