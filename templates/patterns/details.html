@@ -18,15 +18,15 @@
             <p>
                 <strong>Gauge:</strong>
                 {% if pattern.target_gauge.stitches is not none and pattern.target_gauge.rows is not none %}
-                {{ pattern.target_gauge.stitches }} sts /
-                {{ pattern.target_gauge.rows }} rows
-                per {{ pattern.target_gauge.width.value }} x {{ pattern.target_gauge.height.value }} cm
+                {{ '%g' | format(pattern.target_gauge.stitches) }} sts /
+                {{ '%g' | format(pattern.target_gauge.rows) }} rows
+                per {{ pattern.target_gauge.width }} x {{ pattern.target_gauge.height }}
 
                 {% elif pattern.target_gauge.stitches is not none %}
-                {{ pattern.target_gauge.stitches }} sts per {{ pattern.target_gauge.width.value }} cm
+                {{ '%g' | format(pattern.target_gauge.stitches) }} sts per {{ pattern.target_gauge.width }}
 
                 {% elif pattern.target_gauge.rows is not none %}
-                {{ pattern.target_gauge.rows }} rows per {{ pattern.target_gauge.height.value }} cm
+                {{ '%g' | format(pattern.target_gauge.rows) }} rows per {{ pattern.target_gauge.height }}
             {% endif %}
             </p>
             {% endif %}

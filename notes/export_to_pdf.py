@@ -12,7 +12,7 @@ except OSError as e:
     print(f"Error! Cannot fint path to: {PATH_TO_WKHTMLTOPDF}")
     exit(1)
 
-NOTES_DIR = '.'
+NOTES_DIR = os.path.dirname(__file__)
 
 print("Converting to PDF...\n")
 
@@ -66,3 +66,4 @@ for filename in os.listdir(NOTES_DIR):
             pdfkit.from_string(print_html, pdf_file_path, configuration=config)
 
 print("\nSuccess! ✨")
+print(os.getcwd())

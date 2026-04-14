@@ -6,4 +6,4 @@ class Meters:
     value: float
 
     def __str__(self):
-        return f"{self.value} m"
+        return f"{self.value:g} m"
