@@ -23,15 +23,15 @@
                     <p>
                         <strong>My gauge:</strong>
                         {% if project.actual_gauge.stitches is not none and project.actual_gauge.rows is not none %}
-                            {{ project.actual_gauge.stitches }} sts /
-                            {{ project.actual_gauge.rows }} rows
-                            per {{ project.actual_gauge.width.value }} x {{ project.actual_gauge.height.value }} cm
+                            {{ '%g' | format(project.actual_gauge.stitches) }} sts /
+                            {{ '%g' | format(project.actual_gauge.rows) }} rows
+                            per {{ project.actual_gauge.width }} x {{ project.actual_gauge.height }}
 
                         {% elif project.actual_gauge.stitches is not none %}
-                            {{ project.actual_gauge.stitches }} sts per {{ project.actual_gauge.width.value }} cm
+                            {{ '%g' | format(project.actual_gauge.stitches) }} sts per {{ project.actual_gauge.width }}
 
                         {% elif project.actual_gauge.rows is not none %}
-                            {{ project.actual_gauge.rows }} rows per {{ project.actual_gauge.height.value }} cm
+                            {{ '%g' | format(project.actual_gauge.rows) }} rows per {{ project.actual_gauge.height }}
                         {% endif %}
                     </p>
                 {% endif %}

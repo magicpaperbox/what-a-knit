@@ -38,35 +38,51 @@
 
         <div class="form-group">
             <label for="description">Description:</label>
-            <input type="text" id="description" name="description" value="{{ pattern.description or '' }}"
-                placeholder="Any extra notes...">
+            <textarea id="description" name="description" rows="5"
+                placeholder="Any extra notes...">{{ pattern.description or '' }}</textarea>
         </div>
 
         <div class="form-group">
             <div class="inline-fields">
                 <div>
                     <label for="gauge_stitches">Gauge stitches:</label>
-                    <input
-                        value="{{ pattern.target_gauge.stitches if pattern.target_gauge else '' }}"
-                        type="number"
-                        id="gauge_stitches"
-                        name="gauge_stitches"
-                        min="0"
-                        max="100"
-                        step="0.5"
-                        placeholder="stitches in 10 cm">
+                    <div class="number-stepper">
+                        <input
+                            value="{{ pattern.target_gauge.stitches if pattern.target_gauge else '' }}"
+                            type="number"
+                            id="gauge_stitches"
+                            name="gauge_stitches"
+                            min="0"
+                            max="100"
+                            step="0.5"
+                            placeholder="stitches in 10 cm">
+                        <div class="number-stepper-controls">
+                            <button type="button" class="number-stepper-button" data-stepper-action="decrement"
+                                aria-label="Decrease gauge stitches">-</button>
+                            <button type="button" class="number-stepper-button" data-stepper-action="increment"
+                                aria-label="Increase gauge stitches">+</button>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label for="gauge_rows">Gauge rows:</label>
-                    <input
-                        value="{{ pattern.target_gauge.rows if pattern.target_gauge else '' }}"
-                        type="number"
-                        id="gauge_rows"
-                        name="gauge_rows"
-                        min="0"
-                        max="100"
-                        step="0.5"
-                        placeholder="rows in 10 cm">
+                    <div class="number-stepper">
+                        <input
+                            value="{{ pattern.target_gauge.rows if pattern.target_gauge else '' }}"
+                            type="number"
+                            id="gauge_rows"
+                            name="gauge_rows"
+                            min="0"
+                            max="100"
+                            step="0.5"
+                            placeholder="rows in 10 cm">
+                        <div class="number-stepper-controls">
+                            <button type="button" class="number-stepper-button" data-stepper-action="decrement"
+                                aria-label="Decrease gauge rows">-</button>
+                            <button type="button" class="number-stepper-button" data-stepper-action="increment"
+                                aria-label="Increase gauge rows">+</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -155,5 +171,6 @@
 {% endblock %}
 {% block scripts %}
     {{ super() }}
+    <script src="/static/js/number-stepper.js"></script>
     <script src="/static/js/pattern-form.js"></script>
 {% endblock %}

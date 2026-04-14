@@ -48,8 +48,8 @@ class ProjectFormData:
         )
 
     def to_domain(self, project_id: ProjectId | None = None) -> Project:
-        stitches = float(self.gauge_stitches) if self.gauge_stitches else None
-        rows = float(self.gauge_rows) if self.gauge_rows else None
+        stitches = self.normalize_gauge_value(self.gauge_stitches)
+        rows = self.normalize_gauge_value(self.gauge_rows)
         if stitches is not None or rows is not None:
             actual_gauge = Gauge(stitches=stitches, rows=rows)
         else:
@@ -106,3 +106,15 @@ class ProjectFormData:
 
     def selected_patterns_to_dicts(self) -> list[dict]:
         return [{"id": pattern.id, "name": pattern.name} for pattern in self.selected_patterns]
+
+
+    @staticmethod
+    def normalize_gauge_value(raw: str) -> float | None:
+        if raw == "":
+            return None
+
+        value = float(raw)
+        if value <= 0:
+            return None
+
+        return value

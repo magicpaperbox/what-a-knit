@@ -98,19 +98,22 @@
             </div>
 
             <div class="form-group">
-                <label for="start_date">Start date:</label>
-                <input type="date" id="start_date" name="start_date" value="{{ form_data.start_date }}">
-            </div>
-
-            <div class="form-group">
-                <label for="end_date">End date:</label>
-                <input type="date" id="end_date" name="end_date" value="{{ form_data.end_date }}">
+                <div class="inline-fields">
+                    <div>
+                        <label for="start_date">Start date:</label>
+                        <input type="date" id="start_date" name="start_date" value="{{ form_data.start_date }}">
+                    </div>
+                    <div>
+                        <label for="end_date">End date:</label>
+                        <input type="date" id="end_date" name="end_date" value="{{ form_data.end_date }}">
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="notes">Notes:</label>
-                <input type="text" id="notes" name="notes" value="{{ form_data.notes }}"
-                       placeholder="Any extra notes...">
+                <textarea id="notes" name="notes" rows="5"
+                          placeholder="Any extra notes...">{{ form_data.notes }}</textarea>
             </div>
 
             <button type="submit" class="btn-submit">
