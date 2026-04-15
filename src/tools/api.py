@@ -27,7 +27,6 @@ def _render_tool_form(
         mode=mode,
         form_action=form_action,
         form_data=form_data,
-        tool_id=tool_id,
         error=error,
         tool_kinds=ToolKind,
         materials=ToolMaterial,

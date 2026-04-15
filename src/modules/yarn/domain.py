@@ -50,6 +50,7 @@ class Yarn:
     weight_category: YarnWeightCategory
     full_weight: Mass
     full_length: Meters
+    notes: Optional[str] = None
     composition: list[YarnFiber] = field(default_factory=list)
 
     def validate(self) -> None:

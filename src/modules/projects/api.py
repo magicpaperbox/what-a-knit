@@ -36,7 +36,6 @@ def _render_project_form(
         form_action=form_action,
         form_data=form_data,
         error=error,
-        status=ProjectStatus,
         patterns_dicts=_patterns_to_dicts(available_patterns),
         initial_selected_patterns=form_data.selected_patterns_to_dicts(),
     )
@@ -67,7 +66,6 @@ def create_project():
     form_data = ProjectFormData.from_request_form(request.form, available_patterns)
     try:
         new_project = form_data.to_domain()
-        new_project.normalize()
         new_project = repo.add(new_project)
         return redirect(f"/projects/{new_project.id.value}")
     except Exception as error:
@@ -97,7 +95,6 @@ def edit_project(project_id: int):
     form_data = ProjectFormData.from_request_form(request.form, available_patterns)
     try:
         edited_project = form_data.to_domain(ProjectId(project_id))
-        edited_project.normalize()
         repo.update(edited_project)
         return redirect(f'/projects/{project_id}')
     except Exception as error:

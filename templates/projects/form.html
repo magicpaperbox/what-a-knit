@@ -19,19 +19,6 @@
             </div>
 
             <div class="form-group">
-                <label for="status">Status:</label>
-                <select id="status" name="status" required>
-                    <option value="" disabled hidden {% if not form_data.status %}selected{% endif %}>select</option>
-                    {% for current_status in status %}
-                        <option value="{{ current_status.name }}"
-                                {% if form_data.status == current_status.name %}selected{% endif %}>
-                            {{ current_status.value }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
                 <label for="patterns-search">Patterns used:</label>
                 <input type="text" id="patterns-search" placeholder="Search">
 

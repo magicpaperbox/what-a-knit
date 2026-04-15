@@ -29,7 +29,8 @@ def details(pattern_id: int):
     return render_template('patterns/details.html', pattern=pattern)
 
 
-def _build_pattern_form_context(
+def _render_pattern_form(
+    template_name: str,
     form_data: PatternFormData,
     pattern_id: int | None = None,
     error: str | None = None,
@@ -37,28 +38,19 @@ def _build_pattern_form_context(
     subcategories_map = {}
     for category in PatternCategory:
         subcategories_map[category.name] = category.subcategories()
-
     mode = "edit" if pattern_id else "add"
     form_action = f"/patterns/{pattern_id}/edit" if pattern_id else "/patterns/add"
-    return {
-        "mode": mode,
-        "form_action": form_action,
-        "form_data": form_data,
-        "pattern_id": pattern_id,
-        "error": error,
-        "pattern_categories": PatternCategory,
-        "subcategories_map": subcategories_map,
-        "difficulty_levels": PatternDifficultyLevel,
-    }
-
-
-def _render_pattern_form(
-    template_name: str,
-    form_data: PatternFormData,
-    pattern_id: int | None = None,
-    error: str | None = None,
-):
-    return render_template(template_name, **_build_pattern_form_context(form_data, pattern_id, error))
+    return render_template(
+        template_name,
+        mode=mode,
+        form_action=form_action,
+        form_data=form_data,
+        pattern_id=pattern_id,
+        error=error,
+        pattern_categories=PatternCategory,
+        subcategories_map=subcategories_map,
+        difficulty_levels=PatternDifficultyLevel,
+    )
 
 
 @patterns_api.get('/add')

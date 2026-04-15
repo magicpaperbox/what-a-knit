@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS yarn (
     color_shade VARCHAR(100) NOT NULL,
     weight_category VARCHAR(20) NOT NULL,
     full_weight_grams INTEGER NOT NULL,
-    full_length_meters REAL NOT NULL
+    full_length_meters REAL NOT NULL,
+    notes VARCHAR(200)
 );
 
 CREATE TABLE IF NOT EXISTS yarn_fiber (

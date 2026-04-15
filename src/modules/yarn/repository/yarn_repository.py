@@ -19,6 +19,7 @@ class YarnRow:
     weight_category: str
     full_weight_grams: int
     full_length_meters: float
+    notes: str | None
 
 
 @dataclass
@@ -43,6 +44,7 @@ class YarnRepository:
             weight_category=YarnWeightCategory[row.weight_category],
             full_weight=Mass(row.full_weight_grams),
             full_length=Meters(row.full_length_meters),
+            notes=row.notes,
             composition=composition,
         )
 
@@ -105,12 +107,13 @@ class YarnRepository:
         db = get_db()
         cursor = db.execute(
             '''INSERT INTO yarn (
-                brand, name, color_shade, weight_category, full_weight_grams, full_length_meters
-            ) VALUES (?, ?, ?, ?, ?, ?)''',
+                brand, name, color_shade, weight_category, full_weight_grams, full_length_meters, notes
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)''',
             (
                 yarn.brand, yarn.name, yarn.color_shade,
                 yarn.weight_category.name,
                 yarn.full_weight.grams, yarn.full_length.value,
+                yarn.notes,
             ),
         )
         db.commit()
@@ -124,12 +127,13 @@ class YarnRepository:
         db.execute(
             '''UPDATE yarn SET
                 brand = ?, name = ?, color_shade = ?, weight_category = ?,
-                full_weight_grams = ?, full_length_meters = ?
+                full_weight_grams = ?, full_length_meters = ?, notes = ?
             WHERE id = ?''',
             (
                 yarn.brand, yarn.name, yarn.color_shade,
                 yarn.weight_category.name,
                 yarn.full_weight.grams, yarn.full_length.value,
+                yarn.notes,
                 yarn.id.value,
             ),
         )

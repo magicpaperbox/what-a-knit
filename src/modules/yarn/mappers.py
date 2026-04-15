@@ -45,6 +45,7 @@ class YarnFormData:
             weight_category=yarn.weight_category.name,
             full_weight=str(yarn.full_weight.grams),
             full_length=str(yarn.full_length.value),
+            notes=yarn.notes or "",
             composition_rows=[
                 YarnFiberFormData(
                     fiber_type=fiber.fiber_type.name,
@@ -73,6 +74,7 @@ class YarnFormData:
             weight_category=YarnWeightCategory[self.weight_category],
             full_weight=Mass(int(self.full_weight)),
             full_length=Meters(float(self.full_length)),
+            notes=self.notes or None,
             composition=composition,
         )
 

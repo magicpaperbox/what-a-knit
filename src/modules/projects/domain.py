@@ -33,7 +33,7 @@ class Project:
     rating: Optional[int] = None
     notes: Optional[str] = None
 
-    def normalize(self):
+    def update_status_from_progress(self):
         if self.progress_percent is None or self.progress_percent == 0:
             self.status = ProjectStatus.NOT_STARTED
         elif self.progress_percent == 100:

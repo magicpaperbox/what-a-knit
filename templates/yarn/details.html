@@ -8,6 +8,9 @@
             <p><strong>Weight category:</strong> {{ yarn.weight_category.value }}</p>
             <p><strong>Full skein weight:</strong> {{ yarn.full_weight.grams }} g</p>
             <p><strong>Full skein length:</strong> {{ yarn.full_length }}</p>
+            {% if yarn.notes %}
+            <p><strong>Notes:</strong> {{ yarn.notes }}</p>
+            {% endif %}
         </div>
 
         {% if yarn.composition %}

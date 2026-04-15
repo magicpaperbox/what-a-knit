@@ -985,6 +985,10 @@ body.dark .number-stepper-button:hover {
     text-align: center;
 }
 
+.btn-submit.fiber-add-button {
+    margin-top: 12px;
+}
+
 .error-message {
     margin-bottom: 18px;
     padding: 12px 14px;

@@ -16,7 +16,6 @@ class SelectedPatternFormData:
 @dataclass
 class ProjectFormData:
     name: str = ""
-    status: str = ""
     progress_percent: str = ""
     gauge_stitches: str = ""
     gauge_rows: str = ""
@@ -33,7 +32,6 @@ class ProjectFormData:
     def from_domain(cls, project: Project, selected_patterns: list[Pattern]) -> ProjectFormData:
         return ProjectFormData(
             name=project.name,
-            status=project.status.name,
             progress_percent="" if project.progress_percent is None else str(project.progress_percent),
             gauge_stitches="" if project.actual_gauge is None or project.actual_gauge.stitches is None else str(project.actual_gauge.stitches),
             gauge_rows="" if project.actual_gauge is None or project.actual_gauge.rows is None else str(project.actual_gauge.rows),
@@ -63,11 +61,13 @@ class ProjectFormData:
             for selected_pattern in self.selected_patterns
         ]
 
-        return Project(
+        progress_percent = int(self.progress_percent) if self.progress_percent else None
+
+        project = Project(
             id=project_id,
             name=self.name,
-            status=ProjectStatus[self.status],
-            progress_percent=int(self.progress_percent) if self.progress_percent else None,
+            status=ProjectStatus.NOT_STARTED,
+            progress_percent=progress_percent,
             pattern_ids=pattern_ids,
             actual_gauge=actual_gauge,
             start_date=start_date,
@@ -75,6 +75,9 @@ class ProjectFormData:
             rating=None,
             notes=self.notes,
         )
+
+        project.update_status_from_progress()
+        return project
 
     @classmethod
     def from_request_form(cls, form, available_patterns: list[Pattern]) -> ProjectFormData:
@@ -94,7 +97,6 @@ class ProjectFormData:
 
         return ProjectFormData(
             name=form.get('name', ''),
-            status=form.get('status', ''),
             progress_percent=form.get('progress_percent', ''),
             gauge_stitches=form.get('gauge_stitches', ''),
             gauge_rows=form.get('gauge_rows', ''),

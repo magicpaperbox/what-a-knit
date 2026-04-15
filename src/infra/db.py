@@ -28,6 +28,16 @@ def init_db():
     db = get_db()
     with current_app.open_resource('schema.sql', mode='r') as f:
         db.executescript(f.read())
+    _ensure_yarn_notes_column(db)
+    db.commit()
+
+
+def _ensure_yarn_notes_column(db):
+    columns = db.execute("PRAGMA table_info(yarn)").fetchall()
+    column_names = {column["name"] for column in columns}
+
+    if "notes" not in column_names:
+        db.execute("ALTER TABLE yarn ADD COLUMN notes VARCHAR(200)")
 
 def init_app(app):
     # Rejestrujemy funkcję zamykającą bazę po zakończeniu każdego żądania HTTP
