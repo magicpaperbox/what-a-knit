@@ -63,7 +63,7 @@ def create_project_form():
 @projects_api.post('/add')
 def create_project():
     available_patterns = pattern_repo.get_all()
-    form_data = ProjectFormData.from_request_form(request.form, available_patterns)
+    form_data = ProjectFormData.from_request_form(request.form, request.files, available_patterns)
     try:
         new_project = form_data.to_domain()
         new_project = repo.add(new_project)
@@ -90,9 +90,14 @@ def edit_project_form(project_id: int):
 
 @projects_api.post('/<int:project_id>/edit')
 def edit_project(project_id: int):
-    _get_project_or_404(ProjectId(project_id))
+    existing_project = _get_project_or_404(ProjectId(project_id))
     available_patterns = pattern_repo.get_all()
-    form_data = ProjectFormData.from_request_form(request.form, available_patterns)
+    form_data = ProjectFormData.from_request_form(
+        request.form,
+        request.files,
+        available_patterns,
+        existing_project=existing_project,
+    )
     try:
         edited_project = form_data.to_domain(ProjectId(project_id))
         repo.update(edited_project)

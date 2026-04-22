@@ -33,6 +33,9 @@ class Project:
     rating: Optional[int] = None
     notes: Optional[str] = None
 
+    image_blob: Optional[bytes] = None
+    image_mime_type: Optional[str] = None
+
     def update_status_from_progress(self):
         if self.progress_percent is None or self.progress_percent == 0:
             self.status = ProjectStatus.NOT_STARTED

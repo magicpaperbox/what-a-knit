@@ -3,22 +3,40 @@
 <div class="titled-section">
     <h2 class="page-title">{{ yarn.brand }} — {{ yarn.name }}</h2>
     <div class="section section--with-page-title">
-        <div class="detail-list">
-            <p><strong>Color:</strong> {{ yarn.color_shade }}</p>
-            <p><strong>Weight category:</strong> {{ yarn.weight_category.value }}</p>
-            <p><strong>Full skein weight:</strong> {{ yarn.full_weight.grams }} g</p>
-            <p><strong>Full skein length:</strong> {{ yarn.full_length }}</p>
+        <div class="detail-list detail-list--structured">
+            <div class="detail-row">
+                <span class="detail-label">Color</span>
+                <span class="detail-value">{{ yarn.color_shade }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Weight category</span>
+                <span class="detail-value">{{ yarn.weight_category.value }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Full skein weight</span>
+                <span class="detail-value">{{ yarn.full_weight.grams }} g</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Full skein length</span>
+                <span class="detail-value">{{ yarn.full_length }}</span>
+            </div>
             {% if yarn.notes %}
-            <p><strong>Notes:</strong> {{ yarn.notes }}</p>
+            <div class="detail-row detail-row--notes">
+                <span class="detail-label">Notes</span>
+                <span class="detail-value detail-value--notes">{{ yarn.notes }}</span>
+            </div>
             {% endif %}
         </div>
 
         {% if yarn.composition %}
-        <div class="detail-subsection">
+        <div class="detail-subsection detail-subsection--card">
             <h3>Composition</h3>
-            <ul class="fiber-summary">
+            <ul class="fiber-summary fiber-summary--structured">
                 {% for fiber in yarn.composition %}
-                <li>{{ fiber.fiber_type.value }} — {{ fiber.percentage }}%</li>
+                <li class="fiber-summary__item">
+                    <span class="fiber-summary__name">{{ fiber.fiber_type.value }}</span>
+                    <span class="fiber-summary__value">{{ fiber.percentage }}%</span>
+                </li>
                 {% endfor %}
             </ul>
         </div>

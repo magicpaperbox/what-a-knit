@@ -23,6 +23,8 @@ class ProjectFormData:
     end_date: str = ""
     notes: str = ""
     selected_patterns: list[SelectedPatternFormData] = field(default_factory=list)
+    image_blob: bytes | None = None
+    image_mime_type: str | None = None
 
     @classmethod
     def empty(cls) -> ProjectFormData:
@@ -43,6 +45,8 @@ class ProjectFormData:
                 for pattern in selected_patterns
                 if pattern.id is not None
             ],
+            image_blob=project.image_blob,
+            image_mime_type=project.image_mime_type
         )
 
     def to_domain(self, project_id: ProjectId | None = None) -> Project:
@@ -74,13 +78,21 @@ class ProjectFormData:
             end_date=end_date,
             rating=None,
             notes=self.notes,
+            image_blob=self.image_blob,
+            image_mime_type=self.image_mime_type or None
         )
 
         project.update_status_from_progress()
         return project
 
     @classmethod
-    def from_request_form(cls, form, available_patterns: list[Pattern]) -> ProjectFormData:
+    def from_request_form(
+        cls,
+        form,
+        files,
+        available_patterns: list[Pattern],
+        existing_project: Project | None = None,
+    ) -> ProjectFormData:
         patterns_by_id = {
             pattern.id.value: pattern
             for pattern in available_patterns
@@ -95,6 +107,17 @@ class ProjectFormData:
                 SelectedPatternFormData(id=pattern_id, name=pattern.name)
             )
 
+        uploaded_image = files.get('image')
+        if uploaded_image is not None and uploaded_image.filename:
+            image_blob = uploaded_image.read()
+            image_mime_type = uploaded_image.mimetype or None
+        elif existing_project is not None:
+            image_blob = existing_project.image_blob
+            image_mime_type = existing_project.image_mime_type
+        else:
+            image_blob = None
+            image_mime_type = None
+
         return ProjectFormData(
             name=form.get('name', ''),
             progress_percent=form.get('progress_percent', ''),
@@ -104,6 +127,8 @@ class ProjectFormData:
             end_date=form.get('end_date', ''),
             notes=form.get('notes', ''),
             selected_patterns=selected_patterns,
+            image_blob=image_blob,
+            image_mime_type=image_mime_type,
         )
 
     def selected_patterns_to_dicts(self) -> list[dict]:

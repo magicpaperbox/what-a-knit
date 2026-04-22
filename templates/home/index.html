@@ -1,40 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="section">
-        <h2>Keep projects, patterns, yarn and charts together in one playful space.</h2>
-        <div class="detail-list">
-            <p><strong>Today:</strong> {{ current_date }}</p>
+        <div class="home-intro">
             {% if is_logged_in %}
-                <p><strong>Account:</strong> ✅ You are logged in, {{ username }}.</p>
+                <p class="home-intro-greeting">Hello, {{ username }}!</p>
             {% else %}
-                <p><strong>Account:</strong> ❌ You are not logged in.</p>
+                <p class="home-intro-greeting">Hello there!</p>
             {% endif %}
-
-            {% if yarn_count > 5 %}
-                <p><strong>Yarn stash:</strong> 🎉 You have a big stash already ({{ yarn_count }} skeins).</p>
-            {% elif yarn_count > 0 %}
-                <p><strong>Yarn stash:</strong> 📦 You have {{ yarn_count }} skeins waiting.</p>
-            {% else %}
-                <p><strong>Yarn stash:</strong> 😢 No yarn yet.</p>
-            {% endif %}
+            <p class="home-intro-title">Keep projects, patterns, yarn and charts together in one playful space.</p>
+            <p class="home-intro-date">Today is {{ current_date }}.</p>
         </div>
     </div>
 
     <div class="section">
-        <h2>Twoje włóczki:</h2>
-        <ul class="yarn-pill-list">
-            {% for yarn in yarns %}
-                <li class="yarn">
-                    {{ loop.index }}. {{ yarn.color }} - {{ yarn.weight }}g
-                    {% if loop.first %} 👑 (pierwsza!){% endif %}
-                    {% if loop.last %} 🏁 (ostatnia!){% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-
-        {% if yarns|length == 0 %}
-            <p class="empty-state"><em>Lista jest pusta</em></p>
-        {% endif %}
+        <h2>You have:</h2>
+        <div class="home-summary">
+            <p class="home-summary-line">You have <strong>{{ project_count }}</strong> projects, with <strong>{{ active_project_count }}</strong> currently active.</p>
+            <p class="home-summary-line">Your collection already includes <strong>{{ pattern_count }}</strong> patterns.</p>
+            <p class="home-summary-line">In your stash, you have <strong>{{ yarn_grams }} g</strong> of yarn, which gives you as much as <strong>{{ yarn_meters }} m</strong>.</p>
+            <p class="home-summary-line">You have <strong>{{ tool_count }}</strong> tools, including <strong>{{ hook_count }}</strong> hooks and <strong>{{ needle_count }}</strong> needles.</p>
+        </div>
     </div>
 
 {% endblock %}

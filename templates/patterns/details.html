@@ -3,45 +3,65 @@
 <div class="titled-section">
     <h2 class="page-title">{{ pattern.name }}</h2>
     <div class="section section--with-page-title">
-        <div class="detail-list">
-            <p><strong>Category:</strong> {{ pattern.category.value }}</p>
+        <div class="detail-list detail-list--structured">
+            <div class="detail-row">
+                <span class="detail-label">Category</span>
+                <span class="detail-value">{{ pattern.category.value }}</span>
+            </div>
 
             {% if pattern.subcategory %}
-            <p><strong>Subcategory:</strong> {{ pattern.subcategory }}</p>
+            <div class="detail-row">
+                <span class="detail-label">Subcategory</span>
+                <span class="detail-value">{{ pattern.subcategory }}</span>
+            </div>
             {% endif %}
 
             {% if pattern.description %}
-            <p class="detail-text"><strong>Description:</strong> {{ pattern.description }}</p>
+            <div class="detail-row detail-row--notes">
+                <span class="detail-label">Description</span>
+                <span class="detail-value detail-value--notes">{{ pattern.description }}</span>
+            </div>
             {% endif %}
 
             {% if pattern.target_gauge %}
-            <p>
-                <strong>Gauge:</strong>
-                {% if pattern.target_gauge.stitches is not none and pattern.target_gauge.rows is not none %}
-                {{ '%g' | format(pattern.target_gauge.stitches) }} sts /
-                {{ '%g' | format(pattern.target_gauge.rows) }} rows
-                per {{ pattern.target_gauge.width }} x {{ pattern.target_gauge.height }}
+            <div class="detail-row">
+                <span class="detail-label">Gauge</span>
+                <span class="detail-value">
+                    {% if pattern.target_gauge.stitches is not none and pattern.target_gauge.rows is not none %}
+                    {{ '%g' | format(pattern.target_gauge.stitches) }} sts /
+                    {{ '%g' | format(pattern.target_gauge.rows) }} rows
+                    per {{ pattern.target_gauge.width }} x {{ pattern.target_gauge.height }}
 
-                {% elif pattern.target_gauge.stitches is not none %}
-                {{ '%g' | format(pattern.target_gauge.stitches) }} sts per {{ pattern.target_gauge.width }}
+                    {% elif pattern.target_gauge.stitches is not none %}
+                    {{ '%g' | format(pattern.target_gauge.stitches) }} sts per {{ pattern.target_gauge.width }}
 
-                {% elif pattern.target_gauge.rows is not none %}
-                {{ '%g' | format(pattern.target_gauge.rows) }} rows per {{ pattern.target_gauge.height }}
-            {% endif %}
-            </p>
+                    {% elif pattern.target_gauge.rows is not none %}
+                    {{ '%g' | format(pattern.target_gauge.rows) }} rows per {{ pattern.target_gauge.height }}
+                    {% endif %}
+                </span>
+            </div>
             {% endif %}
 
 
             {% if pattern.pattern_language %}
-            <p><strong>Pattern language:</strong> {{ pattern.pattern_language }}</p>
+            <div class="detail-row">
+                <span class="detail-label">Pattern language</span>
+                <span class="detail-value">{{ pattern.pattern_language }}</span>
+            </div>
             {% endif %}
 
             {% if pattern.author %}
-            <p><strong>Designer:</strong> {{ pattern.author }}</p>
+            <div class="detail-row">
+                <span class="detail-label">Designer</span>
+                <span class="detail-value">{{ pattern.author }}</span>
+            </div>
             {% endif %}
 
             {% if pattern.difficulty_level %}
-            <p><strong>Difficulty level:</strong> {{ pattern.difficulty_level.value }}</p>
+            <div class="detail-row">
+                <span class="detail-label">Difficulty level</span>
+                <span class="detail-value">{{ pattern.difficulty_level.value }}</span>
+            </div>
             {% endif %}
         </div>
     </div>

@@ -29,6 +29,9 @@ class ProjectRow:
     rating: Optional[int]
     notes: Optional[str]
 
+    image_blob: Optional[bytes]
+    image_mime_type: Optional[str]
+
 @dataclass
 class ProjectPatternRow:
     project_id: int
@@ -64,7 +67,10 @@ class ProjectRepository:
             start_date=date.fromisoformat(project_row.start_date) if project_row.start_date is not None else None,
             end_date=date.fromisoformat(project_row.end_date) if project_row.end_date is not None else None,
             rating=project_row.rating,
-            notes=project_row.notes
+            notes=project_row.notes,
+
+            image_blob=project_row.image_blob,
+            image_mime_type=project_row.image_mime_type
         )
 
     def _get_gauge(self, project_id: int) -> ProjectGaugeRow | None:
@@ -149,11 +155,11 @@ class ProjectRepository:
         db = get_db()
         cursor = db.execute(
             '''INSERT INTO project (
-                name, status, progress_percent, start_date, end_date, rating, notes
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)''',
+                name, status, progress_percent, start_date, end_date, rating, notes, image_blob, image_mime_type
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (
                 project.name, project.status, project.progress_percent,
-                project.start_date, project.end_date, project.rating, project.notes
+                project.start_date, project.end_date, project.rating, project.notes, project.image_blob, project.image_mime_type
             )
         )
         project.id = ProjectId(cursor.lastrowid)
@@ -180,11 +186,12 @@ class ProjectRepository:
         db.execute(
             '''UPDATE project SET
                 name = ?, status = ?, progress_percent = ?, 
-                start_date = ?, end_date = ?, rating = ?, notes = ?
+                start_date = ?, end_date = ?, rating = ?, notes = ?, image_blob = ?, image_mime_type = ?
             WHERE id = ?''',
             (
                 project.name, project.status, project.progress_percent,
-                project.start_date, project.end_date, project.rating, project.notes, project.id.value
+                project.start_date, project.end_date, project.rating, project.notes,
+                project.image_blob, project.image_mime_type, project.id.value
             )
         )
         db.execute('DELETE FROM project_gauge WHERE project_id = ?', (project.id.value,))

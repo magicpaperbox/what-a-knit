@@ -30,7 +30,6 @@ def details(pattern_id: int):
 
 
 def _render_pattern_form(
-    template_name: str,
     form_data: PatternFormData,
     pattern_id: int | None = None,
     error: str | None = None,
@@ -41,7 +40,7 @@ def _render_pattern_form(
     mode = "edit" if pattern_id else "add"
     form_action = f"/patterns/{pattern_id}/edit" if pattern_id else "/patterns/add"
     return render_template(
-        template_name,
+        "patterns/form.html",
         mode=mode,
         form_action=form_action,
         form_data=form_data,
@@ -55,7 +54,7 @@ def _render_pattern_form(
 
 @patterns_api.get('/add')
 def create_pattern_form():
-    return _render_pattern_form("patterns/add.html", PatternFormData.empty())
+    return _render_pattern_form(PatternFormData.empty())
 
 @patterns_api.post('/add')
 def create_pattern():
@@ -65,7 +64,7 @@ def create_pattern():
         new_pattern = repo.add(new_pattern)
         return redirect(f"/patterns/{new_pattern.id.value}")
     except Exception as error:
-        return _render_pattern_form("patterns/add.html", form_data, error=str(error))
+        return _render_pattern_form(form_data, error=str(error))
 
 @patterns_api.post('/<int:pattern_id>/delete')
 def delete(pattern_id: int):
@@ -77,7 +76,7 @@ def delete(pattern_id: int):
 def edit_pattern_form(pattern_id: int):
     pattern = get_pattern_or_404(PatternId(pattern_id))
     form_data = PatternFormData.from_domain(pattern)
-    return _render_pattern_form("patterns/edit.html", form_data, pattern_id=pattern_id)
+    return _render_pattern_form(form_data, pattern_id=pattern_id)
 
 @patterns_api.post('/<int:pattern_id>/edit')
 def edit_pattern(pattern_id: int):
@@ -88,4 +87,4 @@ def edit_pattern(pattern_id: int):
         repo.update(edited_pattern)
         return redirect(f'/patterns/{pattern_id}')
     except Exception as error:
-        return _render_pattern_form("patterns/edit.html", form_data, pattern_id=pattern_id, error=str(error))
+        return _render_pattern_form( form_data, pattern_id=pattern_id, error=str(error))

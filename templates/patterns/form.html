@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="section">
+        <h2><img src="/static/icons/needles.png" class="icon-header" alt="Needle">
+            {% if mode == "edit" %}Edit pattern{% else %}New pattern{% endif %}
+        </h2>
+
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{{ form_action }}" class="form-shell">
+            <div class="form-group">
+                <label for="name">Pattern name:</label>
+                <input type="text" id="name" name="name" placeholder="pattern name" value="{{ form_data.name }}"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="description">Pattern description:</label>
+                <textarea id="description" name="description" rows="5" placeholder="pattern description"
+                >{{ form_data.description }}</textarea>
+            </div>
+            <!-- SELECT CATEGORY -->
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    <option value="" disabled hidden {% if not form_data.category %}selected{% endif %}>select</option>
+                    {% for category in pattern_categories %}
+                        <option value="{{ category.name }}"
+                                {% if form_data.category == category.name %}selected{% endif %}>
+                            {{ category.value }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- SELECT SUBCATEGORY -->
+            <div class="form-group">
+                <label for="subcategory">Subcategory:</label>
+                <select id="subcategory" name="subcategory" data-selected="{{ form_data.subcategory }}">
+                    <option value="" disabled hidden {% if not form_data.subcategory %}selected{% endif %}>select
+                        category first
+                    </option>
+                    {% if form_data.subcategory %}
+                        <option value="{{ form_data.subcategory }}" selected>{{ form_data.subcategory }}</option>
+                    {% endif %}
+                </select>
+                <script>
+                    const subcategories = {{ subcategories_map | tojson }};
+                </script>
+            </div>
+
+
+            <div class="form-group">
+                <div class="inline-fields">
+                    <div>
+                        <label for="gauge_stitches">Gauge stitches:</label>
+                        <div class="number-stepper">
+                            <input type="number" id="gauge_stitches" name="gauge_stitches" min="0" max="100" step="0.5"
+                                   placeholder="stitches in 10 cm" value="{{ form_data.gauge_stitches }}">
+                            <div class="number-stepper-controls">
+                                <button type="button" class="number-stepper-button" data-stepper-action="decrement"
+                                        aria-label="Decrease gauge stitches">-
+                                </button>
+                                <button type="button" class="number-stepper-button" data-stepper-action="increment"
+                                        aria-label="Increase gauge stitches">+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="gauge_rows">Gauge rows:</label>
+                        <div class="number-stepper">
+                            <input type="number" id="gauge_rows" name="gauge_rows" min="0" max="100" step="0.5"
+                                   placeholder="rows in 10 cm" value="{{ form_data.gauge_rows }}">
+                            <div class="number-stepper-controls">
+                                <button type="button" class="number-stepper-button" data-stepper-action="decrement"
+                                        aria-label="Decrease gauge rows">-
+                                </button>
+                                <button type="button" class="number-stepper-button" data-stepper-action="increment"
+                                        aria-label="Increase gauge rows">+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELECT HAS PATTERN -->
+            <div class="form-group">
+                <label for="has_pattern">Using existing pattern?</label>
+                <select id="has_pattern" name="has_pattern">
+                    <option value="" disabled hidden {% if not form_data.has_pattern %}selected{% endif %}>select
+                    </option>
+                    <option value="yes" {% if form_data.has_pattern == 'yes' %}selected{% endif %}>Yes</option>
+                    <option value="no" {% if form_data.has_pattern == 'no' %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <div id="pattern-details" class="toggle-panel" {% if form_data.has_pattern != 'yes' %}hidden{% endif %}>
+                <div class="form-group">
+                    <label for="pattern_language">Pattern language:</label>
+                    <select id="pattern_language" name="pattern_language">
+                        <option value="" disabled hidden {% if not form_data.pattern_language %}selected{% endif %}>
+                            select
+                        </option>
+                        <option value="polish" {% if form_data.pattern_language == 'polish' %}selected{% endif %}>
+                            polish
+                        </option>
+                        <option value="english" {% if form_data.pattern_language == 'english' %}selected{% endif %}>
+                            english
+                        </option>
+                        <option value="other" {% if form_data.pattern_language == 'other' %}selected{% endif %}>other
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Designer:</label>
+                    <input type="text" id="author" name="author" placeholder="e.g. Petite Knit"
+                           value="{{ form_data.author }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="difficulty_level">Difficulty level:</label>
+                    <select id="difficulty_level" name="difficulty_level">
+                        <option value="" disabled hidden {% if not form_data.difficulty_level %}selected{% endif %}>
+                            select
+                        </option>
+                        {% for difficulty_level in difficulty_levels %}
+                            <option value="{{ difficulty_level.value }}"
+                                    {% if form_data.difficulty_level == difficulty_level.value %}selected{% endif %}>
+                                {{ difficulty_level.value }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit"><img src="/static/icons/yarn_ball.png" alt="Yarn ball"
+                                                          class="button-icon">
+                {% if mode == "edit" %}Save changes{% else %}Add pattern{% endif %}
+            </button>
+        </form>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/number-stepper.js"></script>
+    <script src="/static/js/pattern-form.js"></script>
+{% endblock %}

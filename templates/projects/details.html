@@ -3,57 +3,75 @@
     <div class="titled-section">
         <h2 class="page-title">{{ project.name }}</h2>
         <div class="section section--with-page-title">
-            <div class="detail-list">
+            <div class="detail-list detail-list--structured">
                 {% if project.status %}
-                    <p><strong>Status:</strong> {{ project.status }}</p>
+                    <div class="detail-row">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value">{{ project.status }}</span>
+                    </div>
                 {% endif %}
 
                 {% if patterns %}
-                    <p><strong>Patterns used:</strong>
-                        {% for pattern in patterns %}
-                            <a href="/patterns/{{ pattern.id.value }}">{{ pattern.name }}</a>
-                            {% if not loop.last %}
-                            ,
-                            {% endif %}
-                        {% endfor %}
-                    </p>
+                    <div class="detail-row">
+                        <span class="detail-label">Patterns used</span>
+                        <span class="detail-value">
+                            {% for pattern in patterns %}<a href="/patterns/{{ pattern.id.value }}">{{ pattern.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+                        </span>
+                    </div>
                 {% endif %}
 
                 {% if project.actual_gauge %}
-                    <p>
-                        <strong>My gauge:</strong>
-                        {% if project.actual_gauge.stitches is not none and project.actual_gauge.rows is not none %}
-                            {{ '%g' | format(project.actual_gauge.stitches) }} sts /
-                            {{ '%g' | format(project.actual_gauge.rows) }} rows
-                            per {{ project.actual_gauge.width }} x {{ project.actual_gauge.height }}
+                    <div class="detail-row">
+                        <span class="detail-label">My gauge</span>
+                        <span class="detail-value">
+                            {% if project.actual_gauge.stitches is not none and project.actual_gauge.rows is not none %}
+                                {{ '%g' | format(project.actual_gauge.stitches) }} sts /
+                                {{ '%g' | format(project.actual_gauge.rows) }} rows
+                                per {{ project.actual_gauge.width }} x {{ project.actual_gauge.height }}
 
-                        {% elif project.actual_gauge.stitches is not none %}
-                            {{ '%g' | format(project.actual_gauge.stitches) }} sts per {{ project.actual_gauge.width }}
+                            {% elif project.actual_gauge.stitches is not none %}
+                                {{ '%g' | format(project.actual_gauge.stitches) }} sts per {{ project.actual_gauge.width }}
 
-                        {% elif project.actual_gauge.rows is not none %}
-                            {{ '%g' | format(project.actual_gauge.rows) }} rows per {{ project.actual_gauge.height }}
-                        {% endif %}
-                    </p>
+                            {% elif project.actual_gauge.rows is not none %}
+                                {{ '%g' | format(project.actual_gauge.rows) }} rows per {{ project.actual_gauge.height }}
+                            {% endif %}
+                        </span>
+                    </div>
                 {% endif %}
 
                 {% if project.progress_percent > 0 %}
-                    <p><strong>Progress:</strong> {{ project.progress_percent }} %</p>
+                    <div class="detail-row">
+                        <span class="detail-label">Progress</span>
+                        <span class="detail-value">{{ project.progress_percent }} %</span>
+                    </div>
                 {% endif %}
 
                 {% if project.start_date %}
-                    <p><strong>Started:</strong> {{ project.start_date }}</p>
+                    <div class="detail-row">
+                        <span class="detail-label">Started</span>
+                        <span class="detail-value">{{ project.start_date }}</span>
+                    </div>
                 {% endif %}
 
                 {% if project.end_date %}
-                    <p><strong>Finished:</strong> {{ project.end_date }}</p>
+                    <div class="detail-row">
+                        <span class="detail-label">Finished</span>
+                        <span class="detail-value">{{ project.end_date }}</span>
+                    </div>
                 {% endif %}
 
                 {% if project.rating %}
-                    <p><strong>Rating:</strong> {{ project.rating }}/5</p>
+                    <div class="detail-row">
+                        <span class="detail-label">Rating</span>
+                        <span class="detail-value">{{ project.rating }}/5</span>
+                    </div>
                 {% endif %}
 
                 {% if project.notes %}
-                    <p><strong>Notes:</strong> {{ project.notes }}</p>
+                    <div class="detail-row detail-row--notes">
+                        <span class="detail-label">Notes</span>
+                        <span class="detail-value detail-value--notes">{{ project.notes }}</span>
+                    </div>
                 {% endif %}
             </div>
         </div>

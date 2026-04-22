@@ -35,7 +35,9 @@ CREATE TABLE IF NOT EXISTS project (
     start_date VARCHAR(20),
     end_date VARCHAR(20),
     rating INTEGER,
-    notes VARCHAR(200)
+    notes VARCHAR(200),
+    image_blob BLOB,
+    image_mime_type VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS project_gauge (
@@ -80,4 +82,15 @@ CREATE TABLE IF NOT EXISTS skein (
     yarn_id INTEGER NOT NULL,
     current_weight_grams INTEGER NOT NULL,
     FOREIGN KEY (yarn_id) REFERENCES yarn(id)
+);
+
+CREATE TABLE IF NOT EXISTS chart (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL,
+    rows INTEGER NOT NULL,
+    columns INTEGER NOT NULL,
+    cell_size INTEGER NOT NULL,
+    cells_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
