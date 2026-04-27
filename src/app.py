@@ -9,6 +9,11 @@ import infra.db
 from tools.api import tools_api
 
 
+def _get_database_path(project_root: str):
+    default_db_path = os.path.join(project_root, 'instance', 'knit.db')
+    return os.environ.get('DATABASE_PATH', default_db_path)
+
+
 def create_app():
     # Calculate absolute paths to templates, static folder, and database
     # This assumes app.py is in src/ and templates/static/instance are in the project root
@@ -16,7 +21,8 @@ def create_app():
     project_root = os.path.dirname(src_dir)
     template_dir = os.path.join(project_root, 'templates')
     static_dir = os.path.join(project_root, 'static')
-    db_path = os.path.join(project_root, 'instance', 'knit.db')
+    db_path = _get_database_path(project_root)
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
     app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
     app.config['DATABASE_PATH'] = db_path
