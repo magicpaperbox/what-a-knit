@@ -21,7 +21,6 @@ jobs:
     runs-on: bazel
     container:
       volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
         - /run/secrets/gitea/deployer_ssh_key:/run/secrets/deployer_ssh_key:ro
     steps:
       - name: Checkout
