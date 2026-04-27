@@ -18,20 +18,13 @@ env:
 
 jobs:
   deploy:
-    runs-on: bazel
+    runs-on: deploy
     container:
       volumes:
         - /run/secrets/gitea/deployer_ssh_key:/run/secrets/deployer_ssh_key:ro
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Install deploy tools
-        run: |
-          set -euo pipefail
-          apt-get update
-          apt-get install -y --no-install-recommends docker.io openssh-client
-          rm -rf /var/lib/apt/lists/*
 
       - name: Login to registry
         env:
