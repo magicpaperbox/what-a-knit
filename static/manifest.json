@@ -1,0 +1,15 @@
+{
+  "name": "What a knit!",
+  "short_name": "WAK",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffaf6",
+  "theme_color": "#fffaf6",
+  "icons": [
+    {
+      "src": "/static/icons/app_icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
