@@ -84,7 +84,7 @@
       {% if saved_charts %}
         <div class="resource-list">
           {% for saved_chart in saved_charts %}
-            <a class="resource-card" href="/charts/{{ saved_chart.id }}/edit">
+            <a class="resource-card" href="/charts/{{ saved_chart.id.value }}/edit">
               <h3>{{ saved_chart.name }}</h3>
               <p class="resource-card__eyebrow">{{ saved_chart.rows }} rows x {{ saved_chart.columns }} columns</p>
               <p class="resource-card__meta">
