@@ -6,8 +6,8 @@ from modules.patterns.repository import PatternRepository
 from modules.projects.domain import ProjectStatus
 from modules.projects.repository import ProjectRepository
 from modules.yarn.service import YarnService
-from tools.domain import ToolKind
-from tools.repository import ToolsRepository
+from modules.tools.domain import ToolKind
+from modules.tools.repository import ToolsRepository
 
 home_api = Blueprint('home', __name__)
 project_repo = ProjectRepository()

@@ -4,7 +4,7 @@ from dataclasses import dataclass, fields
 
 from modules.units.centimeters import Centimeters
 from modules.units.thickness import Thickness
-from tools.domain import (
+from modules.tools.domain import (
     Cable,
     DoublePointedNeedles,
     FixedCircularNeedles,

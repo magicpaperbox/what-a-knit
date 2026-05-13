@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, request, abort
 
-from tools.domain import ToolKind, ToolMaterial, ToolId
-from tools.mappers import ToolFormData, tool_kinds_with_field
-from tools.repository import ToolsRepository
+from modules.tools.domain import ToolKind, ToolMaterial, ToolId
+from modules.tools.mappers import ToolFormData, tool_kinds_with_field
+from modules.tools.repository import ToolsRepository
 
 tools_api = Blueprint('tools', __name__, url_prefix="/tools")
 repo = ToolsRepository()

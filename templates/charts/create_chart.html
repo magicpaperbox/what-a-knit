@@ -1,109 +1,137 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="section">
-  <div class="section-header">
-    <h2>{% if mode == "edit" %}Edit chart{% else %}Chart creator (SVG){% endif %}</h2>
-    {% if mode == "edit" %}
-      <a href="/charts" class="btn-submit btn-submit--small">
-        <img src="/static/icons/patterns.png" alt="Charts" class="button-icon">
-        New empty chart
-      </a>
-    {% endif %}
-  </div>
-
-  <p class="section-copy">Set the grid size above the chart, choose a symbol, click cells to place it, and save your chart for later editing.</p>
-
-  {% if error %}
-    <div class="error-message">
-      {{ error }}
-    </div>
-  {% endif %}
-
-  <form id="chartEditorForm" method="POST" action="{{ form_action }}" class="chart-editor-form">
-    <div class="chart-toolbar">
-      <label class="chart-field chart-field--title">
-        <span>Chart name</span>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          maxlength="100"
-          placeholder="e.g. lace repeat"
-          value="{{ form_data.name }}"
-          required
-        >
-      </label>
-
-      <div class="chart-inputs-group">
-        <label class="chart-field chart-field--compact">
-          <span>Rows</span>
-          <input id="rows" name="rows" type="number" min="1" max="200" value="{{ form_data.rows }}">
-        </label>
-        <label class="chart-field chart-field--compact">
-          <span>Columns</span>
-          <input id="columns" name="columns" type="number" min="1" max="200" value="{{ form_data.columns }}">
-        </label>
-        <label class="chart-field chart-field--compact">
-          <span>Box size (px)</span>
-          <input id="cellSize" name="cell_size" type="number" min="10" max="80" value="{{ form_data.cell_size }}">
-        </label>
-      </div>
-
-      <div class="chart-actions">
-        <button id="build" type="button" class="btn-chart btn-chart--secondary">Update grid</button>
-        <button type="submit" class="btn-submit chart-save-button">
-          <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
-          {% if mode == "edit" %}Save changes{% else %}Save chart{% endif %}
-        </button>
-      </div>
-    </div>
-
-    <textarea id="cellsData" name="cells_data" hidden>{{ form_data.cells_json }}</textarea>
-
-    <div class="chart-workspace">
-      <div class="chart-stage">
-        <p class="chart-stage-copy">Select a symbol on the right, then click a box in the chart. The empty square clears a cell.</p>
-        <svg id="chart" class="chart-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-      </div>
-
-      <aside class="chart-symbols" aria-labelledby="chart-symbols-title">
-        <div class="chart-symbols-header">
-          <h3 id="chart-symbols-title">Symbols</h3>
-          <p id="selectedSymbolLabel" class="chart-symbols-copy"></p>
-        </div>
-        <div id="symbolPalette" class="chart-symbol-list" role="list"></div>
-      </aside>
-    </div>
-  </form>
-
-  <div class="chart-saved-section">
+<div class="chart-page-layout">
+  <div class="section chart-editor-shell">
     <div class="section-header">
-      <h3>Saved charts</h3>
+      <h2>{% if mode == "edit" %}Edit chart{% else %}Chart creator (SVG){% endif %}</h2>
+      {% if mode == "edit" %}
+        <a href="/charts" class="btn-submit btn-submit--small">
+          <img src="/static/icons/patterns.png" alt="Charts" class="button-icon">
+          New empty chart
+        </a>
+      {% endif %}
     </div>
 
-    {% if saved_charts %}
-      <div class="resource-list">
-        {% for saved_chart in saved_charts %}
-          <a class="resource-card" href="/charts/{{ saved_chart.id }}/edit">
-            <h3>{{ saved_chart.name }}</h3>
-            <p class="resource-card__eyebrow">{{ saved_chart.rows }} rows x {{ saved_chart.columns }} columns</p>
-            <p class="resource-card__meta">
-              Box {{ saved_chart.cell_size }} px
-              {% if chart_id == saved_chart.id %}· currently open{% endif %}
-            </p>
-          </a>
-        {% endfor %}
+    <p class="section-copy">Set the grid size above the chart, choose a symbol, click cells to place it, and save your chart for later editing.</p>
+
+    {% if error %}
+      <div class="error-message">
+        {{ error }}
       </div>
-    {% else %}
-      <p class="empty-state">No charts saved yet. Build one and save it here.</p>
     {% endif %}
+
+    <form id="chartEditorForm" method="POST" action="{{ form_action }}" class="chart-editor-form">
+      <div class="chart-toolbar">
+        <label class="chart-field chart-field--title">
+          <span>Chart name</span>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            maxlength="100"
+            placeholder="e.g. lace repeat"
+            value="{{ form_data.name }}"
+            required
+          >
+        </label>
+
+        <div class="chart-inputs-group">
+          <label class="chart-field chart-field--compact">
+            <span>Rows</span>
+            <input id="rows" name="rows" type="number" min="1" max="200" value="{{ form_data.rows }}">
+          </label>
+          <label class="chart-field chart-field--compact">
+            <span>Columns</span>
+            <input id="columns" name="columns" type="number" min="1" max="200" value="{{ form_data.columns }}">
+          </label>
+          <label class="chart-field chart-field--compact">
+            <span>Box size (px)</span>
+            <input id="cellSize" name="cell_size" type="number" min="10" max="80" value="{{ form_data.cell_size }}">
+          </label>
+        </div>
+
+        <div class="chart-actions">
+          <button id="build" type="button" class="btn-chart btn-chart--secondary">Update grid</button>
+          <button type="submit" class="btn-submit chart-save-button">
+            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
+            {% if mode == "edit" %}Save changes{% else %}Save chart{% endif %}
+          </button>
+          {% if mode == "edit" %}
+            <button type="button" class="btn-delete chart-delete-button" onclick="openDeleteModal()">
+              <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
+              Delete chart
+            </button>
+          {% endif %}
+        </div>
+      </div>
+
+      <textarea id="cellsData" name="cells_data" hidden>{{ form_data.cells_json }}</textarea>
+
+      <div class="chart-workspace">
+        <div class="chart-stage">
+          <p class="chart-stage-copy">Select a symbol on the right, then click a box in the chart. The empty square clears a cell.</p>
+          <svg id="chart" class="chart-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </div>
+    </form>
+
+    <div class="chart-saved-section">
+      <div class="section-header">
+        <h3>Saved charts</h3>
+      </div>
+
+      {% if saved_charts %}
+        <div class="resource-list">
+          {% for saved_chart in saved_charts %}
+            <a class="resource-card" href="/charts/{{ saved_chart.id }}/edit">
+              <h3>{{ saved_chart.name }}</h3>
+              <p class="resource-card__eyebrow">{{ saved_chart.rows }} rows x {{ saved_chart.columns }} columns</p>
+              <p class="resource-card__meta">
+                Box {{ saved_chart.cell_size }} px
+                {% if chart_id == saved_chart.id %}· currently open{% endif %}
+              </p>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="empty-state">No charts saved yet. Build one and save it here.</p>
+      {% endif %}
+    </div>
   </div>
+
+  <aside class="chart-symbols" aria-labelledby="chart-symbols-title">
+    <div class="chart-symbols-header">
+      <h3 id="chart-symbols-title">Symbols</h3>
+      <p id="selectedSymbolLabel" class="chart-symbols-copy"></p>
+    </div>
+    <div id="symbolPalette" class="chart-symbol-list" role="list"></div>
+  </aside>
 </div>
+
+{% if mode == "edit" %}
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Frog this chart?</h3>
+      <p>Are you sure you want to delete <strong>{{ form_data.name }}</strong>?<br>This cannot be undone!</p>
+
+      <div class="modal-buttons">
+        <button type="button" class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
+
+        <form method="POST" action="/charts/{{ chart_id }}/delete" class="inline-form">
+          <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endif %}
 
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
   <script src="/static/js/charts.js"></script>
+  {% if mode == "edit" %}
+    <script src="/static/js/delete-modal.js"></script>
+  {% endif %}
 {% endblock %}

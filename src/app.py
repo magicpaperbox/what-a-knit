@@ -6,7 +6,7 @@ from modules.projects.api import projects_api
 from modules.charts.api import charts_api
 from modules.yarn.api import yarn_api
 import infra.db
-from tools.api import tools_api
+from modules.tools.api import tools_api
 
 
 def _get_database_path(project_root: str):

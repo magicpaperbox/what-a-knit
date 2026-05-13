@@ -2,7 +2,7 @@ import json
 
 from flask import render_template, Blueprint, redirect, request, abort
 
-from modules.charts.domain import Chart
+from modules.charts.domain import Chart, ChartId
 from modules.charts.repository import ChartRepository
 
 charts_api = Blueprint('charts', __name__, url_prefix="/charts")
@@ -79,7 +79,7 @@ def _form_data_from_request() -> dict:
     }
 
 
-def _form_data_to_chart(form_data: dict, chart_id: int | None = None) -> Chart:
+def _form_data_to_chart(form_data: dict, chart_id: ChartId | None = None) -> Chart:
     name = form_data["name"]
     if not name:
         raise ValueError("Chart name is required.")
@@ -104,7 +104,7 @@ def _form_data_to_chart(form_data: dict, chart_id: int | None = None) -> Chart:
 
 
 def _get_chart_or_404(chart_id: int) -> Chart:
-    chart = repo.get_by_id(chart_id)
+    chart = repo.get_by_id(ChartId(chart_id))
     if chart is None:
         abort(404, f"Chart id {chart_id} doesn't exist.")
     return chart
@@ -144,7 +144,7 @@ def create_chart():
     try:
         chart = _form_data_to_chart(form_data)
         saved_chart = repo.add(chart)
-        return redirect(f"/charts/{saved_chart.id}/edit")
+        return redirect(f"/charts/{saved_chart.id.value}/edit")
     except ValueError as error:
         return _render_chart_form(
             form_data=form_data,
@@ -170,7 +170,7 @@ def edit_chart(chart_id: int):
     _get_chart_or_404(chart_id)
     form_data = _form_data_from_request()
     try:
-        chart = _form_data_to_chart(form_data, chart_id=chart_id)
+        chart = _form_data_to_chart(form_data, chart_id=ChartId(chart_id))
         repo.update(chart)
         return redirect(f"/charts/{chart_id}/edit")
     except ValueError as error:
@@ -181,3 +181,10 @@ def edit_chart(chart_id: int):
             chart_id=chart_id,
             error=str(error),
         )
+
+
+@charts_api.post('/<int:chart_id>/delete')
+def delete(chart_id: int):
+    _get_chart_or_404(chart_id)
+    repo.delete(chart_id)
+    return redirect("/charts")

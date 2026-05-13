@@ -2,7 +2,7 @@ import json
 from dataclasses import dataclass
 
 from infra.db import get_db
-from modules.charts.domain import Chart
+from modules.charts.domain import Chart, ChartId
 
 
 @dataclass
@@ -20,7 +20,7 @@ class ChartRow:
 class ChartRepository:
     def _row_to_domain(self, row: ChartRow) -> Chart:
         return Chart(
-            id=row.id,
+            id=ChartId(row.id),
             name=row.name,
             rows=row.rows,
             columns=row.columns,
@@ -40,9 +40,9 @@ class ChartRepository:
         )
         return [self._row_to_domain(ChartRow(**dict(row))) for row in cursor.fetchall()]
 
-    def get_by_id(self, chart_id: int) -> Chart | None:
+    def get_by_id(self, chart_id: ChartId) -> Chart | None:
         db = get_db()
-        cursor = db.execute("SELECT * FROM chart WHERE id = ?", (chart_id,))
+        cursor = db.execute("SELECT * FROM chart WHERE id = ?", (chart_id.value,))
         row = cursor.fetchone()
 
         if row is None:
@@ -66,7 +66,7 @@ class ChartRepository:
             ),
         )
         db.commit()
-        chart.id = cursor.lastrowid
+        chart.id = ChartId(cursor.lastrowid)
         return self.get_by_id(chart.id)
 
     def update(self, chart: Chart) -> Chart:
@@ -83,8 +83,14 @@ class ChartRepository:
                 chart.columns,
                 chart.cell_size,
                 json.dumps(chart.cells),
-                chart.id,
+                chart.id.value,
             ),
         )
         db.commit()
         return self.get_by_id(chart.id)
+
+
+    def delete(self, chart_id: int) -> None:
+        db = get_db()
+        db.execute('DELETE FROM chart WHERE id = ?', (chart_id,))
+        db.commit()

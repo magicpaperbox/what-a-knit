@@ -1,8 +1,9 @@
 #TODO
-delete chart
+delete chart✅
+type chart id instead of int ✅
 yarn amount instead of id
 zoom chart
-floating chart symbols
+floating chart symbols ✅
 add photos to projects
 add link field to a pattern - make it show thumbnail
 learn how to update database
