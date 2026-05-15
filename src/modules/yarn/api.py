@@ -1,6 +1,12 @@
+from dataclasses import dataclass
+from multiprocessing.spawn import prepare
+
+from click import group
 from flask import Blueprint, render_template, redirect, request
 from werkzeug.exceptions import abort
 
+from modules.units.mass import Mass
+from modules.units.meters import Meters
 from modules.yarn.domain import (
     FiberType,
     Skein,
@@ -75,14 +81,98 @@ def index():
     return render_template('yarn/index.html', yarns=yarns)
 
 
+
+@dataclass
+class SkeinGroup:
+    main_skein: Skein
+    skein_ids: list[SkeinId]
+
+    @property
+    def single_skein_current_weight(self):
+        return self.main_skein.current_weight
+
+    @property
+    def total_current_weight(self) -> Mass:
+        return self.single_skein_current_weight * self.total_skeins
+
+    def total_remaining_length(self, yarn: Yarn) -> Meters:
+        return self.main_skein.remaining_length(yarn) * self.total_skeins
+
+    @property
+    def total_skeins(self):
+        return len(self.skein_ids)
+
+    @property
+    def is_single(self):
+        return self.total_skeins == 1
+
+
+@dataclass
+class SkeinGroups:
+    groups: list[SkeinGroup]
+
+    def is_empty(self):
+        return len(self.groups) == 0
+
+    @property
+    def total_skeins(self):
+        return sum(group.total_skeins for group in self.groups)
+
+    @property
+    def total_current_weight(self):
+        return sum(group.total_current_weight for group in self.groups)
+
+    def total_remaining_length(self, yarn: Yarn) -> Meters:
+        return sum(group.total_remaining_length(yarn) for group in self.groups)
+
+
+    @classmethod
+    def from_skeins(cls, skeins: list[Skein]) -> "SkeinGroups":
+        skein_weight_group: dict[Mass, list[SkeinId]] = {}
+        main_skeins: dict[Mass, Skein] = {}
+        skeins_groups: list[SkeinGroup] = []
+        for skein in skeins:
+            weight_cat = skein.current_weight
+            if weight_cat not in skein_weight_group:
+                skein_weight_group[weight_cat] = []
+            skein_weight_group[weight_cat].append(skein.id)
+
+            if weight_cat not in main_skeins:
+                main_skeins[weight_cat] = skein
+
+        for weight, ids_list in skein_weight_group.items():
+            main_skein = main_skeins[weight]
+            group_of_skeins = SkeinGroup(main_skein=main_skein, skein_ids=ids_list)
+            skeins_groups.append(group_of_skeins)
+        return SkeinGroups(skeins_groups)
+
+    # @classmethod
+    # def from_skeins(cls, skeins: list[Skein]) -> "SkeinGroups":
+    #     skein_weight_group: dict[Mass, list[Skein]] = {}
+    #     for skein in skeins:
+    #         weight_cat = skein.current_weight
+    #         if weight_cat not in skein_weight_group:
+    #             skein_weight_group[weight_cat] = []
+    #         skein_weight_group[weight_cat].append(skein)
+    #
+    #     skeins_groups: list[SkeinGroup] = []
+    #     for weight, skeins_with_weight in skein_weight_group:
+    #         main_skein = skeins_with_weight[0]
+    #         ids_list = [skein.id for skein in skeins_with_weight]
+    #         group_of_skeins = SkeinGroup(main_skein=main_skein, skein_ids=ids_list)
+    #         skeins_groups.append(group_of_skeins)
+    #     return SkeinGroups(skeins_groups)
+    #
+
 @yarn_api.get('/<int:yarn_id>')
 def yarn_details(yarn_id: int):
     yarn = _get_yarn_or_404(YarnId(yarn_id))
     skeins = service.get_skeins_for_yarn(yarn.id)
+    skein_groups = SkeinGroups.from_skeins(skeins)
     return render_template(
         'yarn/details.html',
         yarn=yarn,
-        skeins=skeins,
+        skein_groups=skein_groups,
     )
 
 
@@ -144,6 +234,20 @@ def create_skein(yarn_id: int):
         return redirect(f'/yarn/{yarn_id}')
     except Exception as error:
         return _render_skein_form(yarn, form_data, error=str(error))
+
+@yarn_api.post('/skeins/<int:skein_id>/add-one')
+def add_one_skein(skein_id: int):
+    original_skein = service.get_skein(SkeinId(skein_id))
+    yarn_id = original_skein.yarn_id.value
+
+    new_skein = Skein(
+        id=None,
+        yarn_id=original_skein.yarn_id,
+        current_weight=original_skein.current_weight,
+    )
+
+    service.add_skein(new_skein)
+    return redirect(f'/yarn/{yarn_id}')
 
 
 @yarn_api.get('/skeins/<int:skein_id>/edit')

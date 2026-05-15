@@ -1,147 +1,209 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="titled-section">
-    <h2 class="page-title">{{ yarn.brand }} — {{ yarn.name }}</h2>
-    <div class="section section--with-page-title">
-        <div class="detail-list detail-list--structured">
-            <div class="detail-row">
-                <span class="detail-label">Color</span>
-                <span class="detail-value">{{ yarn.color_shade }}</span>
+    <div class="titled-section">
+        <h2 class="page-title">{{ yarn.brand }} — {{ yarn.name }}</h2>
+        <div class="section section--with-page-title">
+            <div class="detail-list detail-list--structured">
+                <div class="detail-row">
+                    <span class="detail-label">Color</span>
+                    <span class="detail-value">{{ yarn.color_shade }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Weight category</span>
+                    <span class="detail-value">{{ yarn.weight_category.value }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Full skein weight</span>
+                    <span class="detail-value">{{ yarn.full_weight.grams }} g</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Full skein length</span>
+                    <span class="detail-value">{{ yarn.full_length }}</span>
+                </div>
+                {% if yarn.notes %}
+                    <div class="detail-row detail-row--notes">
+                        <span class="detail-label">Notes</span>
+                        <span class="detail-value detail-value--notes">{{ yarn.notes }}</span>
+                    </div>
+                {% endif %}
             </div>
-            <div class="detail-row">
-                <span class="detail-label">Weight category</span>
-                <span class="detail-value">{{ yarn.weight_category.value }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Full skein weight</span>
-                <span class="detail-value">{{ yarn.full_weight.grams }} g</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Full skein length</span>
-                <span class="detail-value">{{ yarn.full_length }}</span>
-            </div>
-            {% if yarn.notes %}
-            <div class="detail-row detail-row--notes">
-                <span class="detail-label">Notes</span>
-                <span class="detail-value detail-value--notes">{{ yarn.notes }}</span>
-            </div>
+
+            {% if yarn.composition %}
+                <div class="detail-subsection detail-subsection--card">
+                    <h3>Composition</h3>
+                    <ul class="fiber-summary fiber-summary--structured">
+                        {% for fiber in yarn.composition %}
+                            <li class="fiber-summary__item">
+                                <span class="fiber-summary__name">{{ fiber.fiber_type.value }}</span>
+                                <span class="fiber-summary__value">{{ fiber.percentage }}%</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
         </div>
-
-        {% if yarn.composition %}
-        <div class="detail-subsection detail-subsection--card">
-            <h3>Composition</h3>
-            <ul class="fiber-summary fiber-summary--structured">
-                {% for fiber in yarn.composition %}
-                <li class="fiber-summary__item">
-                    <span class="fiber-summary__name">{{ fiber.fiber_type.value }}</span>
-                    <span class="fiber-summary__value">{{ fiber.percentage }}%</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
     </div>
-</div>
 
-<div class="action-buttons">
-    <button class="btn-delete" onclick="openDeleteModal()">
-        <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
-        Frog yarn
-    </button>
-    <a href="/yarn/{{ yarn.id.value }}/edit" class="btn-submit">
-        ✏️ Edit yarn
-    </a>
-</div>
-
-<!-- Skeins section -->
-<div class="section">
-    <div class="section-header">
-        <h3>Skeins</h3>
-        <a href="/yarn/{{ yarn.id.value }}/skeins/add" class="btn-submit">
-            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
-            Add skein
+    <div class="action-buttons">
+        <button class="btn-delete" onclick="openDeleteModal()">
+            <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
+            Frog yarn
+        </button>
+        <a href="/yarn/{{ yarn.id.value }}/edit" class="btn-submit">
+            ✏️ Edit yarn
         </a>
     </div>
-    {% if skeins %}
-    <div class="table-scroll">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Skein #</th>
-                    <th>Current weight</th>
-                    <th>Estimated remaining length</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for skein in skeins %}
-                <tr>
-                    <td data-label="Skein #">{{ skein.id.value }}</td>
-                    <td data-label="Current weight">{{ skein.current_weight.grams }} g</td>
-                    <td data-label="Estimated remaining length">{{ skein.remaining_length(yarn) }}</td>
-                    <td data-label="Actions" class="table-actions">
-                        <div class="table-actions-row">
-                            <a href="/yarn/skeins/{{ skein.id.value }}/edit" class="btn-submit btn-submit--small">
-                                ✏️ Edit
-                            </a>
-                            <button class="btn-delete btn-delete--small" onclick="openSkeinDeleteModal({{ skein.id.value }})">
-                                <img src="/static/icons/frog.png" alt="Frog" class="button-icon button-icon--small">
-                                Frog
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <p class="empty-state">No skeins yet. Add your first one!</p>
-    {% endif %}
-</div>
 
-<!-- Delete yarn modal -->
-<div id="deleteModal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>🐸 Frog it?</h3>
-        <p>Are you sure you want to delete <strong>{{ yarn.brand }} — {{ yarn.name }}</strong>?<br>
-            This will also delete all skeins. This cannot be undone!</p>
-        <div class="modal-buttons">
-            <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
-            <form method="POST" action="/yarn/{{ yarn.id.value }}/delete" class="inline-form">
-                <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
-            </form>
+    <!-- Skeins section -->
+    <div class="section">
+        <div class="section-header">
+            <h3>Skeins</h3>
+            <a href="/yarn/{{ yarn.id.value }}/skeins/add" class="btn-submit">
+                <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
+                Add skein
+            </a>
+        </div>
+        {% if not skein_groups.is_empty() %}
+            <div class="table-scroll">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>No. of skeins</th>
+                        <th>Current weight</th>
+                        <th>Estimated remaining length</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for skein_group in skein_groups.groups %}
+                        {% if skein_group.is_single %}
+                            {% set skein = skein_group.main_skein %}
+                            <tr{% if loop.last %} class="skein-list-row--last"{% endif %}>
+                                <td data-label="Skein #">1</td>
+                                <td data-label="Current weight">{{ skein.current_weight }}</td>
+                                <td data-label="Estimated remaining length">{{ skein.remaining_length(yarn) }}</td>
+                                <td data-label="Actions" class="table-actions">
+                                    <div class="table-actions-row">
+                                        <a href="/yarn/skeins/{{ skein.id.value }}/edit"
+                                           class="btn-submit btn-submit--small table-action-button">
+                                            ✏️
+                                        </a>
+                                        <button class="btn-delete btn-delete--small table-action-button table-action-button--trash"
+                                                onclick="openSkeinDeleteModal({{ skein.id.value }})">
+                                            <img src="/static/icons/trash.png" alt="Trash"
+                                                 class="button-icon button-icon">
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% set group_id = loop.index %}
+                            <tr class="skein-group-row{% if loop.last %} skein-list-row--last{% endif %}"
+                                data-group="{{ group_id }}">
+                                <td data-label="Skein #">{{ skein_group.total_skeins }}</td>
+                                <td data-label="Current weight">{{ skein_group.total_current_weight }}</td>
+                                <td data-label="Estimated remaining length">{{ skein_group.total_remaining_length(yarn) }}</td>
+                                <td data-label="Actions" class="table-actions">
+                                    <div class="table-actions-row">
+                                        <button type="button"
+                                                class="skein-toggle-button"
+                                                data-group="{{ group_id }}">
+                                            <img src="/static/icons/down-arrow.png" alt="Expand" class="button-icon skein-toggle-icon">
+                                        </button>
+                                        <form method="POST" action="/yarn/skeins/{{ skein_group.main_skein.id.value }}/delete" class="inline-form">
+                                            <button type="submit" class="btn-delete btn-delete--small table-action-button table-action-button--pink">
+                                                <img src="/static/icons/minus.png" alt="Remove" class="button-icon">
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="/yarn/skeins/{{ skein_group.main_skein.id.value }}/add-one" class="inline-form">
+                                            <button type="submit" class="btn-delete btn-delete--small table-action-button table-action-button--pink">
+                                                <img src="/static/icons/add.png" alt="Add" class="button-icon">
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% set skein = skein_group.main_skein %}
+                            {% for skein_id in skein_group.skein_ids %}
+                                <tr class="skein-child-row{% if loop.first %} skein-child-row--first{% endif %}{% if loop.last %} skein-child-row--last{% endif %}"
+                                    data-group="{{ group_id }}">
+                                    <td data-label="Skein #">jestem dzieckiem</td>
+                                    <td data-label="Current weight">{{ skein.current_weight }}</td>
+                                    <td data-label="Estimated remaining length">{{ skein.remaining_length(yarn) }}</td>
+                                    <td data-label="Actions" class="table-actions">
+                                        <div class="table-actions-row">
+                                            <a href="/yarn/skeins/{{ skein_id.value }}/edit"
+                                               class="btn-submit btn-submit--small table-action-button">
+                                                ✏️
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr class="table-summary-heading">
+                        <td colspan="4">Total</td>
+                    </tr>
+                    <tr class="table-summary-row">
+                        <td data-label="No. of skeins">{{ skein_groups.total_skeins }}</td>
+                        <td data-label="Current weight">{{ skein_groups.total_current_weight }}</td>
+                        <td data-label="Estimated remaining length">{{ skein_groups.total_remaining_length(yarn) }}</td>
+                        <td data-label="Actions"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No skeins yet. Add your first one!</p>
+        {% endif %}
+    </div>
+
+    <!-- Delete yarn modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Delete it?</h3>
+            <p>Are you sure you want to delete <strong>{{ yarn.brand }} — {{ yarn.name }}</strong>?<br>
+                This will also delete all skeins. This cannot be undone!</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
+                <form method="POST" action="/yarn/{{ yarn.id.value }}/delete" class="inline-form">
+                    <button type="submit" class="btn-confirm-delete">Yes, delete it!</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Delete skein modal -->
-<div id="skeinDeleteModal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>🐸 Frog this skein?</h3>
-        <p>Are you sure you want to delete this skein?<br>This cannot be undone!</p>
-        <div class="modal-buttons">
-            <button class="btn-cancel" onclick="closeSkeinDeleteModal()">No, keep it</button>
-            <form id="skeinDeleteForm" method="POST" action="" class="inline-form">
-                <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
-            </form>
+    <!-- Delete skein modal -->
+    <div id="skeinDeleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Delete this skein?</h3>
+            <p>Are you sure you want to delete this skein?<br>This cannot be undone!</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeSkeinDeleteModal()">No, keep it</button>
+                <form id="skeinDeleteForm" method="POST" action="" class="inline-form">
+                    <button type="submit" class="btn-confirm-delete">Yes, delete it!</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-function openSkeinDeleteModal(skeinId) {
-    document.getElementById('skeinDeleteForm').action = '/yarn/skeins/' + skeinId + '/delete';
-    document.getElementById('skeinDeleteModal').style.display = 'flex';
-}
-function closeSkeinDeleteModal() {
-    document.getElementById('skeinDeleteModal').style.display = 'none';
-}
-</script>
+    <script>
+        function openSkeinDeleteModal(skeinId) {
+            document.getElementById('skeinDeleteForm').action = '/yarn/skeins/' + skeinId + '/delete';
+            document.getElementById('skeinDeleteModal').style.display = 'flex';
+        }
+
+        function closeSkeinDeleteModal() {
+            document.getElementById('skeinDeleteModal').style.display = 'none';
+        }
+    </script>
 
 {% endblock %}
 {% block scripts %}
     {{ super() }}
     <script src="/static/js/delete-modal.js"></script>
+    <script src="/static/js/skein-groups.js"></script>
 {% endblock %}
