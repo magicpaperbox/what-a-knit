@@ -12,6 +12,7 @@ dependencies = [
 dev = [
     "markdown>=3.10.2",
     "pdfkit>=1.0.0",
+    "pytest>=8.0.0",
 ]
 
 [tool.uv]

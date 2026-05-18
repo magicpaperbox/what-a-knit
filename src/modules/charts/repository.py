@@ -1,41 +1,63 @@
 import json
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from infra.db import get_db
-from modules.charts.domain import Chart, ChartId
+from modules.charts.domain import Chart, ChartId, ChartKind, ColorChart, SymbolChart, Color, Symbol
 
 
 @dataclass
 class ChartRow:
     id: int
+    kind: str
     name: str
-    rows: int
-    columns: int
     cell_size: int
     cells_json: str
-    created_at: str
-    updated_at: str
 
+def _convert_cells[A, B](raw_rows: list[list[A]], create: Callable[[A], B]) -> list[list[B]]:
+    mapped_rows = []
+    for raw_row in raw_rows:
+        mapped_row = [create(raw_cell) for raw_cell in raw_row]
+        mapped_rows.append(mapped_row)
+    return mapped_rows
 
 class ChartRepository:
     def _row_to_domain(self, row: ChartRow) -> Chart:
-        return Chart(
-            id=ChartId(row.id),
-            name=row.name,
-            rows=row.rows,
-            columns=row.columns,
-            cell_size=row.cell_size,
-            cells=json.loads(row.cells_json),
-            created_at=row.created_at,
-            updated_at=row.updated_at,
+        kind = ChartKind.from_string(row.kind)
+        id = ChartId(row.id)
+        raw_cell_rows = json.loads(row.cells_json)
+        if kind == ChartKind.ColorChart:
+            return ColorChart(
+                id=id,
+                name=row.name,
+                cell_size=row.cell_size,
+                cells=_convert_cells(raw_cell_rows, Color.from_string),
+            )
+        if kind == ChartKind.SymbolChart:
+            return SymbolChart(
+                id=id,
+                name=row.name,
+                cell_size=row.cell_size,
+                cells=_convert_cells(raw_cell_rows, Symbol.from_string),
+            )
+        raise ValueError(f"Unsupported kind: {kind}")
+
+    def _domain_to_row(self, chart: Chart) -> ChartRow:
+        string_cells = _convert_cells(chart.cells, lambda cell: cell.to_string())
+        return ChartRow(
+            id=chart.id.value,
+            kind=chart.kind.to_string(),
+            name=chart.name,
+            cell_size=chart.cell_size,
+            cells_json=json.dumps(string_cells)
         )
+
 
     def get_all(self) -> list[Chart]:
         db = get_db()
         cursor = db.execute(
             """
             SELECT * FROM chart
-            ORDER BY updated_at DESC, id DESC
             """
         )
         return [self._row_to_domain(ChartRow(**dict(row))) for row in cursor.fetchall()]
@@ -51,18 +73,18 @@ class ChartRepository:
         return self._row_to_domain(ChartRow(**dict(row)))
 
     def add(self, chart: Chart) -> Chart:
+        row = self._domain_to_row(chart)
         db = get_db()
         cursor = db.execute(
             """
-            INSERT INTO chart (name, rows, columns, cell_size, cells_json)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO chart (kind, name, cell_size, cells_json)
+            VALUES (?, ?, ?, ?)
             """,
             (
-                chart.name,
-                chart.rows,
-                chart.columns,
-                chart.cell_size,
-                json.dumps(chart.cells),
+                row.kind,
+                row.name,
+                row.cell_size,
+                row.cells_json,
             ),
         )
         db.commit()
@@ -70,20 +92,20 @@ class ChartRepository:
         return self.get_by_id(chart.id)
 
     def update(self, chart: Chart) -> Chart:
+        row = self._domain_to_row(chart)
         db = get_db()
         db.execute(
             """
             UPDATE chart
-            SET name = ?, rows = ?, columns = ?, cell_size = ?, cells_json = ?, updated_at = CURRENT_TIMESTAMP
+            SET kind = ?, name = ?, cell_size = ?, cells_json = ?
             WHERE id = ?
             """,
             (
-                chart.name,
-                chart.rows,
-                chart.columns,
-                chart.cell_size,
-                json.dumps(chart.cells),
-                chart.id.value,
+                row.kind,
+                row.name,
+                row.cell_size,
+                row.cells_json,
+                row.id,
             ),
         )
         db.commit()
