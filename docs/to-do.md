@@ -11,3 +11,4 @@ add 💗 to a project ❌
 add folders to patterns/projects and the rest
 add sorting ui
 tools x projects
+add lot

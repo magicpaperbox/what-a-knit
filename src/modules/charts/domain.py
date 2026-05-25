@@ -8,8 +8,8 @@ class ChartId:
     value: int
 
 class ChartKind(enum.StrEnum):
-    ColorChart = enum.auto()
-    SymbolChart = enum.auto()
+    COLOR_CHART = "color"
+    SYMBOL_CHART = "symbol"
 
     @classmethod
     def from_string(cls, value: str) -> ChartKind:
@@ -18,21 +18,13 @@ class ChartKind(enum.StrEnum):
     def to_string(self) -> str:
         return self.value
 
-
+@dataclass()
 class Chart[CellType]:
-    def __init__(
-        self,
-        id: ChartId | None,
-        name: str,
-        kind: ChartKind,
-        cell_size: int,
-        cells: list[list[CellType | None]],
-    ):
-        self.id = id
-        self.name = name
-        self.kind = kind
-        self.cell_size = cell_size
-        self.cells = cells
+    id: ChartId | None
+    name: str
+    kind: ChartKind
+    cell_size: int
+    cells: list[list[CellType | None]]
 
     @property
     def rows(self) -> int:
@@ -41,6 +33,20 @@ class Chart[CellType]:
     @property
     def columns(self) -> int:
         return len(self.cells[0]) if self.cells else 0
+
+    def validate(self) -> None:
+        if not self.cells:
+            raise ValueError("Chart has no cells!")
+
+        first_row_len = len(self.cells[0])
+
+        if first_row_len == 0:
+            raise ValueError("Empty row!")
+
+        for cell_row in self.cells:
+            if len(cell_row) != first_row_len:
+                raise ValueError("Length of the row is not correct")
+
 
 class Symbol(enum.StrEnum):
     PURL = "purl"
@@ -80,7 +86,8 @@ class ColorChart(Chart[Color]):
         cell_size: int,
         cells: list[list[Color | None]],
     ):
-        super().__init__(id, name, ChartKind.ColorChart, cell_size, cells)
+        super().__init__(id, name, ChartKind.COLOR_CHART, cell_size, cells)
+
 
 class SymbolChart(Chart[Symbol]):
     def __init__(
@@ -90,4 +97,5 @@ class SymbolChart(Chart[Symbol]):
         cell_size: int,
         cells: list[list[Symbol | None]],
     ):
-        super().__init__(id, name, ChartKind.SymbolChart, cell_size, cells)
+        super().__init__(id, name, ChartKind.SYMBOL_CHART, cell_size, cells)
+

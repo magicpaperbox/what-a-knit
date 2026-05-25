@@ -17,7 +17,10 @@ class ChartRow:
 def _convert_cells[A, B](raw_rows: list[list[A]], create: Callable[[A], B]) -> list[list[B]]:
     mapped_rows = []
     for raw_row in raw_rows:
-        mapped_row = [create(raw_cell) for raw_cell in raw_row]
+        mapped_row = [
+            create(raw_cell) if raw_cell is not None else None
+            for raw_cell in raw_row
+        ]
         mapped_rows.append(mapped_row)
     return mapped_rows
 
@@ -26,14 +29,14 @@ class ChartRepository:
         kind = ChartKind.from_string(row.kind)
         id = ChartId(row.id)
         raw_cell_rows = json.loads(row.cells_json)
-        if kind == ChartKind.ColorChart:
+        if kind == ChartKind.COLOR_CHART:
             return ColorChart(
                 id=id,
                 name=row.name,
                 cell_size=row.cell_size,
                 cells=_convert_cells(raw_cell_rows, Color.from_string),
             )
-        if kind == ChartKind.SymbolChart:
+        if kind == ChartKind.SYMBOL_CHART:
             return SymbolChart(
                 id=id,
                 name=row.name,
@@ -45,7 +48,7 @@ class ChartRepository:
     def _domain_to_row(self, chart: Chart) -> ChartRow:
         string_cells = _convert_cells(chart.cells, lambda cell: cell.to_string())
         return ChartRow(
-            id=chart.id.value,
+            id=chart.id.value if chart.id else None,
             kind=chart.kind.to_string(),
             name=chart.name,
             cell_size=chart.cell_size,
