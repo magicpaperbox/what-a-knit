@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from multiprocessing.spawn import prepare
 
-from click import group
-from flask import Blueprint, render_template, redirect, request
+from flask import Blueprint, Response, render_template, redirect, request
 from werkzeug.exceptions import abort
 
 from modules.units.mass import Mass
@@ -176,6 +174,18 @@ def yarn_details(yarn_id: int):
     )
 
 
+@yarn_api.get('/<int:yarn_id>/image')
+def yarn_image(yarn_id: int):
+    yarn = _get_yarn_or_404(YarnId(yarn_id))
+    if yarn.image_blob is None:
+        abort(404, f"Yarn id {yarn_id} doesn't have an image.")
+
+    return Response(
+        yarn.image_blob,
+        mimetype=yarn.image_mime_type or 'application/octet-stream',
+    )
+
+
 @yarn_api.get('/add')
 def create_yarn_form():
     return _render_yarn_form(YarnFormData.empty())
@@ -183,7 +193,7 @@ def create_yarn_form():
 
 @yarn_api.post('/add')
 def create_yarn():
-    form_data = YarnFormData.from_request_form(request.form)
+    form_data = YarnFormData.from_request_form(request.form, request.files)
     try:
         yarn = form_data.to_domain()
         new_yarn = service.add_yarn(yarn)
@@ -202,7 +212,11 @@ def edit_yarn_form(yarn_id: int):
 @yarn_api.post('/<int:yarn_id>/edit')
 def update_yarn(yarn_id: int):
     yarn = _get_yarn_or_404(YarnId(yarn_id))
-    form_data = YarnFormData.from_request_form(request.form)
+    form_data = YarnFormData.from_request_form(
+        request.form,
+        request.files,
+        existing_yarn=yarn,
+    )
     try:
         updated_yarn = form_data.to_domain(yarn.id)
         service.update_yarn(updated_yarn)

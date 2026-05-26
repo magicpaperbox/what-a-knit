@@ -19,6 +19,8 @@ class YarnRow:
     weight_category: str
     full_weight_grams: int
     full_length_meters: float
+    image_blob: bytes | None
+    image_mime_type: str | None
     notes: str | None
 
 
@@ -44,6 +46,8 @@ class YarnRepository:
             weight_category=YarnWeightCategory[row.weight_category],
             full_weight=Mass(row.full_weight_grams),
             full_length=Meters(row.full_length_meters),
+            image_blob=row.image_blob,
+            image_mime_type=row.image_mime_type,
             notes=row.notes,
             composition=composition,
         )
@@ -107,12 +111,13 @@ class YarnRepository:
         db = get_db()
         cursor = db.execute(
             '''INSERT INTO yarn (
-                brand, name, color_shade, weight_category, full_weight_grams, full_length_meters, notes
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)''',
+                brand, name, color_shade, weight_category, full_weight_grams, full_length_meters, image_blob, image_mime_type, notes
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (
                 yarn.brand, yarn.name, yarn.color_shade,
                 yarn.weight_category.name,
                 yarn.full_weight.grams, yarn.full_length.value,
+                yarn.image_blob, yarn.image_mime_type,
                 yarn.notes,
             ),
         )
@@ -127,12 +132,13 @@ class YarnRepository:
         db.execute(
             '''UPDATE yarn SET
                 brand = ?, name = ?, color_shade = ?, weight_category = ?,
-                full_weight_grams = ?, full_length_meters = ?, notes = ?
+                full_weight_grams = ?, full_length_meters = ?, image_blob = ?, image_mime_type = ?, notes = ?
             WHERE id = ?''',
             (
                 yarn.brand, yarn.name, yarn.color_shade,
                 yarn.weight_category.name,
                 yarn.full_weight.grams, yarn.full_length.value,
+                yarn.image_blob, yarn.image_mime_type,
                 yarn.notes,
                 yarn.id.value,
             ),

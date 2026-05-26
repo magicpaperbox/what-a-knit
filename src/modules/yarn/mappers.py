@@ -30,6 +30,8 @@ class YarnFormData:
     full_weight: str = ""
     full_length: str = ""
     notes: str = ""
+    image_blob: bytes | None = None
+    image_mime_type: str | None = None
     composition_rows: list[YarnFiberFormData] = field(default_factory=list)
 
     @classmethod
@@ -45,6 +47,8 @@ class YarnFormData:
             weight_category=yarn.weight_category.name,
             full_weight=str(yarn.full_weight.grams),
             full_length=str(yarn.full_length.value),
+            image_blob=yarn.image_blob,
+            image_mime_type=yarn.image_mime_type,
             notes=yarn.notes or "",
             composition_rows=[
                 YarnFiberFormData(
@@ -74,12 +78,19 @@ class YarnFormData:
             weight_category=YarnWeightCategory[self.weight_category],
             full_weight=Mass(int(self.full_weight)),
             full_length=Meters(float(self.full_length)),
+            image_blob=self.image_blob,
+            image_mime_type=self.image_mime_type,
             notes=self.notes or None,
             composition=composition,
         )
 
     @classmethod
-    def from_request_form(cls, form) -> YarnFormData:
+    def from_request_form(
+        cls,
+        form,
+        files,
+        existing_yarn: Yarn | None = None,
+    ) -> YarnFormData:
         def composition_rows_from_request() -> list[YarnFiberFormData]:
             fiber_types = form.getlist('fiber_type[]')
             percentages = form.getlist('percentage[]')
@@ -96,6 +107,17 @@ class YarnFormData:
                 )
             return rows
 
+        uploaded_image = files.get('image')
+        if uploaded_image is not None and uploaded_image.filename != "":
+            image_blob = uploaded_image.read()
+            image_mime_type = uploaded_image.mimetype or None
+        elif existing_yarn is not None:
+            image_blob = existing_yarn.image_blob
+            image_mime_type = existing_yarn.image_mime_type
+        else:
+            image_blob = None
+            image_mime_type = None
+
         return YarnFormData(
             brand=form.get('brand', ''),
             name=form.get('name', ''),
@@ -103,6 +125,8 @@ class YarnFormData:
             weight_category=form.get('weight_category', ''),
             full_weight=form.get('full_weight', ''),
             full_length=form.get('full_length', ''),
+            image_blob=image_blob,
+            image_mime_type=image_mime_type,
             notes=form.get('notes', ''),
             composition_rows=composition_rows_from_request(),
         )

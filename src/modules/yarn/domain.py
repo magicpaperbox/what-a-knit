@@ -50,8 +50,11 @@ class Yarn:
     weight_category: YarnWeightCategory
     full_weight: Mass
     full_length: Meters
+    image_blob: bytes | None = None
+    image_mime_type: str | None = None
     notes: Optional[str] = None
     composition: list[YarnFiber] = field(default_factory=list)
+
 
     def validate(self) -> None:
         if not self.composition:

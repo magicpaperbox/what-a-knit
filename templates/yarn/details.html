@@ -3,6 +3,12 @@
     <div class="titled-section">
         <h2 class="page-title">{{ yarn.brand }} — {{ yarn.name }}</h2>
         <div class="section section--with-page-title">
+            {% if yarn.image_blob %}
+                <div class="yarn-detail-media">
+                    <img src="/yarn/{{ yarn.id.value }}/image" alt="{{ yarn.brand }} {{ yarn.name }}"
+                         class="yarn-detail-image">
+                </div>
+            {% endif %}
             <div class="detail-list detail-list--structured">
                 <div class="detail-row">
                     <span class="detail-label">Color</span>

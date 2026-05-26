@@ -30,6 +30,7 @@ def init_db():
         db.executescript(f.read())
     _ensure_yarn_notes_column(db)
     _ensure_project_has_image_column(db)
+    _ensure_yarn_has_image_column(db)
     db.commit()
 
 
@@ -49,6 +50,16 @@ def _ensure_project_has_image_column(db):
 
     if "image_mime_type" not in column_names:
         db.execute("ALTER TABLE project ADD COLUMN image_mime_type VARCHAR(50)")
+
+def _ensure_yarn_has_image_column(db):
+    columns = db.execute("PRAGMA table_info(yarn)").fetchall()
+    column_names = {column["name"] for column in columns}
+
+    if "image_blob" not in column_names:
+        db.execute("ALTER TABLE yarn ADD COLUMN image_blob BLOB")
+
+    if "image_mime_type" not in column_names:
+        db.execute("ALTER TABLE yarn ADD COLUMN image_mime_type VARCHAR(50)")
 
 def init_app(app):
     # Rejestrujemy funkcję zamykającą bazę po zakończeniu każdego żądania HTTP

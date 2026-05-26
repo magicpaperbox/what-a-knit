@@ -12,6 +12,12 @@
     <div class="resource-list">
         {% for yarn in yarns %}
         <a class="resource-card" href="/yarn/{{ yarn.id.value }}">
+            {% if yarn.image_blob %}
+                <div class="yarn-card__media">
+                    <img src="/yarn/{{ yarn.id.value }}/image" alt="{{ yarn.brand }} {{ yarn.name }}"
+                         class="yarn-card__image">
+                </div>
+            {% endif %}
             <h3>{{ yarn.name }}</h3>
             <p class="resource-card__eyebrow">{{ yarn.brand }}</p>
             <p class="resource-card__meta">Color: {{ yarn.color_shade }}</p>
