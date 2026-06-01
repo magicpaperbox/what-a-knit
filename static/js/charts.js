@@ -20,6 +20,7 @@ const state = {
   cellSize: 32,
   selectedSymbol: "purl",
   cells: [],
+  kind: "symbol",
 };
 
 const LABEL_MARGIN_LEFT = 34;
@@ -173,8 +174,10 @@ function buildSymbolPreview(symbolId, size = 32) {
 function renderSymbolPalette() {
   const palette = $("symbolPalette");
   const selectedSymbol = getSymbol(state.selectedSymbol);
+  const symbolTitle = $("chart-symbols-title");
 
   palette.innerHTML = "";
+  symbolTitle.innerHTML = "Symbols";
 
   SYMBOLS.forEach((symbol) => {
     const button = document.createElement("button");
@@ -316,6 +319,15 @@ function renderChart() {
   syncSerializedCells();
 }
 
+function renderColorPalette(){
+  const palette = $("symbolPalette");
+  const selectedLabel = $("selectedSymbolLabel");
+  const colorTitle = $("chart-symbols-title");
+  colorTitle.innerHTML = "Colors";
+  palette.innerHTML = "";
+  selectedLabel.textContent = "...";
+}
+
 function handleChartClick(event) {
   const cell = event.target.closest(".chart-cell-hit");
 
@@ -347,13 +359,41 @@ function handleFormSubmit() {
   rebuild();
 }
 
+function getUsedColors():
+  state.cells.forEach(cell)
+
+
 function init() {
   state.rows = clamp(parseInt($("rows").value, 10) || 12, 1, 200);
   state.columns = clamp(parseInt($("columns").value, 10) || 12, 1, 200);
   state.cellSize = clamp(parseInt($("cellSize").value, 10) || 32, 10, 80);
   state.cells = readSerializedCells(state.rows, state.columns);
 
-  renderSymbolPalette();
+  const selectedKindInput = document.querySelector('input[name="kind"]:checked');
+  if (selectedKindInput) {
+    state.kind = selectedKindInput.value;
+  }
+
+  if (state.kind === 'symbol'){
+    renderSymbolPalette();
+  }
+  if (state.kind === 'color') {
+    renderColorPalette();
+  }
+
+  const kindInputs = document.querySelectorAll('input[name="kind"]')
+  kindInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      state.kind = input.value;
+
+      if (state.kind === "symbol") {
+        renderSymbolPalette();
+      } else {
+        renderColorPalette();
+      }
+    });
+  });
+
   rebuild();
 
   $("build").addEventListener("click", rebuild);

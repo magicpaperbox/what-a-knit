@@ -63,7 +63,7 @@ class Symbol(enum.StrEnum):
     def to_string(self) -> str:
         return self.value
 
-@dataclass
+@dataclass(frozen=True)
 class Color:
     hex_value: str
 
@@ -77,6 +77,9 @@ class Color:
 
     def to_string(self) -> str:
         return self.hex_value
+    #
+    # def __lt__(self, other):
+    #     return self.hex_value < other.hex_value
 
 class ColorChart(Chart[Color]):
     def __init__(
@@ -87,6 +90,16 @@ class ColorChart(Chart[Color]):
         cells: list[list[Color | None]],
     ):
         super().__init__(id, name, ChartKind.COLOR_CHART, cell_size, cells)
+
+    def all_colors(self):
+        colors = set()
+        for cell_row in self.cells:
+            for cell in cell_row:
+                if cell is not None:
+                    colors.add(cell)
+        colors = list(colors)
+        colors.sort(key=lambda color: color.hex_value)
+        return colors
 
 
 class SymbolChart(Chart[Symbol]):
