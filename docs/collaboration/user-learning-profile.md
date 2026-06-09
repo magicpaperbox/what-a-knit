@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-06-01
+Last updated: 2026-06-02
 
 ## Current Comfort Zone
 
@@ -14,6 +14,7 @@ Last updated: 2026-06-01
 - Layered application structure: API/routes, domain objects, mappers/form-data objects, repositories, services, and use cases.
 - Form data flow from HTML through Flask into domain objects and SQLite.
 - Plain JavaScript and browser APIs.
+- Frontend state flow: how JavaScript state and DOM inputs update each other over time.
 
 ## Needs Extra Clarity Around
 
@@ -21,6 +22,7 @@ Last updated: 2026-06-01
 - Which application layer owns a specific responsibility.
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
+- The difference between initial rendering from state to the DOM and later DOM events that write user changes back into state.
 
 ## Explanation Style That Works Well
 
@@ -29,6 +31,7 @@ Last updated: 2026-06-01
 - Clear labels for the layer being discussed: backend, template, JavaScript, database, or form data.
 - Direct references to full file paths and function names.
 - Beginner-friendly context before deeper design suggestions.
+- Python analogies help, especially when explaining JavaScript collections, loops, and data flow.
 - Documentation with concrete examples and method-level patterns, not only dry conceptual descriptions.
 - Prefers project instructions to be operational, consistently structured, and not duplicated across sections.
 - Explaining:

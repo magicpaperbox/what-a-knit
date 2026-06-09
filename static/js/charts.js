@@ -21,6 +21,7 @@ const state = {
   selectedSymbol: "purl",
   cells: [],
   kind: "symbol",
+  selectedColor: "#000000",
 };
 
 const LABEL_MARGIN_LEFT = 34;
@@ -323,9 +324,18 @@ function renderColorPalette(){
   const palette = $("symbolPalette");
   const selectedLabel = $("selectedSymbolLabel");
   const colorTitle = $("chart-symbols-title");
+  const usedColors = getUsedColors();
   colorTitle.innerHTML = "Colors";
   palette.innerHTML = "";
-  selectedLabel.textContent = "...";
+
+  const colorInput = document.createElement("input");
+  colorInput.type = "color";
+  colorInput.value = state.selectedColor;
+  colorInput.addEventListener("input", () => {
+    state.selectedColor = colorInput.value;
+  })
+  palette.appendChild(colorInput);
+  selectedLabel.textContent = usedColors.join(", ");
 }
 
 function handleChartClick(event) {
@@ -338,7 +348,11 @@ function handleChartClick(event) {
   const row = Number(cell.dataset.row);
   const column = Number(cell.dataset.column);
 
-  state.cells[row][column] = state.selectedSymbol === "knit" ? null : state.selectedSymbol;
+  if (state.kind === "symbol") {
+    state.cells[row][column] = state.selectedSymbol === "knit" ? null : state.selectedSymbol;
+  } else {
+    state.cells[row][column] = state.selectedColor;
+  }
   renderChart();
 }
 
@@ -359,8 +373,17 @@ function handleFormSubmit() {
   rebuild();
 }
 
-function getUsedColors():
-  state.cells.forEach(cell)
+function getUsedColors() {
+  const colors = new Set();
+  for(const row of state.cells){
+    for (const cell of row) {
+      if (cell !== null && cell.startsWith("#")){
+        colors.add(cell);
+        }
+      }
+    }
+  return Array.from(colors);
+  }
 
 
 function init() {
