@@ -28,6 +28,8 @@ const LABEL_MARGIN_LEFT = 34;
 const LABEL_MARGIN_BOTTOM = 30;
 const LABEL_FONT_SIZE = 12;
 
+// Shared helpers
+
 function createSvgElement(tagName) {
   return document.createElementNS(SVG_NS, tagName);
 }
@@ -40,8 +42,11 @@ function getSymbol(symbolId) {
   return SYMBOLS.find((symbol) => symbol.id === symbolId);
 }
 
+// Cell state helpers
+
 function normalizeCells(rawCells, rows, columns) {
   const normalizedCells = [];
+
   for (let row = 0; row < rows; row += 1) {
     const sourceRow = Array.isArray(rawCells?.[row]) ? rawCells[row] : [];
     const normalizedRow = [];
@@ -92,6 +97,22 @@ function resizeCells(rows, columns) {
   state.cells = resizedCells;
 }
 
+function getUsedColors() {
+  const colors = new Set();
+
+  for (const row of state.cells) {
+    for (const cell of row) {
+      if (cell !== null && cell.startsWith("#")) {
+        colors.add(cell);
+      }
+    }
+  }
+
+  return Array.from(colors);
+}
+
+// Symbol drawing and palette
+
 function drawCellSymbol(symbolId, layer, x, y, cellSize) {
   if (!symbolId || symbolId === "knit") {
     return;
@@ -101,8 +122,8 @@ function drawCellSymbol(symbolId, layer, x, y, cellSize) {
     const fillRect = createSvgElement("rect");
     fillRect.setAttribute("x", x + 1);
     fillRect.setAttribute("y", y + 1);
-    fillRect.setAttribute("width", Math.max(cellSize - 2, 0));
-    fillRect.setAttribute("height", Math.max(cellSize - 2, 0));
+    fillRect.setAttribute("width", Math.max(cellSize - 2, 0).toString());
+    fillRect.setAttribute("height", Math.max(cellSize - 2, 0).toString());
     fillRect.setAttribute("fill", symbolId === "front_marker" ? "#39ff14" : "#b9b9b9");
     layer.appendChild(fillRect);
     return;
@@ -113,7 +134,7 @@ function drawCellSymbol(symbolId, layer, x, y, cellSize) {
     dot.classList.add("chart-symbol-fill");
     dot.setAttribute("cx", x + cellSize / 2);
     dot.setAttribute("cy", y + cellSize / 2);
-    dot.setAttribute("r", Math.max(cellSize * 0.14, 3));
+    dot.setAttribute("r", Math.max(cellSize * 0.14, 3).toString());
     layer.appendChild(dot);
     return;
   }
@@ -123,9 +144,9 @@ function drawCellSymbol(symbolId, layer, x, y, cellSize) {
     ring.classList.add("chart-symbol-stroke");
     ring.setAttribute("cx", x + cellSize / 2);
     ring.setAttribute("cy", y + cellSize / 2);
-    ring.setAttribute("r", Math.max(cellSize * 0.18, 5));
+    ring.setAttribute("r", Math.max(cellSize * 0.18, 5).toString());
     ring.setAttribute("fill", "none");
-    ring.setAttribute("stroke-width", Math.max(cellSize * 0.07, 2));
+    ring.setAttribute("stroke-width", Math.max(cellSize * 0.07, 2).toString());
     layer.appendChild(ring);
     return;
   }
@@ -138,16 +159,16 @@ function drawCellSymbol(symbolId, layer, x, y, cellSize) {
     if (symbolId === "ssk") {
       line.setAttribute("x1", x + padding);
       line.setAttribute("y1", y + padding);
-      line.setAttribute("x2", x + cellSize - padding);
-      line.setAttribute("y2", y + cellSize - padding);
+      line.setAttribute("x2", (x + cellSize - padding).toString());
+      line.setAttribute("y2", (y + cellSize - padding).toString());
     } else {
-      line.setAttribute("x1", x + padding);
-      line.setAttribute("y1", y + cellSize - padding);
-      line.setAttribute("x2", x + cellSize - padding);
+      line.setAttribute("x1", (x + padding).toString());
+      line.setAttribute("y1", (y + cellSize - padding).toString());
+      line.setAttribute("x2", (x + cellSize - padding).toString());
       line.setAttribute("y2", y + padding);
     }
 
-    line.setAttribute("stroke-width", Math.max(cellSize * 0.07, 2));
+    line.setAttribute("stroke-width", Math.max(cellSize * 0.07, 2).toString());
     line.setAttribute("stroke-linecap", "round");
     layer.appendChild(line);
   }
@@ -156,16 +177,16 @@ function drawCellSymbol(symbolId, layer, x, y, cellSize) {
 function buildSymbolPreview(symbolId, size = 32) {
   const preview = createSvgElement("svg");
   preview.setAttribute("viewBox", `0 0 ${size} ${size}`);
-  preview.setAttribute("width", size);
-  preview.setAttribute("height", size);
+  preview.setAttribute("width", size.toString());
+  preview.setAttribute("height", size.toString());
   preview.classList.add("chart-symbol-preview");
 
   const frame = createSvgElement("rect");
   frame.classList.add("chart-preview-frame");
-  frame.setAttribute("x", 0.5);
-  frame.setAttribute("y", 0.5);
-  frame.setAttribute("width", size - 1);
-  frame.setAttribute("height", size - 1);
+  frame.setAttribute("x", (0.5).toString());
+  frame.setAttribute("y", (0.5).toString());
+  frame.setAttribute("width", (size - 1).toString());
+  frame.setAttribute("height", (size - 1).toString());
   preview.appendChild(frame);
 
   drawCellSymbol(symbolId, preview, 0, 0, size);
@@ -214,6 +235,44 @@ function renderSymbolPalette() {
   $("selectedSymbolLabel").textContent = `Selected: ${selectedSymbol.label}`;
 }
 
+// Color drawing and palette
+
+function drawCellColor(color, layer, x, y, cellSize) {
+  if (color === null) {
+    return;
+  }
+
+  const fillRect = createSvgElement("rect");
+  fillRect.setAttribute("x", (x + 1).toString());
+  fillRect.setAttribute("y", (y + 1).toString());
+  fillRect.setAttribute("width", Math.max(cellSize - 2, 0).toString());
+  fillRect.setAttribute("height", Math.max(cellSize - 2, 0).toString());
+  fillRect.setAttribute("fill", color);
+  layer.appendChild(fillRect);
+}
+
+function renderColorPalette() {
+  const palette = $("symbolPalette");
+  const selectedLabel = $("selectedSymbolLabel");
+  const colorTitle = $("chart-symbols-title");
+  const usedColors = getUsedColors();
+
+  colorTitle.innerHTML = "Colors";
+  palette.innerHTML = "";
+
+  const colorInput = document.createElement("input");
+  colorInput.type = "color";
+  colorInput.value = state.selectedColor;
+  colorInput.addEventListener("input", () => {
+    state.selectedColor = colorInput.value;
+  });
+
+  palette.appendChild(colorInput);
+  selectedLabel.textContent = usedColors.join(", ");
+}
+
+// Chart rendering
+
 function renderChart() {
   const svg = $("chart");
   const gridWidth = state.columns * state.cellSize;
@@ -246,7 +305,14 @@ function renderChart() {
     for (let column = 0; column < state.columns; column += 1) {
       const x = gridOriginX + column * state.cellSize;
       const y = gridOriginY + row * state.cellSize;
-      drawCellSymbol(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
+
+      if (state.kind === "symbol") {
+        drawCellSymbol(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
+      }
+
+      if (state.kind === "color") {
+        drawCellColor(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
+      }
 
       const hitRect = createSvgElement("rect");
       hitRect.setAttribute("x", x);
@@ -264,20 +330,20 @@ function renderChart() {
   for (let column = 0; column <= state.columns; column += 1) {
     const x = gridOriginX + column * state.cellSize;
     const line = createSvgElement("line");
-    line.setAttribute("x1", x);
-    line.setAttribute("y1", gridOriginY);
-    line.setAttribute("x2", x);
-    line.setAttribute("y2", gridOriginY + gridHeight);
+    line.setAttribute("x1", x.toString());
+    line.setAttribute("y1", gridOriginY.toString());
+    line.setAttribute("x2", x.toString());
+    line.setAttribute("y2", (gridOriginY + gridHeight).toString());
     gridLayer.appendChild(line);
   }
 
   for (let row = 0; row <= state.rows; row += 1) {
     const y = gridOriginY + row * state.cellSize;
     const line = createSvgElement("line");
-    line.setAttribute("x1", gridOriginX);
-    line.setAttribute("y1", y);
-    line.setAttribute("x2", gridOriginX + gridWidth);
-    line.setAttribute("y2", y);
+    line.setAttribute("x1", gridOriginX.toString());
+    line.setAttribute("y1", y.toString());
+    line.setAttribute("x2", (gridOriginX + gridWidth).toString());
+    line.setAttribute("y2", y.toString());
     gridLayer.appendChild(line);
   }
 
@@ -304,10 +370,10 @@ function renderChart() {
     labelsLayer.appendChild(label);
   }
 
-  border.setAttribute("x", gridOriginX);
-  border.setAttribute("y", gridOriginY);
-  border.setAttribute("width", gridWidth);
-  border.setAttribute("height", gridHeight);
+  border.setAttribute("x", gridOriginX.toString());
+  border.setAttribute("y", gridOriginY.toString());
+  border.setAttribute("width", gridWidth.toString());
+  border.setAttribute("height", gridHeight.toString());
   border.classList.add("chart-grid-border");
   border.setAttribute("fill", "none");
   border.setAttribute("stroke-width", "2");
@@ -320,23 +386,7 @@ function renderChart() {
   syncSerializedCells();
 }
 
-function renderColorPalette(){
-  const palette = $("symbolPalette");
-  const selectedLabel = $("selectedSymbolLabel");
-  const colorTitle = $("chart-symbols-title");
-  const usedColors = getUsedColors();
-  colorTitle.innerHTML = "Colors";
-  palette.innerHTML = "";
-
-  const colorInput = document.createElement("input");
-  colorInput.type = "color";
-  colorInput.value = state.selectedColor;
-  colorInput.addEventListener("input", () => {
-    state.selectedColor = colorInput.value;
-  })
-  palette.appendChild(colorInput);
-  selectedLabel.textContent = usedColors.join(", ");
-}
+// User actions
 
 function handleChartClick(event) {
   const cell = event.target.closest(".chart-cell-hit");
@@ -353,7 +403,11 @@ function handleChartClick(event) {
   } else {
     state.cells[row][column] = state.selectedColor;
   }
+
   renderChart();
+  if (state.kind === "color"){
+    renderColorPalette()
+  }
 }
 
 function rebuild() {
@@ -373,18 +427,7 @@ function handleFormSubmit() {
   rebuild();
 }
 
-function getUsedColors() {
-  const colors = new Set();
-  for(const row of state.cells){
-    for (const cell of row) {
-      if (cell !== null && cell.startsWith("#")){
-        colors.add(cell);
-        }
-      }
-    }
-  return Array.from(colors);
-  }
-
+// Initialization
 
 function init() {
   state.rows = clamp(parseInt($("rows").value, 10) || 12, 1, 200);
@@ -397,14 +440,15 @@ function init() {
     state.kind = selectedKindInput.value;
   }
 
-  if (state.kind === 'symbol'){
+  if (state.kind === "symbol") {
     renderSymbolPalette();
   }
-  if (state.kind === 'color') {
+
+  if (state.kind === "color") {
     renderColorPalette();
   }
 
-  const kindInputs = document.querySelectorAll('input[name="kind"]')
+  const kindInputs = document.querySelectorAll('input[name="kind"]');
   kindInputs.forEach((input) => {
     input.addEventListener("change", () => {
       state.kind = input.value;
@@ -414,6 +458,7 @@ function init() {
       } else {
         renderColorPalette();
       }
+      renderChart();
     });
   });
 

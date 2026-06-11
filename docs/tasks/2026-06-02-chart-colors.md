@@ -11,6 +11,8 @@ Add color chart editing so the user can pick a new color, paint cells with it, a
 
 The backend/domain side already has `Color`, `ColorChart`, and form-data mapping for `kind == "color"`.
 The chart editor JavaScript is the current focus.
+Color cells can now be drawn on the SVG chart with `drawCellColor`.
+The color palette now refreshes after painting a cell in color mode.
 
 ## Decisions Made
 
@@ -32,12 +34,14 @@ The chart editor JavaScript is the current focus.
 ## Where We Stopped
 
 The user clarified the desired color palette behavior.
-`static/js/charts.js` has an unfinished `renderColorPalette` area and still needs color-mode JavaScript logic.
+`static/js/charts.js` now has `drawCellColor`, and `renderChart` calls it when `state.kind === "color"`.
+The JavaScript file has been reorganized into sections so the editor flow is easier to navigate.
+`handleChartClick` now calls `renderColorPalette()` after painting when `state.kind === "color"`.
+The user is learning how this JavaScript/SVG drawing flow works.
 
 ## Next Small Step
 
-Explain and/or implement the JavaScript state flow for:
-selected color, used colors derived from cells, painting cells, and refreshing the color palette after painting.
+Show used colors as reusable clickable color buttons instead of only text in `selectedSymbolLabel`.
 
 ## Open Questions
 

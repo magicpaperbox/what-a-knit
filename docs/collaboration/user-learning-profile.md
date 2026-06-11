@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-06-02
+Last updated: 2026-06-11
 
 ## Current Comfort Zone
 
@@ -23,6 +23,7 @@ Last updated: 2026-06-02
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
 - The difference between initial rendering from state to the DOM and later DOM events that write user changes back into state.
+- SVG drawing concepts in JavaScript, especially layers, `x`/`y` coordinates, `setAttribute`, and converting numbers to strings with `.toString()`.
 
 ## Explanation Style That Works Well
 
@@ -56,6 +57,7 @@ Last updated: 2026-06-02
 - Flask from scratch is documented in `notes/06_jak_dziala_flask_od_zera.md`.
 - Application layers are documented in `notes/07_warstwy_aplikacji.md`.
 - DOM methods and JavaScript utilities are documented in `notes/08_javascript_dom_i_przydatne_metody.md`.
+- Optional chaining with `?.`, `Array.isArray`, and the ternary `? :` operator are documented in `notes/08_javascript_dom_i_przydatne_metody.md`.
 - Searching where to change formatting/code is documented in `notes/09_jak_szukac_gdzie_zmienic_formatowanie.md` and `notes/10_jak_szukac_rzeczy_w_kodzie.md`.
 
 ## Recurring Confusions Or Watch Points

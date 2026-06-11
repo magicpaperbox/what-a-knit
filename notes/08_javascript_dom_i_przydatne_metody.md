@@ -1225,7 +1225,94 @@ button.addEventListener("click", function () {
 });
 ```
 
-## 14. Co warto zapamiętać na teraz
+## 14. `?.` czyli optional chaining
+
+`?.` w JavaScripcie nazywa się **optional chaining**.
+
+Służy do bezpiecznego sięgania do czegoś, co może nie istnieć.
+
+Przykład z `static/js/charts.js`:
+
+```js
+rawCells?.[row]
+```
+
+Czytamy to tak:
+
+> spróbuj wziąć `rawCells[row]`, ale jeśli `rawCells` jest `null` albo `undefined`, nie wywalaj błędu.
+
+Bez `?.` taki kod:
+
+```js
+rawCells[row]
+```
+
+zakłada, że `rawCells` na pewno istnieje.
+Jeśli `rawCells` byłoby `null` albo `undefined`, JavaScript przerwałby działanie błędem.
+
+Z `?.` JavaScript robi bezpieczniej:
+
+```js
+rawCells?.[row]
+```
+
+Jeśli `rawCells` istnieje, dostaniesz:
+
+```js
+rawCells[row]
+```
+
+Jeśli `rawCells` nie istnieje, dostaniesz:
+
+```js
+undefined
+```
+
+ale bez zatrzymania całego kodu błędem.
+
+### Ten zapis w całości
+
+```js
+const sourceRow = Array.isArray(rawCells?.[row]) ? rawCells[row] : [];
+```
+
+To znaczy:
+
+```text
+Jeśli rawCells[row] istnieje i jest tablicą,
+to użyj rawCells[row].
+W przeciwnym razie użyj pustej tablicy [].
+```
+
+Pythonowy odpowiednik:
+
+```python
+if row < len(raw_cells) and isinstance(raw_cells[row], list):
+    source_row = raw_cells[row]
+else:
+    source_row = []
+```
+
+W tym samym przykładzie pojawiają się jeszcze dwie rzeczy:
+
+- `Array.isArray(...)` - sprawdza, czy coś jest tablicą,
+- `condition ? value_if_true : value_if_false` - skrócony `if/else` w JavaScripcie.
+
+Najkrócej:
+
+```js
+rawCells?.[row]
+```
+
+to bezpieczniejsze:
+
+```js
+rawCells[row]
+```
+
+gdy nie masz pewności, czy `rawCells` istnieje.
+
+## 15. Co warto zapamiętać na teraz
 
 Jeśli masz czuć, że ogarniasz podstawy JS do pracy z formularzem, to na ten moment najważniejsze są:
 
@@ -1245,8 +1332,10 @@ Jeśli masz czuć, że ogarniasz podstawy JS do pracy z formularzem, to na ten m
 - `Number`
 - `String`
 - `return`
+- `?.`
+- `Array.isArray`
 
-## 15. Ważna uwaga
+## 16. Ważna uwaga
 
 To nie są "specjalne funkcje JavaScriptu" w jednym sensie.
 W tej notatce są wymieszane:
