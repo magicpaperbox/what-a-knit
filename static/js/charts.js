@@ -200,6 +200,7 @@ function renderSymbolPalette() {
   const paletteSummary = $("chartPaletteSummary");
 
   palette.innerHTML = "";
+  palette.className = "chart-palette chart-palette--symbols";
   paletteTitle.innerHTML = "Symbols";
 
   SYMBOLS.forEach((symbol) => {
@@ -260,25 +261,46 @@ function renderColorPalette() {
 
   paletteTitle.innerHTML = "Colors";
   palette.innerHTML = "";
+  palette.className = "chart-palette chart-palette--colors";
 
   const colorInput = document.createElement("input");
   colorInput.type = "color";
+  colorInput.className = "chart-color-picker";
+  colorInput.setAttribute("aria-label", "Pick a color");
   colorInput.value = state.selectedColor;
   colorInput.addEventListener("input", () => {
     state.selectedColor = colorInput.value;
+    paletteSummary.textContent = `Selected: ${state.selectedColor}`;
   });
 
   palette.appendChild(colorInput);
   paletteSummary.textContent = `Selected: ${state.selectedColor}`;
 
-  usedColors.forEach((color) =>{
+  usedColors.forEach((color) => {
     const colorButton = document.createElement("button");
     colorButton.type = "button";
-    colorButton.style.backgroundColor = color;
-    colorButton.textContent = color;
+    colorButton.className = "chart-color-button";
+    colorButton.setAttribute("aria-label", `Select ${color}`);
+    colorButton.setAttribute("title", color);
+    colorButton.setAttribute("role", "listitem");
+
     if (color === state.selectedColor) {
-        colorButton.style.border = "3px solid #bb0707";
-        }
+      colorButton.classList.add("is-active");
+      colorButton.setAttribute("aria-pressed", "true");
+    } else {
+      colorButton.setAttribute("aria-pressed", "false");
+    }
+
+    const colorSwatch = document.createElement("span");
+    colorSwatch.className = "chart-color-swatch";
+    colorSwatch.style.backgroundColor = color;
+    colorButton.appendChild(colorSwatch);
+
+    const colorLabel = document.createElement("span");
+    colorLabel.className = "chart-color-button-label";
+    colorLabel.textContent = color;
+    colorButton.appendChild(colorLabel);
+
     colorButton.addEventListener("click", () => {
       state.selectedColor = color;
       renderColorPalette();

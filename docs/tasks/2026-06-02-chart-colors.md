@@ -18,6 +18,11 @@ The shared palette UI was renamed from symbol-specific names to chart palette na
 Used colors are now rendered as buttons, and clicking one sets `state.selectedColor`.
 Used color buttons now show their color as the button background.
 Clicking a used color now re-renders the palette, so the visible color picker stays in sync with `state.selectedColor`.
+The color palette now uses CSS classes for the color picker, swatch buttons, swatches, labels, and active selected state.
+The palette summary updates immediately when the color picker changes `state.selectedColor`.
+The color palette now renders as square swatches, and the selected color summary sits below the palette.
+The color picker is now a larger square above the smaller saved-color swatches.
+The native color picker is styled so the selected color directly fills the large picker square.
 
 ## Decisions Made
 
@@ -47,11 +52,13 @@ The template, CSS, and JavaScript now use neutral palette names such as `chartPa
 Used color buttons now update `state.selectedColor` on click.
 Used color buttons now have inline dynamic background colors from their hex values.
 Used color button clicks now call `renderColorPalette()` after updating `state.selectedColor`.
+The selected color is shown with an `is-active` class on the matching color button.
+The shared palette element gets a mode class (`chart-palette--symbols` or `chart-palette--colors`) so symbols can stay as list buttons while colors render as square swatches.
 The user is learning how this JavaScript/SVG drawing flow works.
 
 ## Next Small Step
 
-Show the currently selected color clearly in the palette UI.
+Polish or extract any repeated palette button styling if it becomes annoying to maintain.
 
 ## Open Questions
 

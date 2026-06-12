@@ -1773,11 +1773,18 @@ body.dark .chart-palette-panel {
     margin: 0;
     color: var(--muted);
     font-size: 0.95rem;
+    line-height: 1.35;
 }
 
 .chart-palette {
     display: grid;
     gap: 10px;
+}
+
+.chart-palette--colors {
+    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    align-items: start;
+    justify-items: stretch;
 }
 
 .chart-symbol-button {
@@ -1817,6 +1824,92 @@ body.dark .chart-symbol-button {
     line-height: 1.35;
 }
 
+.chart-color-picker {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 136px;
+    height: 136px;
+    max-width: 100%;
+    min-height: 0;
+    padding: 0;
+    border: 2px solid var(--border-soft);
+    border-radius: 14px;
+    background: var(--surface-strong);
+    cursor: pointer;
+    overflow: hidden;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.chart-color-picker:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 rgba(64, 45, 83, 0.12);
+}
+
+.chart-color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.chart-color-picker::-webkit-color-swatch {
+    border: 0;
+    border-radius: 12px;
+}
+
+.chart-color-picker::-moz-color-swatch {
+    border: 0;
+    border-radius: 12px;
+}
+
+.chart-color-button {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    min-height: 54px;
+    padding: 7px;
+    border: 2px solid var(--border-soft);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.84);
+    color: var(--text);
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.dark .chart-color-button,
+body.dark .chart-color-picker {
+    background: rgba(64, 48, 83, 0.88);
+}
+
+.chart-color-button:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 rgba(64, 45, 83, 0.12);
+}
+
+.chart-color-button.is-active {
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 rgba(232, 67, 147, 0.16);
+}
+
+.chart-color-swatch {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.78);
+    border-radius: 11px;
+    box-shadow: inset 0 0 0 1px rgba(33, 24, 47, 0.16);
+}
+
+.chart-color-button-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
 @media (max-width: 767px) {
     .chart-page-layout {
         display: flex;
@@ -1852,6 +1945,13 @@ body.dark .chart-symbol-button {
         padding-bottom: 2px;
     }
 
+    .chart-palette--colors {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+
     .chart-symbol-button {
         flex: 0 0 auto;
         grid-template-columns: 1fr;
@@ -1863,8 +1963,31 @@ body.dark .chart-symbol-button {
         border-radius: 14px;
     }
 
+    .chart-color-picker {
+        width: 112px;
+        height: 112px;
+        max-width: 100%;
+        min-width: 0;
+        padding: 0;
+        border-radius: 14px;
+    }
+
+    .chart-color-button {
+        flex: 0 0 auto;
+        width: 52px;
+        min-width: 52px;
+        height: 52px;
+        padding: 6px;
+        border-radius: 14px;
+    }
+
     .chart-symbol-button-copy {
         display: none;
+    }
+
+    .chart-palette-summary {
+        margin-top: 4px;
+        font-size: 0.85rem;
     }
 }
 
