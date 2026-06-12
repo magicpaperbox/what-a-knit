@@ -276,6 +276,9 @@ function renderColorPalette() {
   palette.appendChild(colorInput);
   paletteSummary.textContent = `Selected: ${state.selectedColor}`;
 
+  const colorSwatches = document.createElement("div");
+  colorSwatches.className = "chart-color-swatches";
+
   usedColors.forEach((color) => {
     const colorButton = document.createElement("button");
     colorButton.type = "button";
@@ -305,9 +308,12 @@ function renderColorPalette() {
       state.selectedColor = color;
       renderColorPalette();
     });
-    palette.appendChild(colorButton);
+    colorSwatches.appendChild(colorButton);
   });
 
+  if (usedColors.length > 0) {
+    palette.appendChild(colorSwatches);
+  }
 }
 
 // Chart rendering

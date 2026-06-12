@@ -1782,9 +1782,15 @@ body.dark .chart-palette-panel {
 }
 
 .chart-palette--colors {
-    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    grid-template-columns: 1fr;
     align-items: start;
     justify-items: stretch;
+}
+
+.chart-color-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    gap: 10px;
 }
 
 .chart-symbol-button {
@@ -1925,9 +1931,9 @@ body.dark .chart-color-picker {
         align-self: stretch;
         order: -1;
         position: sticky;
-        top: 86px;
+        top: max(2px, env(safe-area-inset-top));
         z-index: 15;
-        gap: 0;
+        gap: 8px;
         padding: 12px;
         border-radius: 22px;
         backdrop-filter: blur(10px);
@@ -1947,9 +1953,18 @@ body.dark .chart-color-picker {
 
     .chart-palette--colors {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+        grid-template-columns: 90px minmax(0, 1fr);
+        align-items: start;
+        gap: 8px 10px;
         overflow-x: visible;
         padding-bottom: 0;
+    }
+
+    .chart-color-swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+        gap: 8px;
+        min-width: 0;
     }
 
     .chart-symbol-button {
@@ -1964,8 +1979,10 @@ body.dark .chart-color-picker {
     }
 
     .chart-color-picker {
-        width: 112px;
-        height: 112px;
+        grid-column: 1;
+        justify-self: stretch;
+        width: 90px;
+        height: 90px;
         max-width: 100%;
         min-width: 0;
         padding: 0;
@@ -1974,11 +1991,12 @@ body.dark .chart-color-picker {
 
     .chart-color-button {
         flex: 0 0 auto;
-        width: 52px;
-        min-width: 52px;
-        height: 52px;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 42px;
         padding: 6px;
-        border-radius: 14px;
+        border-radius: 12px;
     }
 
     .chart-symbol-button-copy {

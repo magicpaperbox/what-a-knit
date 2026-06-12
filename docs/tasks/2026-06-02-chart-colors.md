@@ -23,6 +23,8 @@ The palette summary updates immediately when the color picker changes `state.sel
 The color palette now renders as square swatches, and the selected color summary sits below the palette.
 The color picker is now a larger square above the smaller saved-color swatches.
 The native color picker is styled so the selected color directly fills the large picker square.
+On mobile, the chart palette sticks close to the top of the viewport, with the large color picker on the left and saved color swatches in a smaller grid on the right.
+The mobile color picker was reduced to 90px square and the sticky palette offset was tightened to 2px.
 
 ## Decisions Made
 
@@ -54,6 +56,7 @@ Used color buttons now have inline dynamic background colors from their hex valu
 Used color button clicks now call `renderColorPalette()` after updating `state.selectedColor`.
 The selected color is shown with an `is-active` class on the matching color button.
 The shared palette element gets a mode class (`chart-palette--symbols` or `chart-palette--colors`) so symbols can stay as list buttons while colors render as square swatches.
+Saved color buttons are grouped in `chart-color-swatches`, which lets mobile lay them out beside the larger color picker without changing the desktop layout.
 The user is learning how this JavaScript/SVG drawing flow works.
 
 ## Next Small Step
