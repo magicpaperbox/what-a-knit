@@ -194,12 +194,13 @@ function buildSymbolPreview(symbolId, size = 32) {
 }
 
 function renderSymbolPalette() {
-  const palette = $("symbolPalette");
+  const palette = $("chartPalette");
   const selectedSymbol = getSymbol(state.selectedSymbol);
-  const symbolTitle = $("chart-symbols-title");
+  const paletteTitle = $("chartPaletteTitle");
+  const paletteSummary = $("chartPaletteSummary");
 
   palette.innerHTML = "";
-  symbolTitle.innerHTML = "Symbols";
+  paletteTitle.innerHTML = "Symbols";
 
   SYMBOLS.forEach((symbol) => {
     const button = document.createElement("button");
@@ -232,13 +233,13 @@ function renderSymbolPalette() {
     palette.appendChild(button);
   });
 
-  $("selectedSymbolLabel").textContent = `Selected: ${selectedSymbol.label}`;
+  paletteSummary.textContent = `Selected: ${selectedSymbol.label}`;
 }
 
 // Color drawing and palette
 
 function drawCellColor(color, layer, x, y, cellSize) {
-  if (color === null) {
+  if (color === null || !color.startsWith("#")) {
     return;
   }
 
@@ -252,12 +253,12 @@ function drawCellColor(color, layer, x, y, cellSize) {
 }
 
 function renderColorPalette() {
-  const palette = $("symbolPalette");
-  const selectedLabel = $("selectedSymbolLabel");
-  const colorTitle = $("chart-symbols-title");
+  const palette = $("chartPalette");
+  const paletteSummary = $("chartPaletteSummary");
+  const paletteTitle = $("chartPaletteTitle");
   const usedColors = getUsedColors();
 
-  colorTitle.innerHTML = "Colors";
+  paletteTitle.innerHTML = "Colors";
   palette.innerHTML = "";
 
   const colorInput = document.createElement("input");
@@ -268,7 +269,23 @@ function renderColorPalette() {
   });
 
   palette.appendChild(colorInput);
-  selectedLabel.textContent = usedColors.join(", ");
+  paletteSummary.textContent = `Selected: ${state.selectedColor}`;
+
+  usedColors.forEach((color) =>{
+    const colorButton = document.createElement("button");
+    colorButton.type = "button";
+    colorButton.style.backgroundColor = color;
+    colorButton.textContent = color;
+    if (color === state.selectedColor) {
+        colorButton.style.border = "3px solid #bb0707";
+        }
+    colorButton.addEventListener("click", () => {
+      state.selectedColor = color;
+      renderColorPalette();
+    });
+    palette.appendChild(colorButton);
+  });
+
 }
 
 // Chart rendering
