@@ -51,6 +51,20 @@
           </label>
         </div>
 
+        <fieldset class="chart-kind-selector">
+          <legend>Chart type</legend>
+          <div class="chart-kind-options">
+            <label class="chart-kind-option">
+              <input type="radio" name="kind" value="symbol" {% if form_data.kind=="symbol" %} checked {% endif %}>
+              <span>Symbol</span>
+            </label>
+            <label class="chart-kind-option">
+              <input type="radio" name="kind" value="color" {% if form_data.kind=="color" %} checked {% endif %}>
+              <span>Color</span>
+            </label>
+          </div>
+        </fieldset>
+
         <div class="chart-actions">
           <button id="build" type="button" class="btn-chart btn-chart--secondary">Update grid</button>
           <button type="submit" class="btn-submit chart-save-button">
@@ -68,14 +82,14 @@
 
       <textarea id="cellsData" name="cells_json" hidden>{{ form_data.cells_json }}</textarea>
 
-<label>
-    <input type="radio" name="kind" value="symbol" {% if form_data.kind=="symbol" %} checked {% endif %}>
-Symbol
-</label>
-    <label>
-    <input type="radio" name="kind" value="color" {% if form_data.kind=="color" %} checked {% endif %}>
-    Color
-</label>
+      <aside class="chart-palette-panel" aria-labelledby="chartPaletteTitle">
+        <div class="chart-palette-header">
+          <h3 id="chartPaletteTitle"></h3>
+        </div>
+        <div id="chartPalette" class="chart-palette" role="list"></div>
+        <p id="chartPaletteSummary" class="chart-palette-summary"></p>
+      </aside>
+
       <div class="chart-workspace">
         <div class="chart-stage">
           <p class="chart-stage-copy">Select a symbol or pick a color on the right, then click a box in the chart. The empty square clears a cell.</p>
@@ -107,14 +121,6 @@ Symbol
       {% endif %}
     </div>
   </div>
-
-  <aside class="chart-palette-panel" aria-labelledby="chartPaletteTitle">
-    <div class="chart-palette-header">
-      <h3 id="chartPaletteTitle"></h3>
-    </div>
-    <div id="chartPalette" class="chart-palette" role="list"></div>
-    <p id="chartPaletteSummary" class="chart-palette-summary"></p>
-  </aside>
 </div>
 
 

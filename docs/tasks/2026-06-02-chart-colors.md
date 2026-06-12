@@ -25,6 +25,10 @@ The color picker is now a larger square above the smaller saved-color swatches.
 The native color picker is styled so the selected color directly fills the large picker square.
 On mobile, the chart palette sticks close to the top of the viewport, with the large color picker on the left and saved color swatches in a smaller grid on the right.
 The mobile color picker was reduced to 90px square and the sticky palette offset was tightened to 2px.
+The chart type radio controls are now a styled segmented control inside the main chart toolbar.
+The chart palette now lives inside the form directly above the chart; on wide desktop it is placed in a side column, and on narrow/mobile layouts it stays above the chart and becomes sticky only after scrolling past it.
+The chart toolbar now uses explicit grid areas: on mobile rows and columns share a row and update/save share a row; on wide desktop title and sizing fields sit on the first row, while chart type and actions sit below.
+The chart type segmented control now has label spacing matching the other toolbar fields and no longer uses a gray selected state.
 
 ## Decisions Made
 
@@ -57,6 +61,9 @@ Used color button clicks now call `renderColorPalette()` after updating `state.s
 The selected color is shown with an `is-active` class on the matching color button.
 The shared palette element gets a mode class (`chart-palette--symbols` or `chart-palette--colors`) so symbols can stay as list buttons while colors render as square swatches.
 Saved color buttons are grouped in `chart-color-swatches`, which lets mobile lay them out beside the larger color picker without changing the desktop layout.
+The palette panel was moved from being a sibling of the editor section to being part of `chartEditorForm`, which allows different desktop and narrow/mobile placement through CSS grid.
+The mobile chart editor section now has extra top padding so the heading spacing matches the rest of the app more closely.
+The chart type selector spacing and selected-state colors were polished in light and dark mode.
 The user is learning how this JavaScript/SVG drawing flow works.
 
 ## Next Small Step
