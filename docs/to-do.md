@@ -12,3 +12,5 @@ add folders to patterns/projects and the rest
 add sorting ui
 tools x projects
 add lot
+zapis charta powinien przekierować na stronę tego charta a nie na nowy chart
+kolorowe charty nie zapisują się (a w zasadzie zapisują się zawsze symbole)

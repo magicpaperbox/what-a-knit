@@ -53,7 +53,12 @@ function normalizeCells(rawCells, rows, columns) {
 
     for (let column = 0; column < columns; column += 1) {
       const sourceValue = sourceRow[column];
-      normalizedRow.push(ALLOWED_SYMBOL_IDS.has(sourceValue) && sourceValue !== "knit" ? sourceValue : null);
+      if (state.kind === "symbol") {
+        normalizedRow.push(ALLOWED_SYMBOL_IDS.has(sourceValue) && sourceValue !== "knit" ? sourceValue : null);
+      }
+      if (state.kind === "color") {
+        normalizedRow.push(typeof sourceValue === "string" && /^#[a-fA-F0-9]{6}$/.test(sourceValue) ? sourceValue : null);
+      }
     }
 
     normalizedCells.push(normalizedRow);
@@ -478,12 +483,11 @@ function init() {
   state.rows = clamp(parseInt($("rows").value, 10) || 12, 1, 200);
   state.columns = clamp(parseInt($("columns").value, 10) || 12, 1, 200);
   state.cellSize = clamp(parseInt($("cellSize").value, 10) || 32, 10, 80);
-  state.cells = readSerializedCells(state.rows, state.columns);
-
   const selectedKindInput = document.querySelector('input[name="kind"]:checked');
   if (selectedKindInput) {
     state.kind = selectedKindInput.value;
   }
+  state.cells = readSerializedCells(state.rows, state.columns);
 
   if (state.kind === "symbol") {
     renderSymbolPalette();

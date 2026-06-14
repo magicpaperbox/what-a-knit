@@ -65,10 +65,12 @@ The palette panel was moved from being a sibling of the editor section to being 
 The mobile chart editor section now has extra top padding so the heading spacing matches the rest of the app more closely.
 The chart type selector spacing and selected-state colors were polished in light and dark mode.
 The user is learning how this JavaScript/SVG drawing flow works.
+Color charts saved in the backend can load back into the edit form with correct `cells_json`, but `static/js/charts.js` currently normalizes every loaded cell through symbol-only validation, so hex color values are replaced with `null` before rendering.
+The user fixed the load order in `static/js/charts.js` so `state.kind` is set before `readSerializedCells(...)`, and confirmed that saved color charts now reopen with filled color cells.
 
 ## Next Small Step
 
-Polish or extract any repeated palette button styling if it becomes annoying to maintain.
+Continue with small cleanup or explanation around `normalizeCells` if needed.
 
 ## Open Questions
 
