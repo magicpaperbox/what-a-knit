@@ -22,6 +22,7 @@ const state = {
   cells: [],
   kind: "symbol",
   selectedColor: "#000000",
+  isPainting: false,
 };
 
 const LABEL_MARGIN_LEFT = 34;
@@ -44,6 +45,7 @@ function getSymbol(symbolId) {
 
 // Cell state helpers
 
+// resize chart and validate cells
 function normalizeCells(rawCells, rows, columns) {
   const normalizedCells = [];
 
@@ -343,6 +345,7 @@ function renderChart() {
   const hitLayer = createSvgElement("g");
   const border = createSvgElement("rect");
 
+  // labelsLayer.classList.add("chart-labels-layer");
   labelsLayer.classList.add("chart-labels-layer");
   labelsLayer.setAttribute("font-size", LABEL_FONT_SIZE.toString());
   labelsLayer.setAttribute("font-family", "Arial, sans-serif");
