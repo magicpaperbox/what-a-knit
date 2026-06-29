@@ -5,7 +5,13 @@ from typing import Optional
 from datetime import date
 
 from modules.patterns.domain import PatternId, Gauge
+from modules.units.mass import Mass
+from modules.yarn.domain import SkeinId
 
+@dataclass
+class ProjectSkeinUsage:
+    skein_id: SkeinId
+    used_weight: Mass
 
 @dataclass(frozen=True)
 class ProjectId:
@@ -32,6 +38,7 @@ class Project:
 
     rating: Optional[int] = None
     notes: Optional[str] = None
+    skein_usages: list[ProjectSkeinUsage] = field(default_factory=list)
 
     image_blob: Optional[bytes] = None
     image_mime_type: Optional[str] = None

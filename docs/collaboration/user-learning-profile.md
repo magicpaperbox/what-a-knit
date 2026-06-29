@@ -21,6 +21,7 @@ Last updated: 2026-06-11
 
 - Object-oriented design and the role of classes.
 - Which application layer owns a specific responsibility.
+- Repository method roles, especially the difference between fetching rows, grouping rows for many parent objects, mapping rows to domain objects, and saving domain objects.
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
 - The difference between initial rendering from state to the DOM and later DOM events that write user changes back into state.

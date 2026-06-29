@@ -3,10 +3,19 @@ from dataclasses import dataclass
 from typing import Optional
 from infra.db import get_db
 from modules.patterns.domain import PatternId
-from modules.projects.domain import Gauge, Project, ProjectId, ProjectStatus
+from modules.projects.domain import Gauge, Project, ProjectId, ProjectStatus, ProjectSkeinUsage
 from datetime import date
 
 from modules.units.centimeters import Centimeters
+from modules.units.mass import Mass
+from modules.yarn.domain import SkeinId
+
+
+@dataclass
+class ProjectSkeinRow:
+    project_id: int
+    skein_id: int
+    used_weight_grams: int
 
 @dataclass
 class ProjectGaugeRow:
@@ -39,7 +48,7 @@ class ProjectPatternRow:
 
 
 class ProjectRepository:
-    def _row_to_domain(self, project_row: ProjectRow, gauge_row: ProjectGaugeRow | None, project_pattern_rows: list[ProjectPatternRow]) -> Project:
+    def _row_to_domain(self, project_row: ProjectRow, gauge_row: ProjectGaugeRow | None, project_pattern_rows: list[ProjectPatternRow], skein_usages: list[ProjectSkeinUsage]) -> Project:
         if gauge_row:
             gauge = Gauge(
                 float(gauge_row.stitches) if gauge_row.stitches is not None else None,
@@ -68,6 +77,7 @@ class ProjectRepository:
             end_date=date.fromisoformat(project_row.end_date) if project_row.end_date is not None else None,
             rating=project_row.rating,
             notes=project_row.notes,
+            skein_usages=skein_usages,
 
             image_blob=project_row.image_blob,
             image_mime_type=project_row.image_mime_type
@@ -125,7 +135,8 @@ class ProjectRepository:
         for project_row in project_rows:
             gauge_row = gauge_rows_by_id.get(project_row.id)
             project_pattern_row = project_pattern_rows_by_id.get(project_row.id, [])
-            projects.append(self._row_to_domain(project_row, gauge_row, project_pattern_row))
+            skein_usages = self._get_skein_usages(project_row.id)
+            projects.append(self._row_to_domain(project_row, gauge_row, project_pattern_row, skein_usages))
         return projects
 
     def get_by_id(self, project_id: ProjectId) -> Optional[Project]:
@@ -141,8 +152,9 @@ class ProjectRepository:
 
         cursor = db.execute('SELECT * FROM project_patterns WHERE project_id = ?', (project_id.value,))
         project_pattern_rows = [ProjectPatternRow(**dict(row)) for row in cursor.fetchall()]
+        skein_usages = self._get_skein_usages(project_id.value)
 
-        return self._row_to_domain(project_row, gauge_row, project_pattern_rows)
+        return self._row_to_domain(project_row, gauge_row, project_pattern_rows, skein_usages)
 
     def _save_gauge(self, gauge: Gauge, project_id: int) -> None:
         db = get_db()
@@ -164,6 +176,7 @@ class ProjectRepository:
         )
         project.id = ProjectId(cursor.lastrowid)
         self._add_patterns(project)
+        self._add_skein_usages(project)
         if project.actual_gauge:
             self._save_gauge(project.actual_gauge, project.id.value)
         db.commit()
@@ -178,6 +191,18 @@ class ProjectRepository:
                 ) VALUES (?, ?)''',
                 (
                     project.id.value, pattern_id.value
+                )
+            )
+
+    def _add_skein_usages(self, project: Project) -> None:
+        db = get_db()
+        for skein in project.skein_usages:
+            db.execute(
+                '''INSERT INTO project_skein_usage (
+                    project_id, skein_id, used_weight_grams
+                ) VALUES (?, ?, ?)''',
+                (
+                    project.id.value, skein.skein_id.value, skein.used_weight.grams
                 )
             )
 
@@ -196,7 +221,9 @@ class ProjectRepository:
         )
         db.execute('DELETE FROM project_gauge WHERE project_id = ?', (project.id.value,))
         db.execute('DELETE FROM project_patterns WHERE project_id = ?', (project.id.value,))
+        db.execute('DELETE FROM project_skein_usage WHERE project_id = ?', (project.id.value,))
         self._add_patterns(project)
+        self._add_skein_usages(project)
         if project.actual_gauge:
             self._save_gauge(project.actual_gauge, project.id.value)
         db.commit()
@@ -205,6 +232,7 @@ class ProjectRepository:
         db = get_db()
         db.execute('DELETE FROM project_gauge WHERE project_id = ?', (project_id.value,))
         db.execute('DELETE FROM project_patterns WHERE project_id = ?', (project_id.value,))
+        db.execute('DELETE FROM project_skein_usage WHERE project_id = ?', (project_id.value,))
         db.execute('DELETE FROM project WHERE id = ?', (project_id.value,))
         db.commit()
 
@@ -212,3 +240,24 @@ class ProjectRepository:
         db = get_db()
         db.execute('DELETE FROM project_patterns WHERE pattern_id = ?', (pattern_id.value,))
         db.commit()
+
+    def _skein_usage_row_to_domain(self, row: ProjectSkeinRow) -> ProjectSkeinUsage:
+        return ProjectSkeinUsage(
+            skein_id=SkeinId(row.skein_id),
+            used_weight=Mass(row.used_weight_grams)
+        )
+
+    def _get_skein_usages(self, project_id: int):
+        db = get_db()
+        cursor = db.execute(
+            """SELECT * FROM project_skein_usage
+            WHERE project_id = ?
+            """, (project_id,)
+        )
+        project_skein_rows = [ProjectSkeinRow(**dict(row)) for row in cursor.fetchall()]
+        skein_usages = [self._skein_usage_row_to_domain(row) for row in project_skein_rows]
+
+        return skein_usages
+
+
+

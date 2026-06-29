@@ -4,13 +4,18 @@ from dataclasses import dataclass, field
 from datetime import date
 
 from modules.patterns.domain import Gauge, Pattern, PatternId
-from modules.projects.domain import Project, ProjectId, ProjectStatus
+from modules.projects.domain import Project, ProjectId, ProjectStatus, ProjectSkeinUsage
 
 
 @dataclass(frozen=True)
 class SelectedPatternFormData:
     id: int
     name: str
+
+@dataclass
+class ProjectSkeinFormData:
+    skein_id: int
+    used_yarn_weight: int
 
 
 @dataclass
@@ -23,6 +28,7 @@ class ProjectFormData:
     end_date: str = ""
     notes: str = ""
     selected_patterns: list[SelectedPatternFormData] = field(default_factory=list)
+    skein_usage: list[ProjectSkeinFormData] = field(default_factory=list)
     image_blob: bytes | None = None
     image_mime_type: str | None = None
 
@@ -44,6 +50,10 @@ class ProjectFormData:
                 SelectedPatternFormData(id=pattern.id.value, name=pattern.name)
                 for pattern in selected_patterns
                 if pattern.id is not None
+            ],
+            skein_usage=[
+                ProjectSkeinFormData(usage.skein_id.value, usage.used_weight.grams)
+                for usage in project.skein_usages
             ],
             image_blob=project.image_blob,
             image_mime_type=project.image_mime_type
