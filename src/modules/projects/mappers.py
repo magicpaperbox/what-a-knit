@@ -5,6 +5,8 @@ from datetime import date
 
 from modules.patterns.domain import Gauge, Pattern, PatternId
 from modules.projects.domain import Project, ProjectId, ProjectStatus, ProjectSkeinUsage
+from modules.units.mass import Mass
+from modules.yarn.domain import SkeinId
 
 
 @dataclass(frozen=True)
@@ -75,6 +77,11 @@ class ProjectFormData:
             for selected_pattern in self.selected_patterns
         ]
 
+        skein_usages = [
+            ProjectSkeinUsage(skein_id=SkeinId(usage.skein_id), used_weight=Mass(usage.used_yarn_weight))
+            for usage in self.skein_usage
+        ]
+
         progress_percent = int(self.progress_percent) if self.progress_percent else None
 
         project = Project(
@@ -88,6 +95,7 @@ class ProjectFormData:
             end_date=end_date,
             rating=None,
             notes=self.notes,
+            skein_usages=skein_usages,
             image_blob=self.image_blob,
             image_mime_type=self.image_mime_type or None
         )
@@ -117,6 +125,13 @@ class ProjectFormData:
                 SelectedPatternFormData(id=pattern_id, name=pattern.name)
             )
 
+        skein_ids = form.getlist('skein_id', type=int)
+        used_yarn_weights = form.getlist('used_yarn_weight', type=int)
+
+        skein_usage = []
+        for skein_id, used_yarn_weight in zip(skein_ids, used_yarn_weights):
+            skein_usage.append(ProjectSkeinFormData(skein_id=skein_id, used_yarn_weight=used_yarn_weight))
+
         uploaded_image = files.get('image')
         if uploaded_image is not None and uploaded_image.filename:
             image_blob = uploaded_image.read()
@@ -137,6 +152,7 @@ class ProjectFormData:
             end_date=form.get('end_date', ''),
             notes=form.get('notes', ''),
             selected_patterns=selected_patterns,
+            skein_usage=skein_usage,
             image_blob=image_blob,
             image_mime_type=image_mime_type,
         )

@@ -2,13 +2,15 @@ from flask import Blueprint, render_template, redirect, request, abort
 
 from modules.patterns.domain import Pattern
 from modules.patterns.repository import PatternRepository
-from modules.projects.domain import ProjectId, ProjectStatus
+from modules.projects.domain import ProjectId
 from modules.projects.mappers import ProjectFormData
 from modules.projects.repository import ProjectRepository
+from modules.yarn.service import YarnService
 
 projects_api = Blueprint('projects', __name__, url_prefix="/projects")
 repo = ProjectRepository()
 pattern_repo = PatternRepository()
+yarn_service = YarnService()
 
 
 def _get_project_or_404(project_id: ProjectId):
@@ -38,6 +40,7 @@ def _render_project_form(
         error=error,
         patterns_dicts=_patterns_to_dicts(available_patterns),
         initial_selected_patterns=form_data.selected_patterns_to_dicts(),
+        available_skeins=yarn_service.get_all_skeins(),
     )
 
 

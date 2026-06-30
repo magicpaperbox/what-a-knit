@@ -25,6 +25,12 @@ Guide the user through implementing a feature where a project can use specific y
 - The user started wiring skein usages into `ProjectRepository.get_by_id()` and `_row_to_domain()`.
 - The user added `_add_skein_usages()` and wired it into `add()` and `update()`, including cleanup in `update()`.
 - The user added deletion cleanup for `project_skein_usage` in `ProjectRepository.delete()`.
+- The user added mapper conversion from `ProjectFormData.skein_usage` to `Project.skein_usages` in `ProjectFormData.to_domain()`.
+- The user added parsing of skein usage rows in `ProjectFormData.from_request_form()` with `form.getlist(...)`, `zip(...)`, and `skein_usage.append(ProjectSkeinFormData(...))`.
+- The user started the next API/service step and tried to read all skeins from `projects/api.py`; this needs to be redirected toward `YarnService.get_all_skeins()` because available inventory skeins belong to the yarn module, not to `ProjectRepository.get_all()`.
+- The user added `YarnService.get_all_skeins() -> list[Skein]`, delegating to the existing `SkeinRepository.get_all()`, and cleaned up the unused `SkeinRepository` import from `projects/api.py`.
+- The user imported and instantiated `YarnService` in `projects/api.py`, then passed `available_skeins=yarn_service.get_all_skeins()` to the project form template.
+- The user added a first temporary project form UI with `select name="skein_id"` over `available_skeins` and `input name="used_yarn_weight"`.
 
 ## Decisions Made
 
@@ -50,11 +56,11 @@ Guide the user through implementing a feature where a project can use specific y
 
 ## Where We Stopped
 
-The schema table, domain representation, repository row dataclass, row-to-domain mapper, one-project skein usage query method, `get_by_id()`/`get_all()` wiring, and add/update/delete persistence are in place. The user has moved to `src/modules/projects/mappers.py`; `ProjectSkeinFormData` exists and `ProjectFormData.from_domain()` now maps each `ProjectSkeinUsage` from `project.skein_usages` into a form-data row.
+The schema table, domain representation, repository row dataclass, row-to-domain mapper, one-project skein usage query method, `get_by_id()`/`get_all()` wiring, and add/update/delete persistence are in place. The user has moved to `src/modules/projects/mappers.py`; `ProjectSkeinFormData` exists, `ProjectFormData.from_domain()` maps each `ProjectSkeinUsage` from `project.skein_usages` into a form-data row, `ProjectFormData.to_domain()` converts `self.skein_usage` back into `ProjectSkeinUsage` objects, and `ProjectFormData.from_request_form()` now reads `skein_id` plus `used_yarn_weight` lists and converts them into `ProjectSkeinFormData` rows. The project form now receives `available_skeins` and has a first simple select/input pair for submitting skein usage.
 
 ## Next Small Step
 
-In `src/modules/projects/mappers.py`, decide how `ProjectFormData` should represent skein usage rows from forms, then make sure `ProjectFormData.to_domain()` preserves or converts those rows into `Project.skein_usages`.
+Next session: manually test creating/editing a project with the temporary skein usage fields, then decide whether to improve the UI or first add a small focused test for mapper/form submission.
 
 ## Open Questions
 

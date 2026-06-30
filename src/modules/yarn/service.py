@@ -43,6 +43,9 @@ class YarnService:
 
     # --- Skein operations ---
 
+    def get_all_skeins(self) -> list[Skein]:
+        return self._skein_repo.get_all()
+
     def get_skein(self, skein_id: SkeinId) -> Skein:
         skein = self._skein_repo.get_by_id(skein_id)
         if skein is None:
