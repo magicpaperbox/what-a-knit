@@ -26,13 +26,20 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
+    _reset_old_chart_table(db)
     with current_app.open_resource('schema.sql', mode='r') as f:
         db.executescript(f.read())
+
     _ensure_yarn_notes_column(db)
     _ensure_project_has_image_column(db)
     _ensure_yarn_has_image_column(db)
     db.commit()
 
+def _reset_old_chart_table(db):
+    columns = db.execute("PRAGMA table_info(chart)").fetchall()
+    column_names = {column["name"] for column in columns}
+    if "kind" not in column_names or "rows" in column_names or "columns" in column_names:
+        db.execute("DROP TABLE IF EXISTS chart")
 
 def _ensure_yarn_notes_column(db):
     columns = db.execute("PRAGMA table_info(yarn)").fetchall()

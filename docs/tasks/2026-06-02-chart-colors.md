@@ -67,10 +67,16 @@ The chart type selector spacing and selected-state colors were polished in light
 The user is learning how this JavaScript/SVG drawing flow works.
 Color charts saved in the backend can load back into the edit form with correct `cells_json`, but `static/js/charts.js` currently normalizes every loaded cell through symbol-only validation, so hex color values are replaced with `null` before rendering.
 The user fixed the load order in `static/js/charts.js` so `state.kind` is set before `readSerializedCells(...)`, and confirmed that saved color charts now reopen with filled color cells.
+On 2026-08-24, the user returned to chart saving. Current code already redirects newly saved charts to `/charts/<id>/edit` in `src/modules/charts/api.py:create_chart`, so the next useful check is whether the submitted form sends the correct `kind` and `cells_json`.
+The production 500 is now suspected to come from an old SQLite `chart` table schema. The old table may be missing `kind` and may still have required `rows`/`columns` columns, while the current code expects `id`, `kind`, `name`, `cell_size`, and `cells_json` only.
+The user clarified that existing chart data is not important, but other tables such as yarn, projects, and patterns must be preserved. This means the fix can reset only the `chart` table instead of migrating old chart rows.
+Important decision: do not commit an unconditional `DROP TABLE chart` inside app startup code. Either run the drop once manually on the production database, or commit a conditional ensure function that drops/recreates `chart` only when the existing columns do not match the expected schema.
+`ALTER TABLE` was considered, but the old chart table likely also has required `rows`/`columns` columns that the current repository no longer writes. Adding only `kind` would not fix inserts, so a conditional drop/recreate of only `chart` remains the simpler fix while chart data is disposable.
+The current local attempt adds `_reset_chart_table(db)` before `schema.sql` and drops `chart` when `kind` is missing. This is close, but the condition should also catch old schema leftovers such as `rows`/`columns`, in case `kind` was already added manually to an otherwise old table.
 
 ## Next Small Step
 
-Continue with small cleanup or explanation around `normalizeCells` if needed.
+Add a small database migration/ensure function for the `chart` table in `src/infra/db.py` that drops and recreates only `chart` when its columns do not match the current schema, then test it on a copy of the existing SQLite database before deploying.
 
 ## Open Questions
 
