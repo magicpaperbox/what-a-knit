@@ -1892,6 +1892,12 @@ body.dark .chart-palette-panel {
     justify-items: stretch;
 }
 
+.chart-color-tools {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
 .chart-color-swatches {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
@@ -1971,6 +1977,98 @@ body.dark .chart-symbol-button {
 .chart-color-picker::-moz-color-swatch {
     border: 0;
     border-radius: 12px;
+}
+
+.chart-color-tool-button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid var(--border-soft);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.84);
+    color: var(--text);
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.dark .chart-color-tool-button {
+    background: rgba(64, 48, 83, 0.88);
+}
+
+.chart-color-tool-button:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 rgba(64, 45, 83, 0.12);
+}
+
+.chart-color-tool-button.is-active {
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 rgba(232, 67, 147, 0.16);
+}
+
+.chart-color-tool-icon {
+    position: relative;
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.chart-color-tool-icon--paint::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 2px;
+    width: 5px;
+    height: 19px;
+    border-radius: 999px;
+    background: currentColor;
+    transform: rotate(38deg);
+}
+
+.chart-color-tool-icon--paint::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 14px;
+    width: 12px;
+    height: 7px;
+    border-radius: 8px 8px 4px 4px;
+    background: var(--accent);
+    transform: rotate(38deg);
+}
+
+.chart-color-tool-icon--erase::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 7px;
+    width: 17px;
+    height: 11px;
+    border-radius: 3px;
+    background: currentColor;
+    transform: rotate(-28deg);
+}
+
+.chart-color-tool-icon--erase::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    bottom: 4px;
+    width: 17px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.55;
+}
+
+.chart-color-tool-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
 }
 
 .chart-color-button {

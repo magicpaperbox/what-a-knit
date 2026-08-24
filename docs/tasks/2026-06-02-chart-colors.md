@@ -73,10 +73,12 @@ The user clarified that existing chart data is not important, but other tables s
 Important decision: do not commit an unconditional `DROP TABLE chart` inside app startup code. Either run the drop once manually on the production database, or commit a conditional ensure function that drops/recreates `chart` only when the existing columns do not match the expected schema.
 `ALTER TABLE` was considered, but the old chart table likely also has required `rows`/`columns` columns that the current repository no longer writes. Adding only `kind` would not fix inserts, so a conditional drop/recreate of only `chart` remains the simpler fix while chart data is disposable.
 The current local attempt adds `_reset_chart_table(db)` before `schema.sql` and drops `chart` when `kind` is missing. This is close, but the condition should also catch old schema leftovers such as `rows`/`columns`, in case `kind` was already added manually to an otherwise old table.
+The next editor feature is a color erase tool. In symbol mode, selecting `knit` already writes `null` to a cell. In color mode, `handleChartClick` currently always writes `state.selectedColor`, so the JavaScript needs a separate color tool state such as `paint` vs `erase`; the backend already accepts `null` color cells.
+`static/js/charts.js` now renders color tools separately from saved color swatches, using `state.colorTool` for `paint`/`erase`. Choosing the color picker or a saved color switches back to paint mode. `static/css/style.css` now has compact icon-only buttons for paint and erase.
 
 ## Next Small Step
 
-Add a small database migration/ensure function for the `chart` table in `src/infra/db.py` that drops and recreates only `chart` when its columns do not match the current schema, then test it on a copy of the existing SQLite database before deploying.
+Manually test the color palette in the browser: switch to color mode, paint a cell, click erase, clear that cell, then choose a color again and confirm it returns to paint mode.
 
 ## Open Questions
 
