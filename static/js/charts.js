@@ -381,204 +381,241 @@ function renderColorPalette() {
 
 // Chart rendering
 
-    function renderChart() {
-        const svg = $("chart");
-        const gridWidth = state.columns * state.cellSize;
-        const gridHeight = state.rows * state.cellSize;
-        const width = LABEL_MARGIN_LEFT + gridWidth;
-        const height = gridHeight + LABEL_MARGIN_BOTTOM;
-        const gridOriginX = LABEL_MARGIN_LEFT;
-        const gridOriginY = 0;
+function renderChart() {
+    const svg = $("chart");
+    const gridWidth = state.columns * state.cellSize;
+    const gridHeight = state.rows * state.cellSize;
+    const width = LABEL_MARGIN_LEFT + gridWidth;
+    const height = gridHeight + LABEL_MARGIN_BOTTOM;
+    const gridOriginX = LABEL_MARGIN_LEFT;
+    const gridOriginY = 0;
 
-        svg.setAttribute("width", width.toString());
-        svg.setAttribute("height", height.toString());
-        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-        svg.innerHTML = "";
+    svg.setAttribute("width", width.toString());
+    svg.setAttribute("height", height.toString());
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.innerHTML = "";
 
-        const labelsLayer = createSvgElement("g");
-        const symbolsLayer = createSvgElement("g");
-        const gridLayer = createSvgElement("g");
-        const hitLayer = createSvgElement("g");
-        const border = createSvgElement("rect");
+    const labelsLayer = createSvgElement("g");
+    const symbolsLayer = createSvgElement("g");
+    const gridLayer = createSvgElement("g");
+    const hitLayer = createSvgElement("g");
+    const border = createSvgElement("rect");
 
-        // labelsLayer.classList.add("chart-labels-layer");
-        labelsLayer.classList.add("chart-labels-layer");
-        labelsLayer.setAttribute("font-size", LABEL_FONT_SIZE.toString());
-        labelsLayer.setAttribute("font-family", "Arial, sans-serif");
+    // labelsLayer.classList.add("chart-labels-layer");
+    labelsLayer.classList.add("chart-labels-layer");
+    labelsLayer.setAttribute("font-size", LABEL_FONT_SIZE.toString());
+    labelsLayer.setAttribute("font-family", "Arial, sans-serif");
 
-        gridLayer.classList.add("chart-grid-layer");
-        gridLayer.setAttribute("stroke-width", "1");
-        gridLayer.setAttribute("shape-rendering", "crispEdges");
+    gridLayer.classList.add("chart-grid-layer");
+    gridLayer.setAttribute("stroke-width", "1");
+    gridLayer.setAttribute("shape-rendering", "crispEdges");
 
-        for (let row = 0; row < state.rows; row += 1) {
-            for (let column = 0; column < state.columns; column += 1) {
-                const x = gridOriginX + column * state.cellSize;
-                const y = gridOriginY + row * state.cellSize;
-
-                if (state.kind === "symbol") {
-                    drawCellSymbol(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
-                }
-
-                if (state.kind === "color") {
-                    drawCellColor(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
-                }
-
-                const hitRect = createSvgElement("rect");
-                hitRect.setAttribute("x", x);
-                hitRect.setAttribute("y", y);
-                hitRect.setAttribute("width", state.cellSize);
-                hitRect.setAttribute("height", state.cellSize);
-                hitRect.setAttribute("fill", "transparent");
-                hitRect.classList.add("chart-cell-hit");
-                hitRect.dataset.row = row.toString();
-                hitRect.dataset.column = column.toString();
-                hitLayer.appendChild(hitRect);
-            }
-        }
-
-        for (let column = 0; column <= state.columns; column += 1) {
-            const x = gridOriginX + column * state.cellSize;
-            const line = createSvgElement("line");
-            line.setAttribute("x1", x.toString());
-            line.setAttribute("y1", gridOriginY.toString());
-            line.setAttribute("x2", x.toString());
-            line.setAttribute("y2", (gridOriginY + gridHeight).toString());
-            gridLayer.appendChild(line);
-        }
-
-        for (let row = 0; row <= state.rows; row += 1) {
-            const y = gridOriginY + row * state.cellSize;
-            const line = createSvgElement("line");
-            line.setAttribute("x1", gridOriginX.toString());
-            line.setAttribute("y1", y.toString());
-            line.setAttribute("x2", (gridOriginX + gridWidth).toString());
-            line.setAttribute("y2", y.toString());
-            gridLayer.appendChild(line);
-        }
-
+    for (let row = 0; row < state.rows; row += 1) {
         for (let column = 0; column < state.columns; column += 1) {
-            const label = createSvgElement("text");
-            const x = gridOriginX + column * state.cellSize + state.cellSize / 2;
-            const y = gridOriginY + gridHeight + 18;
-            label.setAttribute("x", x);
-            label.setAttribute("y", y);
-            label.setAttribute("text-anchor", "middle");
-            label.textContent = (column + 1).toString();
-            labelsLayer.appendChild(label);
+            const x = gridOriginX + column * state.cellSize;
+            const y = gridOriginY + row * state.cellSize;
+
+            if (state.kind === "symbol") {
+                drawCellSymbol(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
+            }
+
+            if (state.kind === "color") {
+                drawCellColor(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
+            }
+
+            const hitRect = createSvgElement("rect");
+            hitRect.setAttribute("x", x);
+            hitRect.setAttribute("y", y);
+            hitRect.setAttribute("width", state.cellSize);
+            hitRect.setAttribute("height", state.cellSize);
+            hitRect.setAttribute("fill", "transparent");
+            hitRect.classList.add("chart-cell-hit");
+            hitRect.dataset.row = row.toString();
+            hitRect.dataset.column = column.toString();
+            hitLayer.appendChild(hitRect);
         }
-
-        for (let row = 0; row < state.rows; row += 1) {
-            const label = createSvgElement("text");
-            const x = gridOriginX - 10;
-            const y = gridOriginY + gridHeight - row * state.cellSize - state.cellSize / 2;
-            label.setAttribute("x", x);
-            label.setAttribute("y", y);
-            label.setAttribute("text-anchor", "end");
-            label.setAttribute("dominant-baseline", "middle");
-            label.textContent = (row + 1).toString();
-            labelsLayer.appendChild(label);
-        }
-
-        border.setAttribute("x", gridOriginX.toString());
-        border.setAttribute("y", gridOriginY.toString());
-        border.setAttribute("width", gridWidth.toString());
-        border.setAttribute("height", gridHeight.toString());
-        border.classList.add("chart-grid-border");
-        border.setAttribute("fill", "none");
-        border.setAttribute("stroke-width", "2");
-
-        svg.appendChild(labelsLayer);
-        svg.appendChild(symbolsLayer);
-        svg.appendChild(gridLayer);
-        svg.appendChild(border);
-        svg.appendChild(hitLayer);
-        syncSerializedCells();
     }
+
+    for (let column = 0; column <= state.columns; column += 1) {
+        const x = gridOriginX + column * state.cellSize;
+        const line = createSvgElement("line");
+        line.setAttribute("x1", x.toString());
+        line.setAttribute("y1", gridOriginY.toString());
+        line.setAttribute("x2", x.toString());
+        line.setAttribute("y2", (gridOriginY + gridHeight).toString());
+        gridLayer.appendChild(line);
+    }
+
+    for (let row = 0; row <= state.rows; row += 1) {
+        const y = gridOriginY + row * state.cellSize;
+        const line = createSvgElement("line");
+        line.setAttribute("x1", gridOriginX.toString());
+        line.setAttribute("y1", y.toString());
+        line.setAttribute("x2", (gridOriginX + gridWidth).toString());
+        line.setAttribute("y2", y.toString());
+        gridLayer.appendChild(line);
+    }
+
+    for (let column = 0; column < state.columns; column += 1) {
+        const label = createSvgElement("text");
+        const x = gridOriginX + column * state.cellSize + state.cellSize / 2;
+        const y = gridOriginY + gridHeight + 18;
+        label.setAttribute("x", x);
+        label.setAttribute("y", y);
+        label.setAttribute("text-anchor", "middle");
+        label.textContent = (column + 1).toString();
+        labelsLayer.appendChild(label);
+    }
+
+    for (let row = 0; row < state.rows; row += 1) {
+        const label = createSvgElement("text");
+        const x = gridOriginX - 10;
+        const y = gridOriginY + gridHeight - row * state.cellSize - state.cellSize / 2;
+        label.setAttribute("x", x);
+        label.setAttribute("y", y);
+        label.setAttribute("text-anchor", "end");
+        label.setAttribute("dominant-baseline", "middle");
+        label.textContent = (row + 1).toString();
+        labelsLayer.appendChild(label);
+    }
+
+    border.setAttribute("x", gridOriginX.toString());
+    border.setAttribute("y", gridOriginY.toString());
+    border.setAttribute("width", gridWidth.toString());
+    border.setAttribute("height", gridHeight.toString());
+    border.classList.add("chart-grid-border");
+    border.setAttribute("fill", "none");
+    border.setAttribute("stroke-width", "2");
+
+    svg.appendChild(labelsLayer);
+    svg.appendChild(symbolsLayer);
+    svg.appendChild(gridLayer);
+    svg.appendChild(border);
+    svg.appendChild(hitLayer);
+    syncSerializedCells();
+}
 
 // User actions
 
-    function handleChartClick(event) {
-        const cell = event.target.closest(".chart-cell-hit");
-
-        if (!cell) {
-            return;
-        }
-
-        const row = Number(cell.dataset.row);
-        const column = Number(cell.dataset.column);
-
-        if (state.kind === "symbol") {
-            state.cells[row][column] = state.selectedSymbol === "knit" ? null : state.selectedSymbol;
+function applyCurrentToolToCell(row, column) {
+    if (state.kind === "symbol") {
+        state.cells[row][column] = state.selectedSymbol === "knit" ? null : state.selectedSymbol;
+    } else {
+        if (state.colorTool === "erase") {
+            state.cells[row][column] = null;
         } else {
-            if (state.colorTool === "erase") {
-                state.cells[row][column] = null;
-            } else {
-                state.cells[row][column] = state.selectedColor;
-            }
-        }
-
-        renderChart();
-        if (state.kind === "color") {
-            renderColorPalette()
+            state.cells[row][column] = state.selectedColor;
         }
     }
 
-    function rebuild() {
-        state.rows = clamp(parseInt($("rows").value, 10) || 1, 1, 200);
-        state.columns = clamp(parseInt($("columns").value, 10) || 1, 1, 200);
-        state.cellSize = clamp(parseInt($("cellSize").value, 10) || 32, 10, 80);
+    renderChart();
+    if (state.kind === "color") {
+        renderColorPalette()
+    }
+}
 
-        $("rows").value = state.rows;
-        $("columns").value = state.columns;
-        $("cellSize").value = state.cellSize;
+function getCellPositionFromEvent(event) {
+    const cell = event.target.closest(".chart-cell-hit");
 
-        resizeCells(state.rows, state.columns);
-        renderChart();
+    if (!cell) {
+        return;
     }
 
-    function handleFormSubmit() {
-        rebuild();
+    return {
+        row: Number(cell.dataset.row),
+        column: Number(cell.dataset.column),
+    };
+}
+
+
+function handleChartPointerDown(event) {
+    const position = getCellPositionFromEvent(event);
+
+    if (!position) {
+        return;
     }
+
+    state.isPainting = true;
+    applyCurrentToolToCell(position.row, position.column);
+
+}
+
+function handleChartPointerMove(event) {
+    if (!state.isPainting) {
+        return;
+    }
+    const position = getCellPositionFromEvent(event);
+
+    if (!position) {
+        return;
+    }
+
+    applyCurrentToolToCell(position.row, position.column)
+}
+
+function handleChartPointerUp() {
+    state.isPainting = false;
+}
+
+function rebuild() {
+    state.rows = clamp(parseInt($("rows").value, 10) || 1, 1, 200);
+    state.columns = clamp(parseInt($("columns").value, 10) || 1, 1, 200);
+    state.cellSize = clamp(parseInt($("cellSize").value, 10) || 32, 10, 80);
+
+    $("rows").value = state.rows;
+    $("columns").value = state.columns;
+    $("cellSize").value = state.cellSize;
+
+    resizeCells(state.rows, state.columns);
+    renderChart();
+}
+
+function handleFormSubmit() {
+    rebuild();
+}
+
 
 // Initialization
 
-    function init() {
-        state.rows = clamp(parseInt($("rows").value, 10) || 12, 1, 200);
-        state.columns = clamp(parseInt($("columns").value, 10) || 12, 1, 200);
-        state.cellSize = clamp(parseInt($("cellSize").value, 10) || 32, 10, 80);
-        const selectedKindInput = document.querySelector('input[name="kind"]:checked');
-        if (selectedKindInput) {
-            state.kind = selectedKindInput.value;
-        }
-        state.cells = readSerializedCells(state.rows, state.columns);
+function init() {
+    state.rows = clamp(parseInt($("rows").value, 10) || 12, 1, 200);
+    state.columns = clamp(parseInt($("columns").value, 10) || 12, 1, 200);
+    state.cellSize = clamp(parseInt($("cellSize").value, 10) || 32, 10, 80);
+    const selectedKindInput = document.querySelector('input[name="kind"]:checked');
+    if (selectedKindInput) {
+        state.kind = selectedKindInput.value;
+    }
+    state.cells = readSerializedCells(state.rows, state.columns);
 
-        if (state.kind === "symbol") {
-            renderSymbolPalette();
-        }
-
-        if (state.kind === "color") {
-            renderColorPalette();
-        }
-
-        const kindInputs = document.querySelectorAll('input[name="kind"]');
-        kindInputs.forEach((input) => {
-            input.addEventListener("change", () => {
-                state.kind = input.value;
-
-                if (state.kind === "symbol") {
-                    renderSymbolPalette();
-                } else {
-                    renderColorPalette();
-                }
-                renderChart();
-            });
-        });
-
-        rebuild();
-
-        $("build").addEventListener("click", rebuild);
-        $("chart").addEventListener("click", handleChartClick);
-        $("chartEditorForm").addEventListener("submit", handleFormSubmit);
+    if (state.kind === "symbol") {
+        renderSymbolPalette();
     }
 
-    init();
+    if (state.kind === "color") {
+        renderColorPalette();
+    }
+
+    const kindInputs = document.querySelectorAll('input[name="kind"]');
+    kindInputs.forEach((input) => {
+        input.addEventListener("change", () => {
+            state.kind = input.value;
+
+            if (state.kind === "symbol") {
+                renderSymbolPalette();
+            } else {
+                renderColorPalette();
+            }
+            renderChart();
+        });
+    });
+
+    rebuild();
+
+    $("build").addEventListener("click", rebuild);
+    $("chart").addEventListener("pointerdown", handleChartPointerDown);
+    $("chart").addEventListener("pointermove", handleChartPointerMove);
+    document.addEventListener("pointerup", handleChartPointerUp);
+    $("chartEditorForm").addEventListener("submit", handleFormSubmit);
+}
+
+init();
