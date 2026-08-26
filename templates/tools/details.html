@@ -1,59 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="titled-section">
-    <h2 class="page-title">{{ tool.kind.value }}</h2>
-    <div class="section section--with-page-title">
-        <div class="detail-list detail-list--structured">
-            <div class="detail-row">
-                <span class="detail-label">Type</span>
-                <span class="detail-value">{{ tool.kind.value }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Material</span>
-                <span class="detail-value">{{ tool.material.value }}</span>
-            </div>
+    <div class="titled-section">
+        <a href="/tools" class="back-link" aria-label="Back to tool list">
+            <img src="/static/icons/left-arrow.png" alt="" class="back-link__icon">
+        </a>
 
-            {% if tool.size is defined %}
-            <div class="detail-row">
-                <span class="detail-label">Size</span>
-                <span class="detail-value">{{ tool.size }}</span>
-            </div>
-            {% endif %}
+        <h2 class="page-title">{{ tool.kind.value }}</h2>
+        <div class="section section--with-page-title">
+            <div class="detail-list detail-list--structured">
+                <div class="detail-row">
+                    <span class="detail-label">Type</span>
+                    <span class="detail-value">{{ tool.kind.value }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Material</span>
+                    <span class="detail-value">{{ tool.material.value }}</span>
+                </div>
 
-            {% if tool.length is defined %}
-            <div class="detail-row">
-                <span class="detail-label">Length</span>
-                <span class="detail-value">{{ tool.length }}</span>
+                {% if tool.size is defined %}
+                    <div class="detail-row">
+                        <span class="detail-label">Size</span>
+                        <span class="detail-value">{{ tool.size }}</span>
+                    </div>
+                {% endif %}
+
+                {% if tool.length is defined %}
+                    <div class="detail-row">
+                        <span class="detail-label">Length</span>
+                        <span class="detail-value">{{ tool.length }}</span>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
-</div>
 
-<div class="action-buttons">
-    <button class="btn-delete" onclick="openDeleteModal()">
-        <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
-        Frog tool
-    </button>
-    <a href="/tools/{{ tool.id.value }}/edit" class="btn-submit">
-        ✏️ Edit tool
-    </a>
-</div>
+    <div class="action-buttons">
+        <button class="btn-delete" onclick="openDeleteModal()">
+            <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
+            Frog tool
+        </button>
+        <a href="/tools/{{ tool.id.value }}/edit" class="btn-submit">
+            ✏️ Edit tool
+        </a>
+    </div>
 
-<div id="deleteModal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>🐸 Frog it?</h3>
-        <p>Are you sure you want to delete <strong>{{ tool.kind.value }}</strong>?<br>This cannot be undone!</p>
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>🐸 Frog it?</h3>
+            <p>Are you sure you want to delete <strong>{{ tool.kind.value }}</strong>?<br>This cannot be undone!</p>
 
-        <div class="modal-buttons">
-            <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
 
-            <form method="POST" action="/tools/{{ tool.id.value }}/delete" class="inline-form">
-                <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
-            </form>
+                <form method="POST" action="/tools/{{ tool.id.value }}/delete" class="inline-form">
+                    <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 {% block scripts %}
     {{ super() }}

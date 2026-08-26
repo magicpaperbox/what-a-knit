@@ -1,98 +1,102 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="titled-section">
-    <h2 class="page-title">{{ pattern.name }}</h2>
-    <div class="section section--with-page-title">
-        <div class="detail-list detail-list--structured">
-            <div class="detail-row">
-                <span class="detail-label">Category</span>
-                <span class="detail-value">{{ pattern.category.value }}</span>
-            </div>
+    <div class="titled-section">
+        <a href="/patterns" class="back-link" aria-label="Back to patterns list">
+            <img src="/static/icons/left-arrow.png" alt="" class="back-link__icon">
+        </a>
 
-            {% if pattern.subcategory %}
-            <div class="detail-row">
-                <span class="detail-label">Subcategory</span>
-                <span class="detail-value">{{ pattern.subcategory }}</span>
-            </div>
-            {% endif %}
+        <h2 class="page-title">{{ pattern.name }}</h2>
+        <div class="section section--with-page-title">
+            <div class="detail-list detail-list--structured">
+                <div class="detail-row">
+                    <span class="detail-label">Category</span>
+                    <span class="detail-value">{{ pattern.category.value }}</span>
+                </div>
 
-            {% if pattern.description %}
-            <div class="detail-row detail-row--notes">
-                <span class="detail-label">Description</span>
-                <span class="detail-value detail-value--notes">{{ pattern.description }}</span>
-            </div>
-            {% endif %}
+                {% if pattern.subcategory %}
+                    <div class="detail-row">
+                        <span class="detail-label">Subcategory</span>
+                        <span class="detail-value">{{ pattern.subcategory }}</span>
+                    </div>
+                {% endif %}
 
-            {% if pattern.target_gauge %}
-            <div class="detail-row">
-                <span class="detail-label">Gauge</span>
-                <span class="detail-value">
+                {% if pattern.description %}
+                    <div class="detail-row detail-row--notes">
+                        <span class="detail-label">Description</span>
+                        <span class="detail-value detail-value--notes">{{ pattern.description }}</span>
+                    </div>
+                {% endif %}
+
+                {% if pattern.target_gauge %}
+                    <div class="detail-row">
+                        <span class="detail-label">Gauge</span>
+                        <span class="detail-value">
                     {% if pattern.target_gauge.stitches is not none and pattern.target_gauge.rows is not none %}
-                    {{ '%g' | format(pattern.target_gauge.stitches) }} sts /
-                    {{ '%g' | format(pattern.target_gauge.rows) }} rows
-                    per {{ pattern.target_gauge.width }} x {{ pattern.target_gauge.height }}
+                        {{ '%g' | format(pattern.target_gauge.stitches) }} sts /
+                        {{ '%g' | format(pattern.target_gauge.rows) }} rows
+                        per {{ pattern.target_gauge.width }} x {{ pattern.target_gauge.height }}
 
                     {% elif pattern.target_gauge.stitches is not none %}
-                    {{ '%g' | format(pattern.target_gauge.stitches) }} sts per {{ pattern.target_gauge.width }}
+                        {{ '%g' | format(pattern.target_gauge.stitches) }} sts per {{ pattern.target_gauge.width }}
 
                     {% elif pattern.target_gauge.rows is not none %}
-                    {{ '%g' | format(pattern.target_gauge.rows) }} rows per {{ pattern.target_gauge.height }}
+                        {{ '%g' | format(pattern.target_gauge.rows) }} rows per {{ pattern.target_gauge.height }}
                     {% endif %}
                 </span>
-            </div>
-            {% endif %}
+                    </div>
+                {% endif %}
 
 
-            {% if pattern.pattern_language %}
-            <div class="detail-row">
-                <span class="detail-label">Pattern language</span>
-                <span class="detail-value">{{ pattern.pattern_language }}</span>
-            </div>
-            {% endif %}
+                {% if pattern.pattern_language %}
+                    <div class="detail-row">
+                        <span class="detail-label">Pattern language</span>
+                        <span class="detail-value">{{ pattern.pattern_language }}</span>
+                    </div>
+                {% endif %}
 
-            {% if pattern.author %}
-            <div class="detail-row">
-                <span class="detail-label">Designer</span>
-                <span class="detail-value">{{ pattern.author }}</span>
-            </div>
-            {% endif %}
+                {% if pattern.author %}
+                    <div class="detail-row">
+                        <span class="detail-label">Designer</span>
+                        <span class="detail-value">{{ pattern.author }}</span>
+                    </div>
+                {% endif %}
 
-            {% if pattern.difficulty_level %}
-            <div class="detail-row">
-                <span class="detail-label">Difficulty level</span>
-                <span class="detail-value">{{ pattern.difficulty_level.value }}</span>
+                {% if pattern.difficulty_level %}
+                    <div class="detail-row">
+                        <span class="detail-label">Difficulty level</span>
+                        <span class="detail-value">{{ pattern.difficulty_level.value }}</span>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
-</div>
 
-<div class="action-buttons">
-    <button class="btn-delete" onclick="openDeleteModal()">
-        <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
-        Frog
-        pattern
-    </button>
-    <a href="/patterns/{{ pattern.id.value }}/edit" class="btn-submit">
-        ✏️ Edit pattern
-    </a>
-</div>
+    <div class="action-buttons">
+        <button class="btn-delete" onclick="openDeleteModal()">
+            <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
+            Frog
+            pattern
+        </button>
+        <a href="/patterns/{{ pattern.id.value }}/edit" class="btn-submit">
+            ✏️ Edit pattern
+        </a>
+    </div>
 
-<!-- CUSTOM MODAL -->
-<div id="deleteModal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>🐸 Frog it?</h3>
-        <p>Are you sure you want to delete <strong>{{ pattern.name }}</strong>?<br>This cannot be undone!</p>
+    <!-- CUSTOM MODAL -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>🐸 Frog it?</h3>
+            <p>Are you sure you want to delete <strong>{{ pattern.name }}</strong>?<br>This cannot be undone!</p>
 
-        <div class="modal-buttons">
-            <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeDeleteModal()">No, keep it</button>
 
-            <form method="POST" action="/patterns/{{ pattern.id.value }}/delete" class="inline-form">
-                <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
-            </form>
+                <form method="POST" action="/patterns/{{ pattern.id.value }}/delete" class="inline-form">
+                    <button type="submit" class="btn-confirm-delete">Yes, frog it!</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
 {% block scripts %}

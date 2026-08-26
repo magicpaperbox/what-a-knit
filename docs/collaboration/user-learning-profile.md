@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-06-30
+Last updated: 2026-08-26
 
 ## Current Comfort Zone
 
@@ -65,6 +65,7 @@ Last updated: 2026-06-30
 - Searching where to change formatting/code is documented in `notes/09_jak_szukac_gdzie_zmienic_formatowanie.md` and `notes/10_jak_szukac_rzeczy_w_kodzie.md`.
 - Python `zip(...)` for pairing lists in a `for` loop is documented in `notes/13_python_zip.md`.
 - HTML form `name`, `value`, `id`, `label for`, and Flask `form.getlist(...)` flow is documented in `notes/14_html_form_name_value_getlist.md`.
+- HTML `disabled` inputs, hidden inputs, and CSS adjacent sibling selectors such as `input:disabled + span` were explained while locking chart type selection in edit mode.
 
 ## Recurring Confusions Or Watch Points
 

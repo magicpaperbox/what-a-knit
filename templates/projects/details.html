@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="titled-section">
+        <a href="/projects" class="back-link" aria-label="Back to projects list">
+            <img src="/static/icons/left-arrow.png" alt="" class="back-link__icon">
+        </a>
+
         <h2 class="page-title">{{ project.name }}</h2>
         <div class="section section--with-page-title">
             <div class="detail-list detail-list--structured">

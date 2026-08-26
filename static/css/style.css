@@ -496,9 +496,60 @@ h2 {
 .titled-section {
     position: relative;
     display: grid;
-    gap: 10px;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+        "back title"
+        "content content";
+    column-gap: 12px;
+    row-gap: 10px;
     align-items: start;
     padding-top: 24px;
+}
+
+.back-link {
+    position: relative;
+    grid-area: back;
+    align-self: start;
+    margin-top: 6px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 3px solid var(--title-tab-border);
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: none;
+    color: var(--title-tab-text);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.back-link:hover {
+    border-color: var(--accent-secondary);
+    box-shadow: none;
+}
+
+.back-link:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.back-link__icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.back-link + .page-title {
+    grid-area: title;
+    justify-self: start;
+    max-width: 100%;
+    margin: 0 0 -22px;
 }
 
 .page-title {
@@ -530,6 +581,7 @@ h2 {
 
 .section--with-page-title {
     position: relative;
+    grid-area: content;
     z-index: 2;
     padding-top: 30px;
     display: grid;
@@ -2567,6 +2619,11 @@ body {
         box-shadow: 0 9px 0 var(--title-tab-shadow), 0 14px 24px rgba(25, 13, 38, 0.18);
     }
 
+    .back-link + .page-title {
+        max-width: 100%;
+        margin: 0 0 -26px;
+    }
+
     .page-title::before {
         width: 78px;
     }
@@ -2746,6 +2803,11 @@ body {
         padding: 12px 26px 20px;
         border-radius: 18px 18px 14px 14px;
         box-shadow: 0 10px 0 var(--title-tab-shadow), 0 16px 28px rgba(25, 13, 38, 0.2);
+    }
+
+    .back-link + .page-title {
+        max-width: min(100%, 36rem);
+        margin: 0 0 -28px;
     }
 
     .section--with-page-title {

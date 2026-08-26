@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="titled-section">
+        <a href="/yarn" class="back-link" aria-label="Back to yarn list">
+            <img src="/static/icons/left-arrow.png" alt="" class="back-link__icon">
+        </a>
         <h2 class="page-title">{{ yarn.brand }} — {{ yarn.name }}</h2>
         <div class="section section--with-page-title">
             {% if yarn.image_blob %}
