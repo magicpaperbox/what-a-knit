@@ -1649,7 +1649,6 @@ body.dark .data-table {
     grid-template-areas:
         "title"
         "metrics"
-        "kind"
         "actions";
     gap: 16px;
     padding: 22px;
@@ -1689,7 +1688,6 @@ body.dark .data-table {
 }
 
 .chart-kind-selector {
-    grid-area: kind;
     display: grid;
     gap: 0;
     min-width: 0;
@@ -1698,13 +1696,19 @@ body.dark .data-table {
     border: 0;
 }
 
-.chart-kind-selector legend {
+.chart-kind-selector legend,
+.chart-palette-header h3 {
     display: block;
-    margin-bottom: 8px;
+    margin: 0;
     padding: 0;
     color: var(--heading);
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.chart-kind-selector legend {
+    margin-bottom: 16px;
 }
 
 .chart-kind-options {
@@ -1795,12 +1799,20 @@ body.dark .chart-kind-option input:disabled:checked + span {
 .chart-actions {
     grid-area: actions;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
     width: 100%;
 }
 
+.chart-actions.chart-actions--create {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.chart-actions.chart-actions--edit {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .chart-actions > * {
+    margin-top: 0;
     min-width: 0;
 }
 
@@ -1876,7 +1888,7 @@ body.dark .btn-chart--secondary {
 
 .chart-palette-panel {
     display: grid;
-    gap: 16px;
+    gap: 18px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.74);
     box-shadow: 0 18px 38px rgba(76, 54, 100, 0.12);
@@ -1899,11 +1911,6 @@ body.dark .chart-palette-panel {
 .chart-palette-header {
     display: grid;
     gap: 6px;
-}
-
-.chart-palette-header h3 {
-    margin: 0;
-    color: var(--heading);
 }
 
 .chart-palette-summary {
@@ -2170,9 +2177,14 @@ body.dark .chart-color-picker {
         gap: 14px;
     }
 
+    .chart-actions.chart-actions--create,
+    .chart-actions.chart-actions--edit {
+        grid-template-columns: 1fr;
+    }
+
     .chart-palette-panel {
         align-self: stretch;
-        gap: 8px;
+        gap: 14px;
         padding: 12px;
         border-radius: 22px;
     }
@@ -2930,7 +2942,7 @@ body {
         grid-template-columns: minmax(220px, 1fr) minmax(360px, 1.6fr);
         grid-template-areas:
             "title metrics"
-            "kind actions";
+            "actions actions";
         align-items: end;
     }
 
@@ -2943,8 +2955,6 @@ body {
         grid-row: 1 / 3;
         position: sticky;
         top: 116px;
-        max-height: calc(100vh - 140px);
-        overflow-y: auto;
     }
 
     .chart-workspace {

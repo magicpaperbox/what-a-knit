@@ -5,12 +5,6 @@
         <div class="section chart-editor-shell">
             <div class="section-header">
                 <h2>{% if mode == "edit" %}Edit chart{% else %}Chart creator (SVG){% endif %}</h2>
-                {% if mode == "edit" %}
-                    <a href="/charts" class="btn-submit btn-submit--small">
-                        <img src="/static/icons/patterns.png" alt="Charts" class="button-icon">
-                        New empty chart
-                    </a>
-                {% endif %}
             </div>
 
             <p class="section-copy">Set the grid size above the chart, choose chart type, choose a symbol or color,
@@ -55,6 +49,27 @@
                         <button id="build" type="button" class="btn-chart btn-chart--secondary chart-build-button">Update grid</button>
                     </div>
 
+                    <div class="chart-actions chart-actions--{{ mode }}">
+                        <button type="submit" class="btn-submit chart-save-button">
+                            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
+                            {% if mode == "edit" %}Save changes{% else %}Save chart{% endif %}
+                        </button>
+                        {% if mode == "edit" %}
+                            <button type="button" class="btn-delete chart-delete-button" onclick="openDeleteModal()">
+                                <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
+                                Delete chart
+                            </button>
+                        {% endif %}
+                        <a href="/charts" class="btn-chart btn-chart--secondary chart-new-button">
+                            <img src="/static/icons/patterns.png" alt="Charts" class="button-icon">
+                            {% if mode == "edit" %}New empty chart{% else %}Reset chart{% endif %}
+                        </a>
+                    </div>
+                </div>
+
+                <textarea id="cellsData" name="cells_json" hidden>{{ form_data.cells_json }}</textarea>
+
+                <aside class="chart-palette-panel" aria-labelledby="chartPaletteTitle">
                     <fieldset class="chart-kind-selector">
                         <legend>Chart type</legend>
                         <div class="chart-kind-options">
@@ -76,23 +91,6 @@
                         {% endif %}
                     </fieldset>
 
-                    <div class="chart-actions">
-                        <button type="submit" class="btn-submit chart-save-button">
-                            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
-                            {% if mode == "edit" %}Save changes{% else %}Save chart{% endif %}
-                        </button>
-                        {% if mode == "edit" %}
-                            <button type="button" class="btn-delete chart-delete-button" onclick="openDeleteModal()">
-                                <img src="/static/icons/frog.png" alt="Frog" class="button-icon">
-                                Delete chart
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <textarea id="cellsData" name="cells_json" hidden>{{ form_data.cells_json }}</textarea>
-
-                <aside class="chart-palette-panel" aria-labelledby="chartPaletteTitle">
                     <div class="chart-palette-header">
                         <h3 id="chartPaletteTitle"></h3>
                     </div>
@@ -103,7 +101,7 @@
                 <div class="chart-workspace">
                     <div class="chart-stage">
                         <p class="chart-stage-copy">Select a symbol or pick a color on the right, then click a box in
-                            the chart. The empty square clears a cell.</p>
+                            the chart.</p>
                         <svg id="chart" class="chart-svg" xmlns="http://www.w3.org/2000/svg"></svg>
                     </div>
                 </div>
