@@ -71,6 +71,8 @@
     --chart-grid-line: rgba(112, 82, 129, 0.5);
     --chart-grid-border: #5a476d;
     --chart-label-color: #7e6882;
+    --chart-label-hover-bg: #cfeea0;
+    --chart-label-hover-text: #4f365e;
     --chart-symbol-color: #21182f;
     --chart-preview-fill: var(--surface-strong);
     --chart-preview-border: #d6d2de;
@@ -170,6 +172,8 @@ html.dark {
     --chart-grid-line: rgba(239, 233, 251, 0.34);
     --chart-grid-border: rgba(239, 233, 251, 0.8);
     --chart-label-color: #d3c7e8;
+    --chart-label-hover-bg: #cfeea0;
+    --chart-label-hover-text: #21182f;
     --chart-symbol-color: #f6f1ff;
     --chart-preview-fill: var(--surface-strong);
     --chart-preview-border: rgba(239, 233, 251, 0.34);
@@ -2401,6 +2405,16 @@ html.dark .chart-color-picker {
 
 .chart-labels-layer {
     fill: var(--chart-label-color);
+}
+
+.chart-label-highlight {
+    fill: var(--chart-label-hover-bg);
+}
+
+.chart-label--hovered {
+    fill: var(--chart-label-hover-text);
+    font-weight: 700;
+    stroke: none;
 }
 
 .chart-grid-layer {

@@ -35,11 +35,15 @@ const state = {
     colorTool: "paint",
     selectedColor: "#000000",
     isPainting: false,
+    hoveredRow: null,
+    hoveredColumn: null,
 };
 
 const LABEL_MARGIN_LEFT = 34;
 const LABEL_MARGIN_BOTTOM = 30;
 const LABEL_FONT_SIZE = 12;
+const LABEL_HIGHLIGHT_RADIUS = 11;
+const LABEL_HIGHLIGHT_OFFSET_Y = -1;
 
 // Shared helpers
 
@@ -130,6 +134,15 @@ function getUsedColors() {
     return Array.from(colors);
 }
 
+function drawLabelHighlight(layer, x, y) {
+    const highlight = createSvgElement("circle");
+    highlight.classList.add("chart-label-highlight");
+    highlight.setAttribute("cx", x.toString());
+    highlight.setAttribute("cy", (y + LABEL_HIGHLIGHT_OFFSET_Y).toString());
+    highlight.setAttribute("r", LABEL_HIGHLIGHT_RADIUS.toString());
+    layer.appendChild(highlight);
+}
+
 // Symbol drawing and palette
 
 function drawCellSymbol(symbolId, layer, x, y, cellSize) {
@@ -139,10 +152,10 @@ function drawCellSymbol(symbolId, layer, x, y, cellSize) {
 
     if (symbolId === "front_marker" || symbolId === "no_stitch") {
         const fillRect = createSvgElement("rect");
-        fillRect.setAttribute("x", x + 1);
-        fillRect.setAttribute("y", y + 1);
-        fillRect.setAttribute("width", Math.max(cellSize - 2, 0).toString());
-        fillRect.setAttribute("height", Math.max(cellSize - 2, 0).toString());
+        fillRect.setAttribute("x", x + 2);
+        fillRect.setAttribute("y", y + 2);
+        fillRect.setAttribute("width", Math.max(cellSize - 1, 0).toString());
+        fillRect.setAttribute("height", Math.max(cellSize - 1, 0).toString());
         fillRect.setAttribute("fill", symbolId === "front_marker" ? "#39ff14" : "#b9b9b9");
         layer.appendChild(fillRect);
         return;
@@ -264,10 +277,10 @@ function drawCellColor(color, layer, x, y, cellSize) {
     }
 
     const fillRect = createSvgElement("rect");
-    fillRect.setAttribute("x", (x + 1).toString());
-    fillRect.setAttribute("y", (y + 1).toString());
-    fillRect.setAttribute("width", Math.max(cellSize - 2, 0).toString());
-    fillRect.setAttribute("height", Math.max(cellSize - 2, 0).toString());
+    fillRect.setAttribute("x", x.toString());
+    fillRect.setAttribute("y", y.toString());
+    fillRect.setAttribute("width", cellSize.toString());
+    fillRect.setAttribute("height", cellSize.toString());
     fillRect.setAttribute("fill", color);
     layer.appendChild(fillRect);
 }
@@ -458,26 +471,40 @@ function renderChart() {
 
     for (let column = 0; column < state.columns; column += 1) {
         const label = createSvgElement("text");
+        const labelText = (column + 1).toString();
         const x = gridOriginX + column * state.cellSize + state.cellSize / 2;
         const y = gridOriginY + gridHeight + 18;
         label.setAttribute("x", x);
         label.setAttribute("y", y);
         label.setAttribute("text-anchor", "middle");
-        label.textContent = (column + 1).toString();
+        label.setAttribute("dominant-baseline", "middle");
+        label.textContent = labelText;
+        if (state.hoveredColumn !== null && column === state.hoveredColumn) {
+            drawLabelHighlight(labelsLayer, x, y);
+            label.classList.add("chart-label--hovered");
+        }
+
         labelsLayer.appendChild(label);
     }
 
     for (let row = 0; row < state.rows; row += 1) {
         const label = createSvgElement("text");
-        const x = gridOriginX - 10;
+        const labelText = (row + 1).toString();
+        const x = gridOriginX - 17;
         const y = gridOriginY + gridHeight - row * state.cellSize - state.cellSize / 2;
         label.setAttribute("x", x);
         label.setAttribute("y", y);
-        label.setAttribute("text-anchor", "end");
+        label.setAttribute("text-anchor", "middle");
         label.setAttribute("dominant-baseline", "middle");
-        label.textContent = (row + 1).toString();
+        label.textContent = labelText;
+        if (state.hoveredRow !== null && row === state.rows - 1 - state.hoveredRow) {
+            drawLabelHighlight(labelsLayer, x, y);
+            label.classList.add("chart-label--hovered");
+        }
+
         labelsLayer.appendChild(label);
     }
+
 
     border.setAttribute("x", gridOriginX.toString());
     border.setAttribute("y", gridOriginY.toString());
@@ -541,20 +568,31 @@ function handleChartPointerDown(event) {
 }
 
 function handleChartPointerMove(event) {
-    if (!state.isPainting) {
-        return;
-    }
     const position = getCellPositionFromEvent(event);
 
     if (!position) {
         return;
     }
 
-    applyCurrentToolToCell(position.row, position.column)
+    state.hoveredColumn = position.column;
+    state.hoveredRow = position.row;
+
+    if (state.isPainting) {
+        applyCurrentToolToCell(position.row, position.column);
+        return;
+    }
+
+    renderChart();
 }
 
 function handleChartPointerUp() {
     state.isPainting = false;
+}
+
+function handleChartPointerLeave() {
+    state.hoveredRow = null;
+    state.hoveredColumn = null;
+    renderChart();
 }
 
 function rebuild() {
@@ -614,6 +652,7 @@ function init() {
     $("build").addEventListener("click", rebuild);
     $("chart").addEventListener("pointerdown", handleChartPointerDown);
     $("chart").addEventListener("pointermove", handleChartPointerMove);
+    $("chart").addEventListener("pointerleave", handleChartPointerLeave);
     document.addEventListener("pointerup", handleChartPointerUp);
     $("chartEditorForm").addEventListener("submit", handleFormSubmit);
 }

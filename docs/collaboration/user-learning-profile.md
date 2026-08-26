@@ -25,6 +25,7 @@ Last updated: 2026-08-26
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
 - The difference between initial rendering from state to the DOM and later DOM events that write user changes back into state.
+- The difference between calculating a temporary value inside a JavaScript event handler and saving that value into `state` so rendering can use it.
 - SVG drawing concepts in JavaScript, especially layers, `x`/`y` coordinates, `setAttribute`, and converting numbers to strings with `.toString()`.
 - Drag-to-paint interaction flow in JavaScript: starting an action, continuing it while moving over cells, and stopping it when the pointer is released.
 
