@@ -1666,11 +1666,14 @@ body.dark .data-table {
     grid-area: metrics;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
     gap: 12px;
 }
 
-.chart-inputs-group .chart-field:nth-child(3) {
-    grid-column: 1 / -1;
+.chart-build-button {
+    align-self: end;
+    min-width: 0;
+    white-space: normal;
 }
 
 .chart-field {
@@ -1763,6 +1766,32 @@ body.dark .chart-kind-option input:checked + span {
     box-shadow: 3px 3px 0 rgba(16, 11, 24, 0.32);
 }
 
+.chart-kind-option input:disabled + span {
+    cursor: not-allowed;
+    background: #ece8ee;
+    color: #827789;
+    box-shadow: none;
+    transform: none;
+}
+
+.chart-kind-option input:disabled:checked + span {
+    background: linear-gradient(135deg, #f4f1f5 0%, #d9d2df 100%);
+    color: #51475b;
+    box-shadow: inset 0 0 0 2px rgba(108, 92, 231, 0.18);
+}
+
+body.dark .chart-kind-option input:disabled + span {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(246, 237, 250, 0.54);
+    box-shadow: none;
+}
+
+body.dark .chart-kind-option input:disabled:checked + span {
+    background: linear-gradient(135deg, rgba(246, 237, 250, 0.2) 0%, rgba(246, 237, 250, 0.1) 100%);
+    color: rgba(246, 237, 250, 0.78);
+    box-shadow: inset 0 0 0 2px rgba(246, 237, 250, 0.2);
+}
+
 .chart-actions {
     grid-area: actions;
     display: grid;
@@ -1775,12 +1804,15 @@ body.dark .chart-kind-option input:checked + span {
     min-width: 0;
 }
 
+.chart-actions > :only-child {
+    grid-column: 1 / -1;
+}
+
 .chart-save-button {
     white-space: normal;
 }
 
 .chart-delete-button {
-    grid-column: 1 / -1;
     white-space: normal;
 }
 
@@ -2903,11 +2935,7 @@ body {
     }
 
     .chart-inputs-group {
-        grid-template-columns: repeat(3, minmax(88px, 1fr));
-    }
-
-    .chart-inputs-group .chart-field:nth-child(3) {
-        grid-column: auto;
+        grid-template-columns: repeat(4, minmax(88px, 1fr));
     }
 
     .chart-palette-panel {
