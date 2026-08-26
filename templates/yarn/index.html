@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="section">
+<div class="section section--yarn-list">
     <div class="section-header">
         <h2>Your yarn</h2>
         <a href="/yarn/add" class="btn-submit">
@@ -9,9 +9,9 @@
         </a>
     </div>
     {% if yarns %}
-    <div class="resource-list">
+    <div class="resource-list resource-list--yarn">
         {% for yarn in yarns %}
-        <a class="resource-card" href="/yarn/{{ yarn.id.value }}">
+        <a class="resource-card yarn-card" href="/yarn/{{ yarn.id.value }}">
             {% if yarn.image_blob %}
                 <div class="yarn-card__media">
                     <img src="/yarn/{{ yarn.id.value }}/image" alt="{{ yarn.brand }} {{ yarn.name }}"
