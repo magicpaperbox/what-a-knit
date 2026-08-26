@@ -1,26 +1,41 @@
 // ========== THEME TOGGLE ==========
 
-function toggleTheme() {
-    document.body.classList.toggle('dark');
+const root = document.documentElement;
 
-    const isDark = document.body.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+function getSavedTheme() {
+    try {
+        return localStorage.getItem('theme');
+    } catch (error) {
+        return null;
+    }
+}
 
+function saveTheme(theme) {
+    try {
+        localStorage.setItem('theme', theme);
+    } catch (error) {
+        return;
+    }
+}
+
+function updateToggleText(isDark) {
     const toggleText = document.querySelector('.toggle-text');
     if (toggleText) {
         toggleText.textContent = isDark ? 'Light mode' : 'Dark mode';
     }
 }
 
-// On page load: restore saved theme
-const saved = localStorage.getItem('theme');
-if (saved === 'dark') {
-    document.body.classList.add('dark');
-    const toggleText = document.querySelector('.toggle-text');
-    if (toggleText) toggleText.textContent = 'Light mode';
+function applyTheme(isDark) {
+    root.classList.toggle('dark', isDark);
+    updateToggleText(isDark);
 }
 
+function toggleTheme() {
+    const isDark = !root.classList.contains('dark');
 
+    applyTheme(isDark);
+    saveTheme(isDark ? 'dark' : 'light');
+}
 
-
-
+// On page load: restore saved theme
+applyTheme(getSavedTheme() === 'dark');

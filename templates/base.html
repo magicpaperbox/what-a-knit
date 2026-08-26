@@ -7,6 +7,17 @@
     <title>{% block title %}What a knit!{% endblock %}</title>
     <link rel="icon" type="image/png" href="/static/icons/yarn_ball.png">
     <link rel="apple-touch-icon" type="image/png" href="/static/icons/app_icon.png">
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (error) {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="/static/css/style.css">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="What a knit!">

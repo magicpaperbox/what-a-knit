@@ -22,6 +22,7 @@ Recent work focused on detail pages and global CSS:
 - Normalized odd one-off colors by adding shared tokens for accent washes, neutral buttons, danger text/buttons, icon controls, chart secondary buttons, and footer text.
 - Refined detail-page heading composition: the title now behaves more like a folder tab attached to the details panel, and the back button is aligned as a related outline control instead of a detached floating square.
 - Adjusted the yarn inventory list so yarn cards use a dedicated scan-friendly variant with text on the left and yarn images on the right at wider breakpoints.
+- Fixed the dark-mode navigation flash by applying the saved theme to `<html>` before the main stylesheet loads, then updating dark-mode CSS selectors from `body.dark` to `html.dark`.
 
 ## Decisions Made
 
@@ -41,6 +42,8 @@ Recent work focused on detail pages and global CSS:
 - `templates/yarn/details.html`
 - `templates/patterns/details.html`
 - `templates/tools/details.html`
+- `templates/base.html`
+- `static/js/theme.js`
 - `docs/collaboration/user-learning-profile.md`
 
 ## Where We Stopped
@@ -54,6 +57,8 @@ The palette cleanup replaced several one-off colors that were visually inconsist
 The detail heading/back-link layout was adjusted after visual review: the title tab lost its bottom rounding/shadow and overlaps the section by only the border width, while the back control uses the title-tab border color and sits closer to the tab baseline.
 
 The yarn list now has a dedicated `.resource-list--yarn` and `.yarn-card` variant. The list width is capped and centered, and yarn cards with images use a compact text-left/image-right layout on narrow screens, then get more image width and spacing from the 640px breakpoint upward. The yarn grid uses `auto-fill`, not `auto-fit`, so a single yarn card does not stretch across the whole row.
+
+Dark mode is now restored before first paint: `templates/base.html` runs a small inline script in `<head>` before `static/css/style.css`, and the theme class lives on `<html>` as `html.dark`. `static/js/theme.js` now uses `document.documentElement`, and the dark-mode selectors in `static/css/style.css` were updated accordingly.
 
 ## Next Small Step
 

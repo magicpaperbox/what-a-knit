@@ -24,6 +24,7 @@
 }
 
 :root {
+    color-scheme: light;
     --bg: #fff6f0;
     --bg-secondary: #fff0d9;
     --surface: linear-gradient(180deg, rgba(255, 252, 246, 0.97) 0%, rgba(255, 244, 229, 0.97) 100%);
@@ -122,7 +123,8 @@
     --button-elevation: 0 6px 14px rgba(76, 54, 100, 0.14);
 }
 
-body.dark {
+html.dark {
+    color-scheme: dark;
     --bg: #21182f;
     --bg-secondary: #2d1b3d;
     --surface: linear-gradient(180deg, rgba(66, 46, 88, 0.98) 0%, rgba(58, 40, 79, 0.98) 100%);
@@ -463,7 +465,7 @@ h1 a:hover {
     box-shadow: none;
 }
 
-body:not(.dark) .site-nav a.is-active {
+html:not(.dark) .site-nav a.is-active {
     background: var(--warm-highlight-bg);
     border: 2px solid var(--accent-outline);
     box-shadow: 0 0 0 3px var(--accent-wash-strong);
@@ -1155,11 +1157,11 @@ li + li {
     cursor: pointer;
 }
 
-body.dark .form-group input[type="date"] {
+html.dark .form-group input[type="date"] {
     color-scheme: dark;
 }
 
-body.dark .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+html.dark .form-group input[type="date"]::-webkit-calendar-picker-indicator {
     filter: brightness(0) saturate(100%) invert(87%) sepia(7%) saturate(2575%) hue-rotate(272deg) brightness(103%) contrast(97%);
 }
 
@@ -1205,7 +1207,7 @@ body.dark .form-group input[type="date"]::-webkit-calendar-picker-indicator {
     background-position: right 16px center;
 }
 
-body.dark .form-group select {
+html.dark .form-group select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ff8ab7' stroke-width='2' fill='none'/%3E%3C/svg%3E");
 }
 
@@ -1274,11 +1276,11 @@ body.dark .form-group select {
     color: var(--stepper-button-hover-text);
 }
 
-body.dark .number-stepper-controls {
+html.dark .number-stepper-controls {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-body.dark .number-stepper-button:hover {
+html.dark .number-stepper-button:hover {
     box-shadow: inset 0 0 0 1px rgba(255, 138, 183, 0.08);
 }
 
@@ -1691,7 +1693,7 @@ body.dark .number-stepper-button:hover {
     color: var(--detail-value-color);
 }
 
-body.dark .data-table {
+html.dark .data-table {
     background: transparent;
 }
 
@@ -1899,12 +1901,12 @@ body.dark .data-table {
     outline-offset: 2px;
 }
 
-body.dark .chart-kind-options {
+html.dark .chart-kind-options {
     border-color: var(--accent-line);
     background: var(--accent-wash-strong);
 }
 
-body.dark .chart-kind-option input:checked + span {
+html.dark .chart-kind-option input:checked + span {
     background: linear-gradient(135deg, #badc58 0%, #ff8ab7 100%);
     color: #21182f;
     box-shadow: 0 6px 14px rgba(16, 11, 24, 0.3);
@@ -1924,13 +1926,13 @@ body.dark .chart-kind-option input:checked + span {
     box-shadow: inset 0 0 0 2px rgba(108, 92, 231, 0.18);
 }
 
-body.dark .chart-kind-option input:disabled + span {
+html.dark .chart-kind-option input:disabled + span {
     background: rgba(255, 255, 255, 0.08);
     color: rgba(246, 237, 250, 0.54);
     box-shadow: none;
 }
 
-body.dark .chart-kind-option input:disabled:checked + span {
+html.dark .chart-kind-option input:disabled:checked + span {
     background: linear-gradient(135deg, rgba(246, 237, 250, 0.2) 0%, rgba(246, 237, 250, 0.1) 100%);
     color: rgba(246, 237, 250, 0.78);
     box-shadow: inset 0 0 0 2px rgba(246, 237, 250, 0.2);
@@ -1981,7 +1983,7 @@ body.dark .chart-kind-option input:disabled:checked + span {
     color: var(--chart-secondary-text);
 }
 
-body.dark .btn-chart--secondary {
+html.dark .btn-chart--secondary {
     border-color: var(--chart-secondary-border);
     background: var(--chart-secondary-bg);
     color: var(--chart-secondary-text);
@@ -2256,7 +2258,7 @@ body.dark .btn-chart--secondary {
     transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-body.dark .chart-color-picker {
+html.dark .chart-color-picker {
     background: var(--control-bg);
 }
 
@@ -2462,11 +2464,11 @@ body.dark .chart-color-picker {
     display: none;
 }
 
-body.dark .icon-light {
+html.dark .icon-light {
     display: none;
 }
 
-body.dark .icon-dark {
+html.dark .icon-dark {
     display: inline;
 }
 
@@ -2794,7 +2796,7 @@ body.dark .icon-dark {
         box-shadow: var(--elevation-soft);
     }
 
-    body:not(.dark) .site-nav a.is-active {
+    html:not(.dark) .site-nav a.is-active {
         border: 2px solid var(--accent-outline);
         box-shadow: 0 8px 18px var(--accent-wash-strong);
     }
