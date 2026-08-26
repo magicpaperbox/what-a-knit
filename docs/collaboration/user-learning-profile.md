@@ -35,6 +35,8 @@ Last updated: 2026-08-26
 - Clear labels for the layer being discussed: backend, template, JavaScript, database, or form data.
 - Direct references to full file paths and function names.
 - Beginner-friendly context before deeper design suggestions.
+- UI suggestions should preserve a slightly retro visual direction rather than pushing the app toward a generic modern SaaS style.
+- For UI decisions, explain the practical trade-off clearly, for example decorative centering versus easier scanning in list/inventory views.
 - Python analogies help, especially when explaining JavaScript collections, loops, and data flow.
 - Documentation with concrete examples and method-level patterns, not only dry conceptual descriptions.
 - Prefers project instructions to be operational, consistently structured, and not duplicated across sections.
