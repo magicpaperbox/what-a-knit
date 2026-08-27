@@ -1,0 +1,30 @@
+.icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.icon-header {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.icon-footer {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
+
+.icon-dark {
+    display: none;
+}
+
+html.dark .icon-light {
+    display: none;
+}
+
+html.dark .icon-dark {
+    display: inline;
+}

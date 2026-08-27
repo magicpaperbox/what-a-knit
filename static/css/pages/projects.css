@@ -1,0 +1,120 @@
+#pattern-details {
+    margin-top: 18px;
+}
+
+#selected-patterns-label {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    background: var(--panel-soft);
+}
+
+#selected-patterns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#selected-patterns > div {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 2px solid var(--tag-border);
+    border-radius: var(--radius-pill);
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-weight: 600;
+}
+
+#selected-patterns button {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 2px solid var(--tag-remove-border);
+    border-radius: var(--radius-pill);
+    background: var(--tag-remove-bg);
+    color: transparent;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+#selected-patterns button::before,
+#selected-patterns button::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--tag-remove-text);
+    transform-origin: center;
+}
+
+#selected-patterns button::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+#selected-patterns button::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+#selected-patterns button:hover {
+    transform: translateY(-1px);
+    background: var(--tag-remove-hover-bg);
+    border-color: var(--tag-remove-hover-border);
+    box-shadow: var(--button-elevation);
+}
+
+#selected-patterns button:hover::before,
+#selected-patterns button:hover::after {
+    background: #fff;
+}
+
+#pattern-search-results {
+    margin-top: 10px;
+}
+
+.form-group:has(#pattern-search-results:not(:empty)) #patterns-search {
+    border-color: var(--accent);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+}
+
+#pattern-search-results:not(:empty) {
+    overflow: hidden;
+    margin-top: -2px;
+    border: 2px solid var(--accent-secondary);
+    border-top: none;
+    border-radius: var(--radius-xl);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background: var(--search-results-bg);
+}
+
+#pattern-search-results > div {
+    padding: 10px 14px;
+    color: var(--heading);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+#pattern-search-results > div + div {
+    border-top: 1px solid var(--border-soft);
+}
+
+#pattern-search-results > div:hover {
+    background: var(--search-results-hover-bg);
+    color: var(--search-results-hover-text);
+}

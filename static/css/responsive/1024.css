@@ -1,0 +1,199 @@
+@media (min-width: 1024px) {
+    .site-header {
+        gap: 56px;
+    }
+
+    .site-title,
+    h1 {
+        font-size: 3.45rem;
+    }
+
+    .page-title,
+    h2 {
+        font-size: 1.9rem;
+    }
+
+    .section {
+        padding: 24px 26px 32px;
+        border-radius: var(--radius-panel-lg);
+    }
+
+    .titled-section {
+        padding-top: 18px;
+    }
+
+    .page-title {
+        max-width: min(100%, 32rem);
+        margin: 0 0 -2px 18px;
+        padding: 11px 22px 13px;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .back-link + .page-title {
+        max-width: min(100%, 32rem);
+        margin: 0 0 -2px;
+    }
+
+    .section--with-page-title {
+        padding-top: 28px;
+    }
+
+    .resource-list {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .data-table {
+        display: table;
+        min-width: 720px;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+    }
+
+    .data-table thead {
+        display: table-header-group;
+    }
+
+    .data-table tbody {
+        display: table-row-group;
+    }
+
+    .data-table tbody tr.skein-child-row.is-expanded {
+        display: table-row;
+    }
+
+    .data-table tfoot {
+        display: table-footer-group;
+        margin-top: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .data-table tfoot::before {
+        display: none;
+        content: none;
+    }
+
+    .data-table tr {
+        display: table-row;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .data-table tr.skein-group-row.is-expanded {
+        background: transparent;
+    }
+
+    .data-table tr.skein-child-row.is-expanded {
+        margin-left: 0;
+        border: none;
+        background: transparent;
+    }
+
+    .data-table tr.skein-child-row.is-expanded td {
+        display: table-cell;
+        padding: 12px 10px 12px 48px;
+        border-bottom-color: var(--rose-wash-strong);
+        background: var(--rose-wash);
+    }
+
+    .data-table tr.skein-child-row.is-expanded td + td {
+        border-top: none;
+    }
+
+    .data-table tr.skein-child-row.is-expanded td:first-child {
+        padding-left: 38px;
+        border-left: 2px solid var(--rose-outline);
+    }
+
+    .data-table tr.skein-child-row.is-expanded td:last-child {
+        border-right: 2px solid var(--rose-outline);
+    }
+
+    .data-table tbody tr.skein-child-row--last.is-expanded td {
+        border-bottom: 2px solid var(--rose-outline);
+    }
+
+    .data-table th,
+    .data-table td {
+        display: table-cell;
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--table-border);
+    }
+
+    .data-table th:nth-child(1),
+    .data-table td:nth-child(1) {
+        width: 18%;
+    }
+
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2) {
+        width: 20%;
+    }
+
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) {
+        width: auto;
+    }
+
+    .data-table td + td {
+        margin-top: 0;
+    }
+
+    .data-table td::before {
+        display: none;
+        content: none;
+    }
+
+    .table-actions {
+        margin-top: 0;
+    }
+
+    .data-table tr.table-summary-heading,
+    .data-table tr.table-summary-row {
+        display: table-row;
+    }
+
+    .table-summary-heading td {
+        display: table-cell;
+        padding: 48px 10px 8px;
+        border-top: none;
+        border-bottom: none;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: 0.035em;
+        color: var(--title);
+        background:
+            linear-gradient(var(--accent-line), var(--accent-line))
+            left 24px / 100% 2px no-repeat;
+    }
+
+    .table-summary-row td {
+        display: table-cell;
+        padding: 8px 10px 0;
+        border-top: none;
+        border-bottom: none;
+        font-weight: 600;
+        color: var(--detail-value-color);
+        background: transparent;
+    }
+
+    .table-summary-row td[data-label="Actions"] {
+        display: table-cell;
+    }
+
+    .data-table th:last-child,
+    .data-table td.table-actions {
+        width: 190px;
+        white-space: nowrap;
+    }
+
+    .table-actions-row {
+        flex-wrap: nowrap;
+    }
+}

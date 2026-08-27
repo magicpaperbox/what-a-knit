@@ -1,0 +1,212 @@
+@media (max-width: 380px) {
+    .yarn-card {
+        padding-inline: 14px;
+    }
+
+    .yarn-card:has(.yarn-card__media) {
+        grid-template-columns: minmax(0, 1fr) 72px;
+        column-gap: 10px;
+    }
+}
+
+@media (max-width: 640px) {
+    .detail-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .detail-value {
+        font-size: 0.96rem;
+    }
+
+    .fiber-summary__item {
+        gap: 12px;
+    }
+}
+
+/* Mobile first breakpoints: 640 / 768 / 1024 */
+
+.section-header {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.section-header .btn-submit,
+.fiber-row .btn-delete,
+.action-buttons > *,
+.modal-buttons > * {
+    width: 100%;
+}
+
+.action-buttons::before {
+    content: "Actions";
+    width: 100%;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.modal-buttons {
+    flex-direction: column;
+}
+
+.number-stepper {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+}
+
+.number-stepper-button {
+    min-height: var(--control-size);
+}
+
+.data-table,
+.data-table thead,
+.data-table tbody,
+.data-table tfoot,
+.data-table tr,
+.data-table th,
+.data-table td {
+    display: block;
+    width: 100%;
+}
+
+.data-table thead {
+    display: none;
+}
+
+.data-table tbody {
+    display: grid;
+    gap: 10px;
+}
+
+.data-table tbody tr.skein-child-row.is-expanded {
+    display: block;
+}
+
+.data-table tfoot {
+    display: grid;
+    gap: 0;
+    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-lg);
+    background: var(--accent-wash);
+}
+
+.data-table tfoot::before {
+    content: "Total";
+    display: block;
+    padding-bottom: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--title);
+}
+
+.data-table tr {
+    padding: 12px;
+    border: 1px solid var(--table-border);
+    border-radius: var(--radius-lg);
+    background: var(--panel-soft);
+}
+
+.data-table tr.skein-group-row.is-expanded {
+    border-color: var(--accent-outline);
+    background: var(--accent-wash);
+}
+
+.data-table tr.skein-child-row.is-expanded {
+    display: grid;
+    gap: 0;
+    margin-left: 10px;
+    width: calc(100% - 10px);
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid var(--rose-outline);
+    border-radius: var(--radius-lg);
+    background: var(--rose-wash);
+}
+
+.data-table tr.skein-child-row.is-expanded td {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.45fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 0;
+    background: transparent;
+}
+
+.data-table tr.skein-child-row.is-expanded td + td {
+    margin-top: 0;
+    border-top: 1px solid var(--rose-divider);
+}
+
+.data-table tr.skein-child-row.is-expanded td::before {
+    margin-bottom: 0;
+}
+
+.data-table tr.skein-child-row.is-expanded td:first-child,
+.data-table tr.skein-child-row.is-expanded td:last-child {
+    padding-left: 14px;
+    border-right: 0;
+    border-left: 0;
+}
+
+.data-table tbody tr.skein-child-row--last.is-expanded td {
+    border-bottom: 0;
+}
+
+.data-table td {
+    padding: 0;
+    border: none;
+}
+
+.data-table td + td {
+    margin-top: 8px;
+}
+
+.data-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.table-summary-heading td::before {
+    display: none;
+}
+
+.data-table tr.table-summary-heading {
+    display: none;
+}
+
+.table-summary-heading td {
+    padding: 0 0 14px;
+    color: var(--title);
+}
+
+.table-summary-row {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.table-summary-row td {
+    padding: 0;
+    border: none;
+}
+
+.table-summary-row td + td {
+    margin-top: 10px;
+}
+
+.table-summary-row td[data-label="Actions"] {
+    display: none;
+}

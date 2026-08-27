@@ -1,0 +1,64 @@
+:root {
+    --chart-panel: linear-gradient(135deg, #ffd0df 0%, #ffc6b0 100%);
+    --chart-grid-line: rgba(112, 82, 129, 0.5);
+    --chart-grid-border: #5a476d;
+    --chart-label-color: #7e6882;
+    --chart-label-hover-bg: #cfeea0;
+    --chart-label-hover-text: #4f365e;
+    --chart-symbol-color: #21182f;
+    --chart-preview-fill: var(--surface-strong);
+    --chart-preview-border: #d6d2de;
+    --chart-control-bg: rgba(255, 255, 255, 0.84);
+    --chart-color-picker-bg: var(--surface-strong);
+    --chart-palette-panel-bg: rgba(255, 255, 255, 0.74);
+    --chart-secondary-bg: rgba(255, 255, 255, 0.7);
+    --chart-secondary-text: var(--heading);
+    --chart-secondary-border: rgba(95, 82, 199, 0.34);
+    --chart-kind-options-bg: rgba(255, 246, 240, 0.58);
+    --chart-kind-active-bg: linear-gradient(135deg, #fff0a8 0%, #f17aa8 100%);
+    --chart-kind-active-text: #5a476d;
+    --chart-kind-active-shadow: 0 6px 14px rgba(108, 92, 231, 0.16);
+    --chart-kind-disabled-bg: #ece8ee;
+    --chart-kind-disabled-text: #827789;
+    --chart-kind-disabled-active-bg: linear-gradient(135deg, #f4f1f5 0%, #d9d2df 100%);
+    --chart-kind-disabled-active-text: #51475b;
+    --chart-kind-disabled-active-shadow: inset 0 0 0 2px rgba(108, 92, 231, 0.18);
+    --chart-control-border: 2px solid var(--border-soft);
+    --chart-control-radius: var(--radius-md);
+    --chart-control-radius-sm: var(--radius-sm);
+    --chart-panel-radius: var(--radius-panel);
+    --chart-page-gap: 18px;
+    --chart-toolbar-gap: 14px;
+    --chart-control-gap: 8px;
+    --chart-control-hover-shadow: 0 6px 14px rgba(64, 45, 83, 0.12);
+    --chart-control-active-shadow: 0 6px 14px var(--accent-wash-strong);
+    --chart-control-transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    --chart-button-transition: var(--button-transition);
+}
+
+html.dark {
+    --chart-panel: linear-gradient(135deg, #523b6c 0%, #422f56 100%);
+    --chart-grid-line: rgba(239, 233, 251, 0.34);
+    --chart-grid-border: rgba(239, 233, 251, 0.8);
+    --chart-label-color: #d3c7e8;
+    --chart-label-hover-bg: #cfeea0;
+    --chart-label-hover-text: #21182f;
+    --chart-symbol-color: #f6f1ff;
+    --chart-preview-fill: var(--surface-strong);
+    --chart-preview-border: rgba(239, 233, 251, 0.34);
+    --chart-control-bg: rgba(64, 48, 83, 0.88);
+    --chart-color-picker-bg: var(--chart-control-bg);
+    --chart-palette-panel-bg: rgba(41, 31, 56, 0.92);
+    --chart-secondary-bg: rgba(255, 255, 255, 0.08);
+    --chart-secondary-text: var(--text);
+    --chart-secondary-border: var(--border-soft);
+    --chart-kind-options-bg: var(--accent-wash-strong);
+    --chart-kind-active-bg: linear-gradient(135deg, #badc58 0%, #ff8ab7 100%);
+    --chart-kind-active-text: #21182f;
+    --chart-kind-active-shadow: 0 6px 14px rgba(16, 11, 24, 0.3);
+    --chart-kind-disabled-bg: rgba(255, 255, 255, 0.08);
+    --chart-kind-disabled-text: rgba(246, 237, 250, 0.54);
+    --chart-kind-disabled-active-bg: linear-gradient(135deg, rgba(246, 237, 250, 0.2) 0%, rgba(246, 237, 250, 0.1) 100%);
+    --chart-kind-disabled-active-text: rgba(246, 237, 250, 0.78);
+    --chart-kind-disabled-active-shadow: inset 0 0 0 2px rgba(246, 237, 250, 0.2);
+}

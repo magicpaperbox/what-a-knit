@@ -1,0 +1,10 @@
+.site-footer {
+    text-align: center;
+    color: var(--footer-text);
+    font-family: LaBelleAurore, sans-serif;
+    font-size: 0.95rem;
+}
+
+.site-footer p {
+    margin: 0;
+}

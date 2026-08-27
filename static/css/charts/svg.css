@@ -1,0 +1,43 @@
+.chart-symbol-preview {
+    display: block;
+}
+
+.chart-preview-frame {
+    fill: var(--chart-preview-fill);
+    stroke: var(--chart-preview-border);
+}
+
+.chart-labels-layer {
+    fill: var(--chart-label-color);
+}
+
+.chart-label-highlight {
+    fill: var(--chart-label-hover-bg);
+}
+
+.chart-label--hovered {
+    fill: var(--chart-label-hover-text);
+    font-weight: 700;
+    stroke: none;
+}
+
+.chart-grid-layer {
+    stroke: var(--chart-grid-line);
+}
+
+.chart-grid-border {
+    stroke: var(--chart-grid-border);
+}
+
+.chart-symbol-fill {
+    fill: var(--chart-symbol-color);
+}
+
+.chart-symbol-stroke {
+    stroke: var(--chart-symbol-color);
+}
+
+.chart-cell-hit {
+    cursor: pointer;
+    pointer-events: all;
+}

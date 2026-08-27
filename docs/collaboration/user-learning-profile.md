@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-08-26
+Last updated: 2026-08-27
 
 ## Current Comfort Zone
 
@@ -14,6 +14,7 @@ Last updated: 2026-08-26
 - Layered application structure: API/routes, domain objects, mappers/form-data objects, repositories, services, and use cases.
 - Form data flow from HTML through Flask into domain objects and SQLite.
 - Plain JavaScript and browser APIs.
+- CSS file organization and CSS custom properties used as design tokens.
 - Frontend state flow: how JavaScript state and DOM inputs update each other over time.
 - JavaScript pointer/mouse events for drag interactions on SVG chart cells.
 
@@ -24,10 +25,12 @@ Last updated: 2026-08-26
 - Repository method roles, especially the difference between fetching rows, grouping rows for many parent objects, mapping rows to domain objects, and saving domain objects.
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
+- CSS custom properties, especially when they act like reusable constants for repeated colors, spacing, radii, borders, shadows, and transitions.
 - The difference between initial rendering from state to the DOM and later DOM events that write user changes back into state.
 - The difference between calculating a temporary value inside a JavaScript event handler and saving that value into `state` so rendering can use it.
 - SVG drawing concepts in JavaScript, especially layers, `x`/`y` coordinates, `setAttribute`, and converting numbers to strings with `.toString()`.
 - Drag-to-paint interaction flow in JavaScript: starting an action, continuing it while moving over cells, and stopping it when the pointer is released.
+- Separating similar pointer interactions in JavaScript, such as hover, painting, and temporary area selection, so one state flag does not accidentally mean several different things.
 
 ## Explanation Style That Works Well
 

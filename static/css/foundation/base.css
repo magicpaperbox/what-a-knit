@@ -1,0 +1,116 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    min-width: 320px;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 12px calc(132px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    font-family: Fredoka, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top left, var(--bg-glow-1), transparent 32%),
+        radial-gradient(circle at bottom right, var(--bg-glow-2), transparent 28%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 100%);
+    transition: background 0.28s ease, color 0.2s ease;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    z-index: 0;
+    border-radius: var(--radius-pill);
+    pointer-events: none;
+    filter: blur(8px);
+    opacity: 0.45;
+}
+
+body::before {
+    top: -90px;
+    left: -50px;
+    width: 240px;
+    height: 240px;
+    background: var(--orb-1);
+}
+
+body::after {
+    right: -40px;
+    bottom: 60px;
+    width: 220px;
+    height: 220px;
+    background: var(--orb-2);
+}
+
+::selection {
+    background: var(--accent-selection);
+}
+
+img {
+    max-width: 100%;
+}
+
+a {
+    color: var(--link);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+code {
+    padding: 2px 6px;
+    border-radius: var(--radius-code);
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: var(--heading);
+    background: rgba(253, 203, 110, 0.32);
+}
+
+h3 {
+    margin: 0 0 12px;
+    font-size: 1.2rem;
+    line-height: 1.25;
+    color: var(--title);
+}
+
+p {
+    margin: 0 0 12px;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+li + li {
+    margin-top: 8px;
+}
+
+.section-copy {
+    max-width: 48rem;
+    color: var(--muted);
+}

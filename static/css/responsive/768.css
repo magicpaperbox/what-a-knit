@@ -1,0 +1,121 @@
+@media (min-width: 768px) {
+    body {
+        padding-bottom: 48px;
+    }
+
+    .page-shell {
+        gap: 24px;
+    }
+
+    .site-header {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+    }
+
+    .site-title,
+    h1 {
+        font-size: 2.9rem;
+    }
+
+    .page-title,
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    .site-nav-shell {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+        width: auto;
+        max-width: 100%;
+        justify-self: center;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        transform: none;
+        z-index: 1;
+        border-radius: var(--radius-panel-lg);
+        box-shadow: var(--elevation-soft);
+        backdrop-filter: blur(4px);
+    }
+
+    .site-nav-shell::after {
+        content: "";
+        display: block;
+        position: absolute;
+        inset: auto -40px -70px auto;
+        width: 180px;
+        height: 180px;
+        border-radius: var(--radius-round);
+        background: radial-gradient(circle, var(--section-orb) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .site-nav {
+        justify-content: center;
+        gap: 2px;
+        min-height: 0;
+        padding: 2px 12px 2px 2px;
+        margin: clamp(2px, 1vw, 10px);
+    }
+
+    .site-nav a {
+        flex-direction: column;
+        gap: 3px;
+        width: clamp(54px, 7.5vw, 76px);
+        min-height: clamp(54px, 7.5vw, 76px);
+        font-size: 0.8rem;
+    }
+
+    .site-nav a:hover {
+        background: var(--nav-item-bg);
+        transform: translateY(-1px);
+        box-shadow: var(--button-elevation);
+    }
+
+    .site-nav a.is-active {
+        box-shadow: var(--elevation-soft);
+    }
+
+    html:not(.dark) .site-nav a.is-active {
+        border: 2px solid var(--accent-outline);
+        box-shadow: 0 8px 18px var(--accent-wash-strong);
+    }
+
+    .site-nav__icon {
+        width: clamp(18px, 2.1vw, 26px);
+        height: clamp(18px, 2.1vw, 26px);
+    }
+
+    .site-nav__label {
+        display: block;
+    }
+
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .section-header {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .section-header h2,
+    .section-header h3 {
+        font-size: 1.55rem;
+    }
+
+    .section-header .btn-submit,
+    .fiber-row .btn-delete,
+    .action-buttons > * {
+        width: auto;
+    }
+
+    .resource-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}

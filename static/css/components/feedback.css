@@ -1,0 +1,8 @@
+.error-message {
+    margin-bottom: 16px;
+    padding: 11px 13px;
+    border: 2px solid var(--danger-border-soft);
+    border-radius: var(--radius-md);
+    color: var(--danger-text);
+    background: var(--danger-soft);
+}

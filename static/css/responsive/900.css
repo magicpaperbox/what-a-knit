@@ -1,0 +1,14 @@
+@media (min-width: 900px) {
+    .section--with-page-title {
+        grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+        grid-template-areas:
+            "details media"
+            "composition media";
+        column-gap: 28px;
+    }
+
+    .yarn-detail-media {
+        justify-self: end;
+        align-self: start;
+    }
+}

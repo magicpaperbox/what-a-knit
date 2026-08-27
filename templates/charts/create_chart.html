@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="/static/css/charts.css">
+{% endblock %}
+
 {% block content %}
 
     <div class="chart-page-layout">
@@ -6,9 +12,6 @@
             <div class="section-header">
                 <h2>{% if mode == "edit" %}Edit chart{% else %}Chart creator (SVG){% endif %}</h2>
             </div>
-
-            <p class="section-copy">Set the grid size above the chart, choose chart type, choose a symbol or color,
-                click cells to place it, and save your chart for later editing.</p>
 
             {% if error %}
                 <div class="error-message">
@@ -46,7 +49,9 @@
                             <input id="cellSize" name="cell_size" type="number" min="10" max="80"
                                    value="{{ form_data.cell_size }}">
                         </label>
-                        <button id="build" type="button" class="btn-chart btn-chart--secondary chart-build-button">Update grid</button>
+                        <button id="build" type="button" class="btn-chart btn-chart--secondary chart-build-button">
+                            Update grid
+                        </button>
                     </div>
 
                     <div class="chart-actions chart-actions--{{ mode }}">

@@ -1,0 +1,50 @@
+.home-intro {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.home-intro-title {
+    max-width: 24ch;
+    margin: 0;
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.24;
+}
+
+.home-intro-date {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+}
+
+.home-intro-greeting {
+    margin: 0;
+    color: var(--detail-value-color);
+    font-size: 1.08rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.home-summary {
+    display: grid;
+    gap: 14px;
+    max-width: 56rem;
+}
+
+.home-summary-line {
+    margin: 0;
+    color: var(--detail-value-color);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.home-summary-line strong {
+    color: var(--heading);
+    font-weight: 600;
+}

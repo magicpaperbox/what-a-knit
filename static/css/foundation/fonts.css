@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'AmaticSC';
+    src: url('/static/fonts/AmaticSC.ttf');
+}
+
+@font-face {
+    font-family: 'Fredoka';
+    src: url('/static/fonts/Fredoka.ttf');
+}
+
+@font-face {
+    font-family: 'LaBelleAurore';
+    src: url('/static/fonts/LaBelleAurore.ttf');
+}
+
+@font-face {
+    font-family: 'Delius';
+    src: url('/static/fonts/Delius.ttf');
+}
+
+@font-face {
+    font-family: 'PrincessSofia';
+    src: url('/static/fonts/PrincessSofia.ttf');
+}
