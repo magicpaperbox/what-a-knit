@@ -142,7 +142,10 @@
     {% if mode == "edit" %}
         <div id="deleteModal" class="modal-overlay">
             <div class="modal-content">
-                <h3>Frog this chart?</h3>
+                <h3>
+                    <img src="/static/icons/sad-frog.png" alt="" class="modal-title-icon">
+                    Frog this chart?
+                </h3>
                 <p>Are you sure you want to delete <strong>{{ form_data.name }}</strong>?<br>This cannot be undone!</p>
 
                 <div class="modal-buttons">

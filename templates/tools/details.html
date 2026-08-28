@@ -40,13 +40,16 @@
             Frog tool
         </button>
         <a href="/tools/{{ tool.id.value }}/edit" class="btn-submit">
-            ✏️ Edit tool
+            <img src="/static/icons/pencil.png" alt="Pencil" class="button-icon"> Edit tool
         </a>
     </div>
 
     <div id="deleteModal" class="modal-overlay">
         <div class="modal-content">
-            <h3>🐸 Frog it?</h3>
+            <h3>
+                <img src="/static/icons/sad-frog.png" alt="" class="modal-title-icon">
+                Frog it?
+            </h3>
             <p>Are you sure you want to delete <strong>{{ tool.kind.value }}</strong>?<br>This cannot be undone!</p>
 
             <div class="modal-buttons">

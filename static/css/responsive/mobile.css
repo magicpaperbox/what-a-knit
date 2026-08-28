@@ -123,7 +123,7 @@
     width: calc(100% - 10px);
     padding: 0;
     overflow: hidden;
-    border: 2px solid var(--rose-outline);
+    border: 1px solid var(--rose-outline);
     border-radius: var(--radius-lg);
     background: var(--rose-wash);
 }

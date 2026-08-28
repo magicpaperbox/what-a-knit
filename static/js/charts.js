@@ -19,8 +19,8 @@ const SYMBOLS = [
 ];
 
 const COLOR_TOOLS = [
-    {id: "paint", label: "Paint"},
-    {id: "erase", label: "Erase"},
+    {id: "paint", label: "Paint", icon: "/static/icons/paint-brush.png"},
+    {id: "erase", label: "Erase", icon: "/static/icons/eraser.png"},
 ];
 
 const ALLOWED_SYMBOL_IDS = new Set(SYMBOLS.map((symbol) => symbol.id));
@@ -314,8 +314,10 @@ function renderColorPalette() {
             button.setAttribute("aria-pressed", "false");
         }
 
-        const icon = document.createElement("span");
-        icon.className = `chart-color-tool-icon chart-color-tool-icon--${tool.id}`;
+        const icon = document.createElement("img");
+        icon.className = "chart-color-tool-icon";
+        icon.src = tool.icon;
+        icon.alt = "";
         icon.setAttribute("aria-hidden", "true");
         button.appendChild(icon);
 

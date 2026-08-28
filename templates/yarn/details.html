@@ -59,7 +59,7 @@
             Frog yarn
         </button>
         <a href="/yarn/{{ yarn.id.value }}/edit" class="btn-submit">
-            ✏️ Edit yarn
+            <img src="/static/icons/pencil.png" alt="Pencil" class="button-icon"> Edit yarn
         </a>
     </div>
 
@@ -87,7 +87,7 @@
                     {% for skein_group in skein_groups.groups %}
                         {% if skein_group.is_single %}
                             {% set skein = skein_group.main_skein %}
-                            <tr{% if loop.last %} class="skein-list-row--last"{% endif %}>
+                            <tr class="skein-parent-row{% if loop.last %} skein-list-row--last{% endif %}">
                                 <td data-label="Skein #">1</td>
                                 <td data-label="Current weight">{{ skein.current_weight }}</td>
                                 <td data-label="Estimated remaining length">{{ skein.remaining_length(yarn) }}</td>
@@ -95,7 +95,7 @@
                                     <div class="table-actions-row">
                                         <a href="/yarn/skeins/{{ skein.id.value }}/edit"
                                            class="btn-submit btn-submit--small table-action-button">
-                                            ✏️
+                                            <img src="/static/icons/pencil.png" alt="Pencil" class="button-icon">
                                         </a>
                                         <button class="btn-delete btn-delete--small table-action-button table-action-button--trash"
                                                 onclick="openSkeinDeleteModal({{ skein.id.value }})">
@@ -107,7 +107,7 @@
                             </tr>
                         {% else %}
                             {% set group_id = loop.index %}
-                            <tr class="skein-group-row{% if loop.last %} skein-list-row--last{% endif %}"
+                            <tr class="skein-parent-row skein-group-row{% if loop.last %} skein-list-row--last{% endif %}"
                                 data-group="{{ group_id }}">
                                 <td data-label="Skein #">{{ skein_group.total_skeins }}</td>
                                 <td data-label="Current weight">{{ skein_group.total_current_weight }}</td>
@@ -143,7 +143,7 @@
                                         <div class="table-actions-row">
                                             <a href="/yarn/skeins/{{ skein_id.value }}/edit"
                                                class="btn-submit btn-submit--small table-action-button">
-                                                ✏️
+                                                <img src="/static/icons/pencil.png" alt="Pencil" class="button-icon">
                                             </a>
                                         </div>
                                     </td>

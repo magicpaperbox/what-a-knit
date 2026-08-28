@@ -22,7 +22,18 @@
 }
 
 .modal-content h3 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     margin-top: 0;
+}
+
+.modal-title-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    object-fit: contain;
 }
 
 .modal-buttons {

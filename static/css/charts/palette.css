@@ -209,56 +209,10 @@
 }
 
 .chart-color-tool-icon {
-    position: relative;
     display: block;
-    width: 24px;
-    height: 24px;
-}
-
-.chart-color-tool-icon--paint::before,
-.chart-color-tool-icon--paint::after,
-.chart-color-tool-icon--erase::before,
-.chart-color-tool-icon--erase::after {
-    content: "";
-    position: absolute;
-    background: currentColor;
-}
-
-.chart-color-tool-icon--paint::before {
-    left: 11px;
-    top: 2px;
-    width: 5px;
-    height: 19px;
-    border-radius: var(--radius-pill);
-    transform: rotate(38deg);
-}
-
-.chart-color-tool-icon--paint::after {
-    left: 5px;
-    top: 14px;
-    width: 12px;
-    height: 7px;
-    border-radius: 8px 8px 4px 4px;
-    background: var(--accent);
-    transform: rotate(38deg);
-}
-
-.chart-color-tool-icon--erase::before {
-    left: 4px;
-    top: 7px;
-    width: 17px;
-    height: 11px;
-    border-radius: 3px;
-    transform: rotate(-28deg);
-}
-
-.chart-color-tool-icon--erase::after {
-    left: 5px;
-    bottom: 4px;
-    width: 17px;
-    height: 2px;
-    border-radius: var(--radius-pill);
-    opacity: 0.55;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
 }
 
 .chart-color-button {

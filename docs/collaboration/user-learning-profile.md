@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-08-27
+Last updated: 2026-08-28
 
 ## Current Comfort Zone
 
@@ -40,6 +40,7 @@ Last updated: 2026-08-27
 - Direct references to full file paths and function names.
 - Beginner-friendly context before deeper design suggestions.
 - UI suggestions should preserve a slightly retro visual direction rather than pushing the app toward a generic modern SaaS style.
+- For retro UI polish, prefers flat fills and clear borders over soft blurry shadows, especially for navigation hover and active states.
 - For UI decisions, explain the practical trade-off clearly, for example decorative centering versus easier scanning in list/inventory views.
 - Python analogies help, especially when explaining JavaScript collections, loops, and data flow.
 - Documentation with concrete examples and method-level patterns, not only dry conceptual descriptions.

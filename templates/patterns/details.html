@@ -78,14 +78,17 @@
             pattern
         </button>
         <a href="/patterns/{{ pattern.id.value }}/edit" class="btn-submit">
-            ✏️ Edit pattern
+            <img src="/static/icons/pencil.png" alt="Pencil" class="button-icon"> Edit pattern
         </a>
     </div>
 
     <!-- CUSTOM MODAL -->
     <div id="deleteModal" class="modal-overlay">
         <div class="modal-content">
-            <h3>🐸 Frog it?</h3>
+            <h3>
+                <img src="/static/icons/sad-frog.png" alt="" class="modal-title-icon">
+                Frog it?
+            </h3>
             <p>Are you sure you want to delete <strong>{{ pattern.name }}</strong>?<br>This cannot be undone!</p>
 
             <div class="modal-buttons">

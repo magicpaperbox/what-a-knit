@@ -50,26 +50,25 @@
 .skein-child-row.is-expanded td {
     color: var(--muted);
     background: var(--rose-wash);
-    border-bottom-color: var(--rose-wash-strong);
+    border-bottom: 1px solid var(--rose-divider);
     padding-left: 48px;
 }
 
 .skein-child-row.is-expanded td:first-child {
-    position: relative;
     padding-left: 38px;
-    border-left: 2px solid var(--rose-outline);
+    border-left: 1px solid var(--rose-outline);
 }
 
 .skein-child-row.is-expanded td:last-child {
-    border-right: 2px solid var(--rose-outline);
+    border-right: 1px solid var(--rose-outline);
 }
 
 .skein-child-row--first.is-expanded td {
-    border-top: 2px solid var(--rose-outline);
+    border-top: 1px solid var(--rose-outline);
 }
 
 .data-table tbody tr.skein-child-row--last.is-expanded td {
-    border-bottom: 2px solid var(--rose-outline);
+    border-bottom: 1px solid var(--rose-outline);
 }
 
 .skein-child-row--first.is-expanded td:first-child {
@@ -131,19 +130,19 @@ html.dark .data-table {
     padding: 0;
     border: 0;
     border-radius: var(--radius-round);
-    background: var(--icon-control-bg);
+    background: var(--title);
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .skein-toggle-button:hover {
-    background: var(--icon-control-hover-bg);
+    background: var(--accent-strong);
     transform: translateY(-1px);
 }
 
 .skein-toggle-button .button-icon {
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
 }
 
 .table-action-button {
@@ -175,10 +174,10 @@ html.dark .data-table {
 }
 
 .table-action-button--trash {
-    background: var(--danger-button-bg);
-    color: var(--danger-text);
+    background: var(--danger);
+    color: #fff;
 }
 
 .table-action-button--trash:hover {
-    background: var(--danger-button-hover-bg);
+    background: var(--danger-strong);
 }

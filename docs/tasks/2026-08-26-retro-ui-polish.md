@@ -23,6 +23,10 @@ Recent work focused on detail pages and global CSS:
 - Refined detail-page heading composition: the title now behaves more like a folder tab attached to the details panel, and the back button is aligned as a related outline control instead of a detached floating square.
 - Adjusted the yarn inventory list so yarn cards use a dedicated scan-friendly variant with text on the left and yarn images on the right at wider breakpoints.
 - Fixed the dark-mode navigation flash by applying the saved theme to `<html>` before the main stylesheet loads, then updating dark-mode CSS selectors from `body.dark` to `html.dark`.
+- Refined the expanded skein subtable: the nested rows now use a lighter outline, a subtle divider between child records, and clearer parent-child hierarchy.
+- Flattened the desktop navigation item interaction style: hover/active states now use flat fills and borders instead of per-item soft shadows, dark mode active navigation has a visible border, and the nav shell keeps a soft shadow to separate the panel from the page.
+- Strengthened the skein table trash action so it uses the same danger color family as the "Frog yarn" delete button instead of the softer secondary danger background.
+- Reworked the trash icon artwork to use a lighter body, softer pink accents, two front slats, and a stronger outline so it stays readable on the darker danger button background.
 
 ## Decisions Made
 
@@ -38,12 +42,16 @@ Recent work focused on detail pages and global CSS:
 
 - `static/css/style.css`
 - `templates/yarn/index.html`
-- `templates/projects/details.html`
 - `templates/yarn/details.html`
+- `templates/projects/details.html`
 - `templates/patterns/details.html`
 - `templates/tools/details.html`
 - `templates/base.html`
 - `static/js/theme.js`
+- `static/css/components/tables.css`
+- `static/css/responsive/mobile.css`
+- `static/css/responsive/768.css`
+- `static/css/responsive/1024.css`
 - `docs/collaboration/user-learning-profile.md`
 
 ## Where We Stopped
@@ -59,6 +67,14 @@ The detail heading/back-link layout was adjusted after visual review: the title 
 The yarn list now has a dedicated `.resource-list--yarn` and `.yarn-card` variant. The list width is capped and centered, and yarn cards with images use a compact text-left/image-right layout on narrow screens, then get more image width and spacing from the 640px breakpoint upward. The yarn grid uses `auto-fill`, not `auto-fit`, so a single yarn card does not stretch across the whole row.
 
 Dark mode is now restored before first paint: `templates/base.html` runs a small inline script in `<head>` before `static/css/style.css`, and the theme class lives on `<html>` as `html.dark`. `static/js/theme.js` now uses `document.documentElement`, and the dark-mode selectors in `static/css/style.css` were updated accordingly.
+
+The desktop navigation panel now leans flatter and more retro: `static/css/responsive/768.css` removes the hover and active nav item shadows, adds a visible active border in dark mode, uses a slower hover transition, and replaces the desktop nav shell's gradient/blur/radial glow with a flat panel background while keeping a soft outer shell shadow for separation.
+
+The expanded skein child-row styling was softened after visual review: the pink nested group now uses `--rose-divider` between records, and the outer rose outline was reduced from 2px to 1px across desktop and mobile breakpoints. `templates/yarn/details.html` now marks every top-level skein record with `skein-parent-row`, so single skeins and grouped parent rows share the same wrapped row styling. On desktop, an expanded parent row becomes the top part of one outlined parent-and-children package; the child rows stay as real table rows and use a subtle timeline-style connector with dots in the first column, closer to a nested comment thread without breaking column alignment. The desktop table columns were adjusted so the child label no longer collides with the weight column, parent row counts align more closely with the child-row dots, and text cells are vertically centered without moving action buttons.
+
+The skein table delete icon now uses the same stronger danger background as the main delete buttons, so destructive actions stand out while staying in the app's existing palette.
+
+The trash icon artwork was updated after the stronger danger background made the old mostly-pink icon too low-contrast. A later pass simplified the front from three slats to two and softened the hot-pink accents for better tiny-size readability.
 
 ## Next Small Step
 
