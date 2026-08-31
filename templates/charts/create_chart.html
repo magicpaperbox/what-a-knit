@@ -56,7 +56,6 @@
 
                     <div class="chart-actions chart-actions--{{ mode }}">
                         <button type="submit" class="btn-submit chart-save-button">
-                            <img src="/static/icons/yarn_ball.png" alt="Yarn ball" class="button-icon">
                             {% if mode == "edit" %}Save changes{% else %}Save chart{% endif %}
                         </button>
                         {% if mode == "edit" %}
@@ -66,7 +65,6 @@
                             </button>
                         {% endif %}
                         <a href="/charts" class="btn-chart btn-chart--secondary chart-new-button">
-                            <img src="/static/icons/patterns.png" alt="Charts" class="button-icon">
                             {% if mode == "edit" %}New empty chart{% else %}Reset chart{% endif %}
                         </a>
                     </div>
@@ -75,6 +73,9 @@
                 <textarea id="cellsData" name="cells_json" hidden>{{ form_data.cells_json }}</textarea>
 
                 <aside class="chart-palette-panel" aria-labelledby="chartPaletteTitle">
+                <div id="chartTools" class="chart-tools">
+                    <h3>Tools</h3>
+                </div>
                     <fieldset class="chart-kind-selector">
                         <legend>Chart type</legend>
                         <div class="chart-kind-options">

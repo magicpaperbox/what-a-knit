@@ -3,6 +3,7 @@ const $ = (id) => document.getElementById(id);
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 const TOOLS = [
+    {id: "cursor", label: "cursor"},
     {id: "zoom", label: "zoom"},
     {id: "select", label: "select tool"},
     {id: "rotate_selected", label: "rotate selected"}
@@ -31,12 +32,18 @@ const state = {
     cellSize: 32,
     selectedSymbol: "purl",
     cells: [],
+    activeTool: "cursor",
     kind: "symbol",
     colorTool: "paint",
     selectedColor: "#000000",
     isPainting: false,
     hoveredRow: null,
     hoveredColumn: null,
+    isSelecting: false,
+    selectionStart: null,
+    selectionEnd: null,
+    selectedArea: null,
+    chartClipboard: null,
 };
 
 const LABEL_MARGIN_LEFT = 34;
@@ -57,6 +64,22 @@ function clamp(value, min, max) {
 
 function getSymbol(symbolId) {
     return SYMBOLS.find((symbol) => symbol.id === symbolId);
+}
+
+function getSelectionBounds(start, end) {
+    if (!start || !end) {
+        return null;
+    }
+
+    const minRow = Math.min(start.row, end.row);
+    const maxRow = Math.max(start.row, end.row);
+    const minColumn = Math.min(start.column, end.column);
+    const maxColumn = Math.max(start.column, end.column);
+
+    const startPoint = {minRow: minRow, minColumn: minColumn}
+    const endPoint = {maxRow: maxRow, maxColumn: maxColumn}
+
+    return {startPoint, endPoint}
 }
 
 // Cell state helpers
@@ -404,6 +427,7 @@ function renderChart() {
     const height = gridHeight + LABEL_MARGIN_BOTTOM;
     const gridOriginX = LABEL_MARGIN_LEFT;
     const gridOriginY = 0;
+    const bounds = getSelectionBounds(state.selectionStart, state.selectionEnd);
 
     svg.setAttribute("width", width.toString());
     svg.setAttribute("height", height.toString());
@@ -520,11 +544,51 @@ function renderChart() {
     svg.appendChild(symbolsLayer);
     svg.appendChild(gridLayer);
     svg.appendChild(border);
+
+    if (bounds){
+        const selectionRect = createSvgElement("rect");
+        selectionRect.setAttribute("x", (gridOriginX + bounds.startPoint.minColumn * state.cellSize).toString());
+        selectionRect.setAttribute("y", (gridOriginY + bounds.startPoint.minRow * state.cellSize).toString());
+        selectionRect.setAttribute("width", ((bounds.endPoint.maxColumn - bounds.startPoint.minColumn + 1) * state.cellSize).toString())
+        selectionRect.setAttribute("height", ((bounds.endPoint.maxRow - bounds.startPoint.minRow + 1) * state.cellSize).toString())
+        selectionRect.classList.add("chart-selection");
+        svg.appendChild(selectionRect);
+    }
     svg.appendChild(hitLayer);
     syncSerializedCells();
 }
 
 // User actions
+
+const activeTools = $("chartTools");
+
+TOOLS.forEach((tool) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = tool.label;
+    button.className = "chart-tool-button";
+    button.dataset.tool = tool.id;
+    activeTools.appendChild(button);
+
+    button.addEventListener("click", () => {
+        state.activeTool = tool.id;
+        const tools = document.querySelectorAll(".chart-tool-button");
+        tools.forEach((toolButton) => {
+            toolButton.classList.remove("is-active");
+            toolButton.setAttribute("aria-pressed", "false");
+        });
+        button.classList.add("is-active");
+        button.setAttribute("aria-pressed", "true");
+    });
+
+    if (tool.id === state.activeTool) {
+        button.classList.add("is-active");
+        button.setAttribute("aria-pressed", "true");
+    } else {
+        button.setAttribute("aria-pressed", "false");
+    }
+})
+
 
 function applyCurrentToolToCell(row, column) {
     if (state.kind === "symbol") {
@@ -564,6 +628,17 @@ function handleChartPointerDown(event) {
         return;
     }
 
+    if (state.activeTool !== "cursor") {
+        state.isPainting = false;
+        if (state.activeTool === "select") {
+            state.isSelecting = true;
+            state.selectionStart = position;
+            state.selectionEnd = position;
+            renderChart();
+        }
+        return;
+    }
+
     state.isPainting = true;
     applyCurrentToolToCell(position.row, position.column);
 
@@ -579,6 +654,10 @@ function handleChartPointerMove(event) {
     state.hoveredColumn = position.column;
     state.hoveredRow = position.row;
 
+    if (state.isSelecting) {
+        state.selectionEnd = position;
+    }
+
     if (state.isPainting) {
         applyCurrentToolToCell(position.row, position.column);
         return;
@@ -589,6 +668,7 @@ function handleChartPointerMove(event) {
 
 function handleChartPointerUp() {
     state.isPainting = false;
+    state.isSelecting = false;
 }
 
 function handleChartPointerLeave() {

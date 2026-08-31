@@ -1,7 +1,7 @@
 # Task: Retro UI Polish
 
 Started: 2026-08-26
-Status: in progress
+Status: completed
 
 ## Goal
 
@@ -27,6 +27,7 @@ Recent work focused on detail pages and global CSS:
 - Flattened the desktop navigation item interaction style: hover/active states now use flat fills and borders instead of per-item soft shadows, dark mode active navigation has a visible border, and the nav shell keeps a soft shadow to separate the panel from the page.
 - Strengthened the skein table trash action so it uses the same danger color family as the "Frog yarn" delete button instead of the softer secondary danger background.
 - Reworked the trash icon artwork to use a lighter body, softer pink accents, two front slats, and a stronger outline so it stays readable on the darker danger button background.
+- Manual visual inspection passed on 2026-08-28. The UI polish work was committed as `e3e1768 more css and ui`.
 
 ## Decisions Made
 
@@ -76,11 +77,12 @@ The skein table delete icon now uses the same stronger danger background as the 
 
 The trash icon artwork was updated after the stronger danger background made the old mostly-pink icon too low-contrast. A later pass simplified the front from three slats to two and softened the hot-pink accents for better tiny-size readability.
 
+The changed screens were visually checked in the browser and the user confirmed everything works. The UI polish pass is considered complete.
+
 ## Next Small Step
 
-Visually inspect the changed screens in the browser, especially the yarn list with many cards, detail pages, list pages with tables/cards, and the chart editor in light and dark mode.
+No active UI polish step. If the design is revisited later, open a new small polish task for that specific area.
 
 ## Open Questions
 
-- Whether the light mode palette feels retro enough or should lean more pastel/candy.
-- Whether chart editor controls should keep stronger playful shadows or be softened like the rest of the app.
+- None for this completed polish pass.

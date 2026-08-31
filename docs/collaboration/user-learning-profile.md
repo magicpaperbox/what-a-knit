@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-08-28
+Last updated: 2026-08-31
 
 ## Current Comfort Zone
 
@@ -25,19 +25,26 @@ Last updated: 2026-08-28
 - Repository method roles, especially the difference between fetching rows, grouping rows for many parent objects, mapping rows to domain objects, and saving domain objects.
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
+- The difference between a single DOM element and a list of DOM elements returned by `querySelectorAll`, especially when using `.forEach(...)` and `.classList`.
 - CSS custom properties, especially when they act like reusable constants for repeated colors, spacing, radii, borders, shadows, and transitions.
 - The difference between initial rendering from state to the DOM and later DOM events that write user changes back into state.
 - The difference between calculating a temporary value inside a JavaScript event handler and saving that value into `state` so rendering can use it.
 - SVG drawing concepts in JavaScript, especially layers, `x`/`y` coordinates, `setAttribute`, and converting numbers to strings with `.toString()`.
 - Drag-to-paint interaction flow in JavaScript: starting an action, continuing it while moving over cells, and stopping it when the pointer is released.
 - Separating similar pointer interactions in JavaScript, such as hover, painting, and temporary area selection, so one state flag does not accidentally mean several different things.
+- Helper function inputs and outputs: parameters themselves introduce local variables whose values come from call arguments; they do not need separate `const` declarations. Show the actual function header and the matching call together before using proposed parameter names in calculations. Distinguish whole point objects from coordinates and input data from returned results.
 
 ## Explanation Style That Works Well
 
 - Polish explanations with code and commit messages in English.
-- Small steps focused on one concrete change at a time.
+- Small, coherent functional stages that group related changes, such as one complete pointer interaction. Avoid splitting each assignment or word into a separate review cycle.
+- After a successful implementation review, provide the next coherent step without waiting for another "what next?" message, unless the user is asking only a focused conceptual question or wants to pause.
 - Clear labels for the layer being discussed: backend, template, JavaScript, database, or form data.
 - Direct references to full file paths and function names.
+- When several loops look alike, provide a unique searchable line and explain what that block draws; file links and line numbers alone may not be enough to locate it.
+- Clearly separate explanations of existing behavior from edit instructions. State the exact target function before discussing related functions, so background context does not sound like an instruction to move code.
+- When the user points to a specific line or asks about named variables, answer that exact question first and stop. Do not append a broader review of the surrounding function until the focused point is resolved.
+- When the user says she is lost, pause edit instructions and explain one data-flow connection using a concrete call and its parameters. Mark illustrative code as explanation rather than something to insert; do not combine input shapes, calculations, naming, and return syntax in one corrective checklist.
 - Beginner-friendly context before deeper design suggestions.
 - UI suggestions should preserve a slightly retro visual direction rather than pushing the app toward a generic modern SaaS style.
 - For retro UI polish, prefers flat fills and clear borders over soft blurry shadows, especially for navigation hover and active states.
@@ -69,6 +76,11 @@ Last updated: 2026-08-28
 - DOM methods and JavaScript utilities are documented in `notes/08_javascript_dom_i_przydatne_metody.md`.
 - Optional chaining with `?.`, `Array.isArray`, and the ternary `? :` operator are documented in `notes/08_javascript_dom_i_przydatne_metody.md`.
 - JavaScript logical OR `||` and simple guard conditions were explained while checking `drawCellColor`.
+- Changing a state flag does not stop function execution; `return` exits the function. When explaining a guard, distinguish the condition checked by `if` from assignments and `return` executed inside its body. Discussed in `handleChartPointerDown` when separating tool selection from painting.
+- Rectangle selection uses two endpoint cells to describe an entire area. Both endpoints initially identify the clicked cell; during dragging the start stays fixed and the end changes. Equal initial endpoints do not limit selection to one cell.
+- `Math.min` and `Math.max` can turn selection endpoints into direction-independent row and column bounds, including a drag toward smaller indices.
+- JavaScript `return (a, b)` uses the comma operator and returns only the last value, unlike a Python tuple return. Return an object with named fields when several related results are needed.
+- Used `console.log(bounds)` in `renderChart` and expanded nested objects in the browser console to inspect the helper's returned selection bounds.
 - Searching where to change formatting/code is documented in `notes/09_jak_szukac_gdzie_zmienic_formatowanie.md` and `notes/10_jak_szukac_rzeczy_w_kodzie.md`.
 - Python `zip(...)` for pairing lists in a `for` loop is documented in `notes/13_python_zip.md`.
 - HTML form `name`, `value`, `id`, `label for`, and Flask `form.getlist(...)` flow is documented in `notes/14_html_form_name_value_getlist.md`.

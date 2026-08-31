@@ -15,6 +15,8 @@ Split large frontend files into smaller CSS and JavaScript files so the chart ed
 `templates/charts/create_chart.html` loads `/static/js/charts.js` in its scripts block and adds a chart-specific CSS link.
 `static/css/charts.css` exists and now imports smaller chart CSS files from `static/css/charts/`.
 Global CSS has been split into foundation, layout, pages, components, and responsive folders under `static/css/`.
+The CSS split and related UI work were visually checked and committed as `e3e1768 more css and ui`.
+After that commit, the Charts navigation icon was changed to use `/static/icons/chart.png`; that image and the one-line template reference are pending a separate commit.
 
 ## Decisions Made
 
@@ -73,10 +75,11 @@ The chart editor CSS was moved from `static/css/style.css` to `static/css/charts
 `static/css/charts.css` now acts as the import entrypoint for smaller chart CSS files.
 `static/css/style.css` now acts as the import entrypoint for smaller global CSS files.
 CSS validation checks passed for whitespace and balanced braces.
+The user confirmed the visual check passed and committed the completed CSS/UI work.
 
 ## Next Small Step
 
-Move JavaScript in small steps when the user is ready, keeping `static/js/charts.js` behavior unchanged during the split.
+Commit the pending chart navigation icon change separately if desired. Then move JavaScript in small steps when the user is ready, keeping `static/js/charts.js` behavior unchanged during the split.
 Future selection/highlight styles can be added to `static/css/charts/svg.css` or a new focused chart CSS file.
 
 ## Open Questions

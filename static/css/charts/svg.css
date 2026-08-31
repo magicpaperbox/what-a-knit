@@ -29,6 +29,13 @@
     stroke: var(--chart-grid-border);
 }
 
+.chart-selection {
+    fill: var(--accent-wash-strong);
+    stroke: var(--accent-strong);
+    stroke-width: 2px;
+    pointer-events: none;
+}
+
 .chart-symbol-fill {
     fill: var(--chart-symbol-color);
 }
