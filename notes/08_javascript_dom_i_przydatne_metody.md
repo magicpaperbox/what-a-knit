@@ -1198,6 +1198,95 @@ Używasz, gdy wartość ma się zmieniać.
 let result = value;
 ```
 
+### Nie można przypisać nowej wartości do zmiennej zadeklarowanej przez `const`
+
+Taki zapis jest niepoprawny:
+
+```js
+const isSelectedColumn = false;
+
+if (columnIsInsideSelection) {
+    isSelectedColumn = true;
+}
+```
+
+Najpierw zmienna `isSelectedColumn` otrzymuje wartość `false`, ale później kod próbuje przypisać do tej samej zmiennej nową wartość `true`.
+JavaScript przerwie wtedy działanie błędem:
+
+```text
+TypeError: Assignment to constant variable
+```
+
+Jeśli zmienna rzeczywiście ma zmieniać wartość, trzeba użyć `let`:
+
+```js
+let isSelectedColumn = false;
+
+if (columnIsInsideSelection) {
+    isSelectedColumn = true;
+}
+```
+
+Jednak często `let` i osobny `if` nie są potrzebne, ponieważ sam warunek już zwraca `true` albo `false`.
+
+### Wynik warunku można zapisać bezpośrednio w `const`
+
+Porównania zwracają wartości logiczne:
+
+```js
+3 >= 2; // true
+3 <= 2; // false
+```
+
+Dlatego zamiast zaczynać od `false`, a potem zmieniać wartość na `true`, można zapisać wynik całego warunku:
+
+```js
+const isSelectedColumn =
+    bounds !== null &&
+    column >= bounds.startPoint.minColumn &&
+    column <= bounds.endPoint.maxColumn;
+```
+
+Jak to czytać:
+
+- istnieje zaznaczenie opisane przez `bounds`,
+- aktualna kolumna nie znajduje się przed `minColumn`,
+- aktualna kolumna nie znajduje się za `maxColumn`,
+- jeśli wszystkie trzy warunki są spełnione, `isSelectedColumn` ma wartość `true`,
+- w przeciwnym razie ma wartość `false`.
+
+Operator `&&` sprawdza warunki od lewej do prawej.
+Jeśli `bounds !== null` daje `false`, JavaScript zatrzymuje sprawdzanie tego wyrażenia i nie próbuje odczytać `bounds.startPoint`.
+Dzięki temu kod nie próbuje czytać właściwości z `null`.
+
+Pythonowy odpowiednik działa według tego samego pomysłu:
+
+```python
+is_selected_column = (
+    bounds is not None
+    and column >= bounds["start_point"]["min_column"]
+    and column <= bounds["end_point"]["max_column"]
+)
+```
+
+### Dlaczego `node --check` może nie zgłosić takiego błędu
+
+Polecenie:
+
+```text
+node --check static/js/charts.js
+```
+
+sprawdza przede wszystkim składnię, na przykład brakujący nawias albo źle zapisane słowo kluczowe.
+
+Przypisanie nowej wartości do `const` jest składniowo możliwe do odczytania przez JavaScript, dlatego kontrola składni może przejść.
+Błąd pojawia się dopiero podczas wykonywania tej konkretnej linii kodu.
+
+Najkrócej:
+
+- `node --check` odpowiada: „czy ten plik da się poprawnie odczytać jako JavaScript?”,
+- test w przeglądarce odpowiada: „czy kod poprawnie działa, kiedy użytkownik uruchomi daną akcję?”.
+
 Najprościej:
 
 - `const` - domyślny wybór,

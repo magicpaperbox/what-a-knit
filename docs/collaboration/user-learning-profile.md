@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-08-31
+Last updated: 2026-09-01
 
 ## Current Comfort Zone
 
@@ -30,6 +30,7 @@ Last updated: 2026-08-31
 - The difference between initial rendering from state to the DOM and later DOM events that write user changes back into state.
 - The difference between calculating a temporary value inside a JavaScript event handler and saving that value into `state` so rendering can use it.
 - SVG drawing concepts in JavaScript, especially layers, `x`/`y` coordinates, `setAttribute`, and converting numbers to strings with `.toString()`.
+- The difference between plain JavaScript data objects and DOM/SVG nodes: `appendChild(...)` can append an element such as an SVG `text` or `rect`, but not a data object such as selection `bounds`.
 - Drag-to-paint interaction flow in JavaScript: starting an action, continuing it while moving over cells, and stopping it when the pointer is released.
 - Separating similar pointer interactions in JavaScript, such as hover, painting, and temporary area selection, so one state flag does not accidentally mean several different things.
 - Helper function inputs and outputs: parameters themselves introduce local variables whose values come from call arguments; they do not need separate `const` declarations. Show the actual function header and the matching call together before using proposed parameter names in calculations. Distinguish whole point objects from coordinates and input data from returned results.
@@ -85,6 +86,8 @@ Last updated: 2026-08-31
 - Python `zip(...)` for pairing lists in a `for` loop is documented in `notes/13_python_zip.md`.
 - HTML form `name`, `value`, `id`, `label for`, and Flask `form.getlist(...)` flow is documented in `notes/14_html_form_name_value_getlist.md`.
 - HTML `disabled` inputs, hidden inputs, and CSS adjacent sibling selectors such as `input:disabled + span` were explained while locking chart type selection in edit mode.
+- JavaScript `const` reassignment, assigning a boolean expression directly to a constant, `&&` short-circuiting, and the difference between `node --check` syntax validation and runtime errors are documented in `notes/08_javascript_dom_i_przydatne_metody.md`.
+- Converting a bottom-up displayed row index to the chart grid's top-down array index with `state.rows - 1 - row` was explained using a 12-row chart mapping.
 
 ## Recurring Confusions Or Watch Points
 

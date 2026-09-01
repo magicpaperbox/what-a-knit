@@ -166,6 +166,19 @@ function drawLabelHighlight(layer, x, y) {
     layer.appendChild(highlight);
 }
 
+function drawLabelSelectionBar(layer, x, y, width, height) {
+    const highlight = createSvgElement("rect");
+    const radius = Math.min(width, height) / 2;
+    highlight.classList.add("chart-label-selection-highlight");
+    highlight.setAttribute("x", x.toString());
+    highlight.setAttribute("y", y.toString());
+    highlight.setAttribute("width", width.toString());
+    highlight.setAttribute("height", height.toString());
+    highlight.setAttribute("rx", radius.toString());
+    highlight.setAttribute("ry", radius.toString());
+    layer.appendChild(highlight);
+}
+
 // Symbol drawing and palette
 
 function drawCellSymbol(symbolId, layer, x, y, cellSize) {
@@ -420,7 +433,6 @@ function renderColorPalette() {
 // Chart rendering
 
 function renderChart() {
-    const svg = $("chart");
     const gridWidth = state.columns * state.cellSize;
     const gridHeight = state.rows * state.cellSize;
     const width = LABEL_MARGIN_LEFT + gridWidth;
@@ -429,132 +441,223 @@ function renderChart() {
     const gridOriginY = 0;
     const bounds = getSelectionBounds(state.selectionStart, state.selectionEnd);
 
-    svg.setAttribute("width", width.toString());
-    svg.setAttribute("height", height.toString());
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    svg.innerHTML = "";
+    function createSymbolAndHitLayers() {
+        const symbolsLayer = createSvgElement("g");
+        const hitLayer = createSvgElement("g");
 
-    const labelsLayer = createSvgElement("g");
-    const symbolsLayer = createSvgElement("g");
-    const gridLayer = createSvgElement("g");
-    const hitLayer = createSvgElement("g");
-    const border = createSvgElement("rect");
-
-    // labelsLayer.classList.add("chart-labels-layer");
-    labelsLayer.classList.add("chart-labels-layer");
-    labelsLayer.setAttribute("font-size", LABEL_FONT_SIZE.toString());
-    labelsLayer.setAttribute("font-family", "Arial, sans-serif");
-
-    gridLayer.classList.add("chart-grid-layer");
-    gridLayer.setAttribute("stroke-width", "1");
-    gridLayer.setAttribute("shape-rendering", "crispEdges");
-
-    for (let row = 0; row < state.rows; row += 1) {
-        for (let column = 0; column < state.columns; column += 1) {
-            const x = gridOriginX + column * state.cellSize;
-            const y = gridOriginY + row * state.cellSize;
-
-            if (state.kind === "symbol") {
-                drawCellSymbol(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
-            }
-
-            if (state.kind === "color") {
-                drawCellColor(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
-            }
-
+        function createHitRect(x, y, row, column) {
             const hitRect = createSvgElement("rect");
-            hitRect.setAttribute("x", x);
-            hitRect.setAttribute("y", y);
+            hitRect.setAttribute("x", x.toString());
+            hitRect.setAttribute("y", y.toString());
             hitRect.setAttribute("width", state.cellSize);
             hitRect.setAttribute("height", state.cellSize);
             hitRect.setAttribute("fill", "transparent");
             hitRect.classList.add("chart-cell-hit");
             hitRect.dataset.row = row.toString();
             hitRect.dataset.column = column.toString();
-            hitLayer.appendChild(hitRect);
-        }
-    }
-
-    for (let column = 0; column <= state.columns; column += 1) {
-        const x = gridOriginX + column * state.cellSize;
-        const line = createSvgElement("line");
-        line.setAttribute("x1", x.toString());
-        line.setAttribute("y1", gridOriginY.toString());
-        line.setAttribute("x2", x.toString());
-        line.setAttribute("y2", (gridOriginY + gridHeight).toString());
-        gridLayer.appendChild(line);
-    }
-
-    for (let row = 0; row <= state.rows; row += 1) {
-        const y = gridOriginY + row * state.cellSize;
-        const line = createSvgElement("line");
-        line.setAttribute("x1", gridOriginX.toString());
-        line.setAttribute("y1", y.toString());
-        line.setAttribute("x2", (gridOriginX + gridWidth).toString());
-        line.setAttribute("y2", y.toString());
-        gridLayer.appendChild(line);
-    }
-
-    for (let column = 0; column < state.columns; column += 1) {
-        const label = createSvgElement("text");
-        const labelText = (column + 1).toString();
-        const x = gridOriginX + column * state.cellSize + state.cellSize / 2;
-        const y = gridOriginY + gridHeight + 18;
-        label.setAttribute("x", x);
-        label.setAttribute("y", y);
-        label.setAttribute("text-anchor", "middle");
-        label.setAttribute("dominant-baseline", "middle");
-        label.textContent = labelText;
-        if (state.hoveredColumn !== null && column === state.hoveredColumn) {
-            drawLabelHighlight(labelsLayer, x, y);
-            label.classList.add("chart-label--hovered");
+            return hitRect;
         }
 
-        labelsLayer.appendChild(label);
+        for (let row = 0; row < state.rows; row += 1) {
+            for (let column = 0; column < state.columns; column += 1) {
+                const x = gridOriginX + column * state.cellSize;
+                const y = gridOriginY + row * state.cellSize;
+
+                if (state.kind === "symbol") {
+                    drawCellSymbol(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
+                }
+
+                if (state.kind === "color") {
+                    drawCellColor(state.cells[row][column], symbolsLayer, x, y, state.cellSize);
+                }
+                hitLayer.appendChild(createHitRect(x, y, row, column));
+            }
+        }
+        return {hitLayer, symbolsLayer};
     }
 
-    for (let row = 0; row < state.rows; row += 1) {
-        const label = createSvgElement("text");
-        const labelText = (row + 1).toString();
-        const x = gridOriginX - 17;
-        const y = gridOriginY + gridHeight - row * state.cellSize - state.cellSize / 2;
-        label.setAttribute("x", x);
-        label.setAttribute("y", y);
-        label.setAttribute("text-anchor", "middle");
-        label.setAttribute("dominant-baseline", "middle");
-        label.textContent = labelText;
-        if (state.hoveredRow !== null && row === state.rows - 1 - state.hoveredRow) {
-            drawLabelHighlight(labelsLayer, x, y);
-            label.classList.add("chart-label--hovered");
+    function createLabelsLayer(bounds) {
+        const labelsLayer = createSvgElement("g");
+        labelsLayer.classList.add("chart-labels-layer");
+        labelsLayer.setAttribute("font-size", LABEL_FONT_SIZE.toString());
+        labelsLayer.setAttribute("font-family", "Arial, sans-serif");
+        const columnLabelY = gridOriginY + gridHeight + 18;
+        const rowLabelX = gridOriginX - 17;
+
+        if (bounds !== null) {
+            const selectionBarX =
+                gridOriginX +
+                bounds.startPoint.minColumn * state.cellSize +
+                state.cellSize / 2 -
+                LABEL_HIGHLIGHT_RADIUS;
+            const selectionBarY =
+                columnLabelY + LABEL_HIGHLIGHT_OFFSET_Y - LABEL_HIGHLIGHT_RADIUS;
+            const selectionBarWidth =
+                (bounds.endPoint.maxColumn - bounds.startPoint.minColumn) * state.cellSize +
+                LABEL_HIGHLIGHT_RADIUS * 2;
+            const selectionBarHeight = LABEL_HIGHLIGHT_RADIUS * 2;
+
+            drawLabelSelectionBar(
+                labelsLayer,
+                selectionBarX,
+                selectionBarY,
+                selectionBarWidth,
+                selectionBarHeight,
+            );
+
+            const rowSelectionBarX = rowLabelX - LABEL_HIGHLIGHT_RADIUS;
+            const rowSelectionBarY =
+                gridOriginY +
+                bounds.startPoint.minRow * state.cellSize +
+                state.cellSize / 2 +
+                LABEL_HIGHLIGHT_OFFSET_Y -
+                LABEL_HIGHLIGHT_RADIUS;
+            const rowSelectionBarWidth = LABEL_HIGHLIGHT_RADIUS * 2;
+            const rowSelectionBarHeight =
+                (bounds.endPoint.maxRow - bounds.startPoint.minRow) * state.cellSize +
+                LABEL_HIGHLIGHT_RADIUS * 2;
+
+            drawLabelSelectionBar(
+                labelsLayer,
+                rowSelectionBarX,
+                rowSelectionBarY,
+                rowSelectionBarWidth,
+                rowSelectionBarHeight,
+            );
         }
 
-        labelsLayer.appendChild(label);
+        for (let column = 0; column < state.columns; column += 1) {
+            const label = createSvgElement("text");
+            const labelText = (column + 1).toString();
+            const x = gridOriginX + column * state.cellSize + state.cellSize / 2;
+            const y = columnLabelY;
+
+            label.setAttribute("x", x.toString());
+            label.setAttribute("y", y.toString());
+            label.setAttribute("text-anchor", "middle");
+            label.setAttribute("dominant-baseline", "middle");
+            label.textContent = labelText;
+            const isSelectedColumn =
+                bounds !== null &&
+                column >= bounds.startPoint.minColumn &&
+                column <= bounds.endPoint.maxColumn;
+
+            const isHoveredColumn =
+                state.hoveredColumn !== null && column === state.hoveredColumn;
+
+            if (isHoveredColumn && !isSelectedColumn) {
+                drawLabelHighlight(labelsLayer, x, y);
+            }
+
+            if (isHoveredColumn || isSelectedColumn) {
+                label.classList.add("chart-label--hovered");
+            }
+
+            labelsLayer.appendChild(label);
+        }
+
+        for (let row = 0; row < state.rows; row += 1) {
+            const label = createSvgElement("text");
+            const labelText = (row + 1).toString();
+            const gridRow = state.rows - 1 - row;
+            const x = rowLabelX;
+            const y = gridOriginY + gridHeight - row * state.cellSize - state.cellSize / 2;
+            label.setAttribute("x", x.toString());
+            label.setAttribute("y", y.toString());
+            label.setAttribute("text-anchor", "middle");
+            label.setAttribute("dominant-baseline", "middle");
+            label.textContent = labelText;
+            const isSelectedRow =
+                bounds !== null &&
+                gridRow >= bounds.startPoint.minRow &&
+                gridRow <= bounds.endPoint.maxRow;
+
+            const isHoveredRow =
+                state.hoveredRow !== null && gridRow === state.hoveredRow;
+
+            if (isHoveredRow && !isSelectedRow) {
+                drawLabelHighlight(labelsLayer, x, y);
+            }
+
+            if (isHoveredRow || isSelectedRow) {
+                label.classList.add("chart-label--hovered");
+            }
+
+            labelsLayer.appendChild(label);
+        }
+        return labelsLayer;
     }
 
+    function createGridLayer() {
+        const gridLayer = createSvgElement("g");
+        gridLayer.classList.add("chart-grid-layer");
+        gridLayer.setAttribute("stroke-width", "1");
+        gridLayer.setAttribute("shape-rendering", "crispEdges");
 
-    border.setAttribute("x", gridOriginX.toString());
-    border.setAttribute("y", gridOriginY.toString());
-    border.setAttribute("width", gridWidth.toString());
-    border.setAttribute("height", gridHeight.toString());
-    border.classList.add("chart-grid-border");
-    border.setAttribute("fill", "none");
-    border.setAttribute("stroke-width", "2");
+        for (let column = 0; column <= state.columns; column += 1) {
+            const x = gridOriginX + column * state.cellSize;
+            const line = createSvgElement("line");
+            line.setAttribute("x1", x.toString());
+            line.setAttribute("y1", gridOriginY.toString());
+            line.setAttribute("x2", x.toString());
+            line.setAttribute("y2", (gridOriginY + gridHeight).toString());
+            gridLayer.appendChild(line);
+        }
 
-    svg.appendChild(labelsLayer);
-    svg.appendChild(symbolsLayer);
-    svg.appendChild(gridLayer);
-    svg.appendChild(border);
+        for (let row = 0; row <= state.rows; row += 1) {
+            const y = gridOriginY + row * state.cellSize;
+            const line = createSvgElement("line");
+            line.setAttribute("x1", gridOriginX.toString());
+            line.setAttribute("y1", y.toString());
+            line.setAttribute("x2", (gridOriginX + gridWidth).toString());
+            line.setAttribute("y2", y.toString());
+            gridLayer.appendChild(line);
+        }
+        return gridLayer;
+    }
 
-    if (bounds){
+    function createBorderLayer() {
+        const border = createSvgElement("rect");
+        border.setAttribute("x", gridOriginX.toString());
+        border.setAttribute("y", gridOriginY.toString());
+        border.setAttribute("width", gridWidth.toString());
+        border.setAttribute("height", gridHeight.toString());
+        border.classList.add("chart-grid-border");
+        border.setAttribute("fill", "none");
+        border.setAttribute("stroke-width", "2");
+        return border;
+    }
+
+    function createSelectionRect(bounds) {
+        if (!bounds) {
+            return;
+        }
         const selectionRect = createSvgElement("rect");
         selectionRect.setAttribute("x", (gridOriginX + bounds.startPoint.minColumn * state.cellSize).toString());
         selectionRect.setAttribute("y", (gridOriginY + bounds.startPoint.minRow * state.cellSize).toString());
         selectionRect.setAttribute("width", ((bounds.endPoint.maxColumn - bounds.startPoint.minColumn + 1) * state.cellSize).toString())
         selectionRect.setAttribute("height", ((bounds.endPoint.maxRow - bounds.startPoint.minRow + 1) * state.cellSize).toString())
         selectionRect.classList.add("chart-selection");
+        return selectionRect;
+    }
+
+    const svg = $("chart");
+    svg.setAttribute("width", width.toString());
+    svg.setAttribute("height", height.toString());
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.innerHTML = "";
+
+    const {hitLayer, symbolsLayer} = createSymbolAndHitLayers();
+    svg.appendChild(createLabelsLayer(bounds));
+    svg.appendChild(symbolsLayer);
+    svg.appendChild(createGridLayer());
+    svg.appendChild(createBorderLayer());
+    const selectionRect = createSelectionRect(bounds);
+    if (selectionRect) {
         svg.appendChild(selectionRect);
     }
     svg.appendChild(hitLayer);
+
     syncSerializedCells();
 }
 

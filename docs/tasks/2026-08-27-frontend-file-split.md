@@ -77,10 +77,11 @@ The chart editor CSS was moved from `static/css/style.css` to `static/css/charts
 CSS validation checks passed for whitespace and balanced braces.
 The user confirmed the visual check passed and committed the completed CSS/UI work.
 
+On 2026-09-01, `static/js/charts.js` has an uncommitted refactor of `renderChart()`. The function now delegates SVG construction to nested helpers: `createSymbolAndHitLayers()`, `createLabelsLayer()`, `createGridLayer()`, `createBorderLayer()`, and `createSelectionRect()`. No JavaScript has been moved to separate files yet. `renderChart()` calculates the selection `bounds` once and passes it explicitly to the selection rectangle and label helpers. `node --check static/js/charts.js` passes, and the refactored renderer plus the new continuous selected-column label bar were verified in the browser and confirmed by the user.
+
 ## Next Small Step
 
-Commit the pending chart navigation icon change separately if desired. Then move JavaScript in small steps when the user is ready, keeping `static/js/charts.js` behavior unchanged during the split.
-Future selection/highlight styles can be added to `static/css/charts/svg.css` or a new focused chart CSS file.
+Review and behavior-test only the current `renderChart()` helper extraction before continuing the file split or adding selected-label highlighting. Keep this as a behavior-preserving refactor; after it is stable, decide whether the helpers should remain nested or be moved to module scope as preparation for separate JavaScript files.
 
 ## Open Questions
 

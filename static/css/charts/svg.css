@@ -15,6 +15,10 @@
     fill: var(--chart-label-hover-bg);
 }
 
+.chart-label-selection-highlight {
+    fill: var(--chart-label-hover-bg);
+}
+
 .chart-label--hovered {
     fill: var(--chart-label-hover-text);
     font-weight: 700;
