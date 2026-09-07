@@ -1,6 +1,6 @@
 # User Learning Profile
 
-Last updated: 2026-09-01
+Last updated: 2026-09-04
 
 ## Current Comfort Zone
 
@@ -17,13 +17,16 @@ Last updated: 2026-09-01
 - CSS file organization and CSS custom properties used as design tokens.
 - Frontend state flow: how JavaScript state and DOM inputs update each other over time.
 - JavaScript pointer/mouse events for drag interactions on SVG chart cells.
+- JavaScript event propagation phases and how rerendering can detach `event.target` before a bubbling document listener runs.
 
 ## Needs Extra Clarity Around
 
 - Object-oriented design and the role of classes.
 - Which application layer owns a specific responsibility.
+- Recognizing Flask routes in Blueprint-based `api.py` files: the route is the decorator such as `@patterns_api.get(...)`, `@patterns_api.post(...)`, or `@home_api.route(...)` together with the function directly below it.
 - Repository method roles, especially the difference between fetching rows, grouping rows for many parent objects, mapping rows to domain objects, and saving domain objects.
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
+- HTTP request anatomy, especially the difference between metadata in request headers and submitted content in the request body.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
 - The difference between a single DOM element and a list of DOM elements returned by `querySelectorAll`, especially when using `.forEach(...)` and `.classList`.
 - CSS custom properties, especially when they act like reusable constants for repeated colors, spacing, radii, borders, shadows, and transitions.
@@ -44,6 +47,7 @@ Last updated: 2026-09-01
 - Direct references to full file paths and function names.
 - When several loops look alike, provide a unique searchable line and explain what that block draws; file links and line numbers alone may not be enough to locate it.
 - Clearly separate explanations of existing behavior from edit instructions. State the exact target function before discussing related functions, so background context does not sound like an instruction to move code.
+- Before suggesting a DOM update driven by JavaScript state, explicitly separate initialization during page load from later work inside an event handler. Explain that assigning a DOM property from state copies the value at that moment; it does not create a live connection that updates automatically.
 - When the user points to a specific line or asks about named variables, answer that exact question first and stop. Do not append a broader review of the surrounding function until the focused point is resolved.
 - When the user says she is lost, pause edit instructions and explain one data-flow connection using a concrete call and its parameters. Mark illustrative code as explanation rather than something to insert; do not combine input shapes, calculations, naming, and return syntax in one corrective checklist.
 - Beginner-friendly context before deeper design suggestions.
@@ -88,6 +92,7 @@ Last updated: 2026-09-01
 - HTML `disabled` inputs, hidden inputs, and CSS adjacent sibling selectors such as `input:disabled + span` were explained while locking chart type selection in edit mode.
 - JavaScript `const` reassignment, assigning a boolean expression directly to a constant, `&&` short-circuiting, and the difference between `node --check` syntax validation and runtime errors are documented in `notes/08_javascript_dom_i_przydatne_metody.md`.
 - Converting a bottom-up displayed row index to the chart grid's top-down array index with `state.rows - 1 - row` was explained using a 12-row chart mapping.
+- A bubbling `pointerdown` event can first run the chart listener, whose `renderChart()` replaces the SVG children, and only afterward reach the `document` listener with a detached `event.target`; a capture-phase listener can inspect the original ancestry first.
 
 ## Recurring Confusions Or Watch Points
 

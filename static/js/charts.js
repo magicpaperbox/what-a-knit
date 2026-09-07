@@ -5,8 +5,11 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const TOOLS = [
     {id: "cursor", label: "cursor"},
     {id: "zoom", label: "zoom"},
-    {id: "select", label: "select tool"},
-    {id: "rotate_selected", label: "rotate selected"}
+    {id: "select", label: "select"},
+];
+
+const SELECTION_COMMANDS = [
+    {id: "rotate_selected", label: "rotate selected"},
 ];
 
 const SYMBOLS = [
@@ -675,10 +678,15 @@ TOOLS.forEach((tool) => {
 
     button.addEventListener("click", () => {
         state.activeTool = tool.id;
+        const commandButtons = document.querySelectorAll(".chart-selection-command-button");
+        commandButtons.forEach((commandButton) => {
+            commandButton.hidden = state.activeTool !== "select"
+        })
         const tools = document.querySelectorAll(".chart-tool-button");
         tools.forEach((toolButton) => {
             toolButton.classList.remove("is-active");
             toolButton.setAttribute("aria-pressed", "false");
+
         });
         button.classList.add("is-active");
         button.setAttribute("aria-pressed", "true");
@@ -690,6 +698,16 @@ TOOLS.forEach((tool) => {
     } else {
         button.setAttribute("aria-pressed", "false");
     }
+})
+
+SELECTION_COMMANDS.forEach((command) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = command.label;
+    button.className = "chart-selection-command-button";
+    button.dataset.command = command.id;
+    button.hidden = state.activeTool !== "select";
+    activeTools.appendChild(button);
 })
 
 
@@ -780,6 +798,20 @@ function handleChartPointerLeave() {
     renderChart();
 }
 
+function handleDocumentPointerDown(event) {
+    const clickedInsideChart = event.target.closest("#chart") !== null;
+    const clickedSelectionCommand =
+        event.target.closest(".chart-selection-command-button") !== null;
+
+    if (clickedInsideChart || clickedSelectionCommand){
+        return;
+    }
+    state.selectionStart = null;
+    state.selectionEnd = null;
+    state.selectedArea = null;
+    renderChart();
+}
+
 function rebuild() {
     state.rows = clamp(parseInt($("rows").value, 10) || 1, 1, 200);
     state.columns = clamp(parseInt($("columns").value, 10) || 1, 1, 200);
@@ -840,6 +872,7 @@ function init() {
     $("chart").addEventListener("pointerleave", handleChartPointerLeave);
     document.addEventListener("pointerup", handleChartPointerUp);
     $("chartEditorForm").addEventListener("submit", handleFormSubmit);
+    document.addEventListener("pointerdown", handleDocumentPointerDown,  {capture: true});
 }
 
 init();

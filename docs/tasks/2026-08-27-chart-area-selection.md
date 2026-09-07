@@ -25,6 +25,9 @@ The selection must be represented as reusable data, not only as a visual SVG hig
 - Copy/paste should likely use a separate chart clipboard state storing a 2D cell matrix copied from the selected area.
 - Zoom drag selection should reuse shared rectangle/bounds helper logic where useful, but remain a separate interaction because it should zoom rather than create a persistent edit selection.
 - Selection should become active only after the user chooses the Select tool. The default tool should keep the current paint/draw behavior.
+- `cursor`, `zoom`, and `select` are persistent tool modes, while `rotate_selected` is a one-time selection command and must not replace `state.activeTool`.
+- Selection commands should be visible only while Select mode is active.
+- A pointer press outside the chart should clear the current selection, except when the target is a selection command such as Rotate selected.
 
 ## Relevant Files
 
@@ -51,9 +54,14 @@ Selected column labels are now implemented. `renderChart()` passes `bounds` to `
 
 Selected row labels are now implemented with the same continuous-bar behavior. The row loop converts its bottom-up display counter to the grid's top-down index through `gridRow = state.rows - 1 - row`, then uses `gridRow` for both selection and hover comparisons. `drawLabelSelectionBar(...)` now calculates its corner radius from the shorter rectangle dimension, so it produces both horizontal and vertical pills. The vertical bar geometry follows `bounds.startPoint.minRow` through `bounds.endPoint.maxRow`; hover circles are suppressed inside the selected range and retained outside it. Browser checks passed for a multi-row selection, a single row, hover outside the selection, and reverse-direction dragging.
 
+The user separated `rotate_selected` from the persistent `TOOLS` array into `SELECTION_COMMANDS`. The existing `TOOLS.forEach(...)` now renders only `cursor`, `zoom`, and `select`, so clicking a future Rotate selected command will not accidentally set `state.activeTool` to `"rotate_selected"`. A separate `SELECTION_COMMANDS.forEach(...)` creates the Rotate selected button and initially hides it because `state.activeTool` starts as `"cursor"`.
+The command button now correctly has the command-specific `chart-selection-command-button` class and `data-command` attribute. Inside the `TOOLS` click handler, `querySelectorAll(".chart-selection-command-button")` gets the command-button list and `forEach(...)` recalculates each button's `hidden` property after `state.activeTool` changes. The user confirmed that Rotate selected now appears in Select mode and hides in the other modes. `node --check static/js/charts.js` and the whitespace check pass.
+The first outside-click detection step is connected through `handleDocumentPointerDown(event)` and a `pointerdown` listener on `document`. With the default bubble phase, the chart case logged `clickedInsideChart: false`: the event first reached `handleChartPointerDown`, which called `renderChart()` and cleared `svg.innerHTML`; the original `.chart-cell-hit` stored in `event.target` was therefore detached before the event reached `document`, so `event.target.closest("#chart")` returned `null`. The listener is now registered with `{capture: true}`, which should let the document handler inspect the original ancestry before the chart handler rerenders the SVG. JavaScript syntax validation passes; browser behavior after this change still needs confirmation.
+The capture-phase diagnostic clicks now appear to return the expected inside-chart and selection-command classifications. `handleDocumentPointerDown(event)` has been changed from diagnostic logging to a guard: chart clicks and selection-command clicks return early, while other pointer presses clear `selectionStart`, `selectionEnd`, and `selectedArea`, then rerender the chart. This implementation has been reviewed as functionally correct; browser behavior after the clearing change still needs confirmation.
+
 ## Next Small Step
 
-The visual selection interaction is complete. Before implementing the first command that operates on a selection, decide whether commands should derive current bounds from `selectionStart` and `selectionEnd` or whether `state.selectedArea` should become the stored completed-selection representation.
+Behavior-test the completed outside-click clearing: create a selection, verify that clicking the chart or Rotate selected preserves it, and verify that clicking elsewhere clears it. Do not attach rotation behavior yet.
 
 ## Open Questions
 
