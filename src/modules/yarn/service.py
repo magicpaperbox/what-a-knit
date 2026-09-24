@@ -1,3 +1,4 @@
+from modules.units.mass import Mass
 from modules.yarn.domain import Skein, Yarn, YarnId, SkeinId
 from modules.yarn.repository import YarnRepository, SkeinRepository
 
@@ -54,6 +55,14 @@ class YarnService:
 
     def get_skeins_for_yarn(self, yarn_id: YarnId) -> list[Skein]:
         return self._skein_repo.get_by_yarn_id(yarn_id)
+
+    def get_stash_yarn_weight(self, yarn_id: YarnId) -> Mass:
+        skeins = self.get_skeins_for_yarn(yarn_id)
+        weight = Mass(0)
+        for skein in skeins:
+            weight += skein.current_weight
+
+        return weight
 
     def add_skein(self, skein: Skein) -> Skein:
         yarn = self.get_yarn(skein.yarn_id)

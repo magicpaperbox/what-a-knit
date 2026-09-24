@@ -10,10 +10,16 @@
 
 .form-group label {
     display: block;
+    margin-top: 7px;
     margin-bottom: 7px;
     font-size: 0.92rem;
     font-weight: 600;
     color: var(--heading);
+}
+
+.form-group label.form-label-secondary {
+    font-size: 0.9rem;
+    font-weight: 400;
 }
 
 .form-group input[type="text"],

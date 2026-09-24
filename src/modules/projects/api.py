@@ -40,7 +40,8 @@ def _render_project_form(
         error=error,
         patterns_dicts=_patterns_to_dicts(available_patterns),
         initial_selected_patterns=form_data.selected_patterns_to_dicts(),
-        available_skeins=yarn_service.get_all_skeins(),
+        available_skeins=yarn_service.get_all_skeins(), # TODO return actually available skeins
+        available_yarns=yarn_service.get_all_yarns() # TODO return available quantity
     )
 
 
@@ -54,7 +55,9 @@ def index():
 def details(project_id: int):
     project = _get_project_or_404(ProjectId(project_id))
     patterns = pattern_repo.get_by_ids(project.pattern_ids)
-    return render_template('projects/details.html', project=project, patterns=patterns)
+    yarns = [yarn_service.get_yarn(requirement.yarn_id) for requirement in project.yarn_requirements]
+    weight = [yarn_service.get_stash_yarn_weight(requirement.yarn_id) for requirement in project.yarn_requirements]
+    return render_template('projects/details.html', project=project, patterns=patterns, yarns=yarns, weight=weight)
 
 
 @projects_api.get('/add')

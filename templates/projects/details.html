@@ -19,7 +19,9 @@
                     <div class="detail-row">
                         <span class="detail-label">Patterns used</span>
                         <span class="detail-value">
-                            {% for pattern in patterns %}<a href="/patterns/{{ pattern.id.value }}">{{ pattern.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+                            {% for pattern in patterns %}
+                                <a href="/patterns/{{ pattern.id.value }}">{{ pattern.name }}</a>{% if not loop.last %},
+                            {% endif %}{% endfor %}
                         </span>
                     </div>
                 {% endif %}
@@ -34,14 +36,27 @@
                                 per {{ project.actual_gauge.width }} x {{ project.actual_gauge.height }}
 
                             {% elif project.actual_gauge.stitches is not none %}
-                                {{ '%g' | format(project.actual_gauge.stitches) }} sts per {{ project.actual_gauge.width }}
+                                {{ '%g' | format(project.actual_gauge.stitches) }} sts per
+                                {{ project.actual_gauge.width }}
 
                             {% elif project.actual_gauge.rows is not none %}
-                                {{ '%g' | format(project.actual_gauge.rows) }} rows per {{ project.actual_gauge.height }}
+                                {{ '%g' | format(project.actual_gauge.rows) }} rows per
+                                {{ project.actual_gauge.height }}
                             {% endif %}
                         </span>
                     </div>
                 {% endif %}
+
+                {% if project.yarn_requirements %}
+                    <div class="detail-row">
+                        <span class="detail-label">Booked yarn</span>
+                        <span class="detail-value">{% for requirement in project.yarn_requirements %}
+                            {{ requirement.required_weight.grams }} g of {{ yarns[loop.index0].name }}, {{ weight[loop.index0].grams }} g in stash{% endfor %}
+                        </span>
+                    </div>
+                {% endif %}
+
+
 
                 {% if project.progress_percent > 0 %}
                     <div class="detail-row">

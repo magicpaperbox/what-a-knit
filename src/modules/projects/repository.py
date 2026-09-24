@@ -3,13 +3,19 @@ from dataclasses import dataclass
 from typing import Optional
 from infra.db import get_db
 from modules.patterns.domain import PatternId
-from modules.projects.domain import Gauge, Project, ProjectId, ProjectStatus, ProjectSkeinUsage
+from modules.projects.domain import Gauge, Project, ProjectId, ProjectStatus, ProjectSkeinUsage, ProjectYarnRequirement
 from datetime import date
 
 from modules.units.centimeters import Centimeters
 from modules.units.mass import Mass
-from modules.yarn.domain import SkeinId
+from modules.yarn.domain import SkeinId, YarnId
 
+
+@dataclass
+class ProjectYarnRequirementRow:
+    project_id: int
+    yarn_id: int
+    required_weight_grams: int
 
 @dataclass
 class ProjectSkeinRow:
@@ -48,7 +54,7 @@ class ProjectPatternRow:
 
 
 class ProjectRepository:
-    def _row_to_domain(self, project_row: ProjectRow, gauge_row: ProjectGaugeRow | None, project_pattern_rows: list[ProjectPatternRow], skein_usages: list[ProjectSkeinUsage]) -> Project:
+    def _row_to_domain(self, project_row: ProjectRow, gauge_row: ProjectGaugeRow | None, project_pattern_rows: list[ProjectPatternRow], yarn_requirements: list[ProjectYarnRequirement], skein_usages: list[ProjectSkeinUsage]) -> Project:
         if gauge_row:
             gauge = Gauge(
                 float(gauge_row.stitches) if gauge_row.stitches is not None else None,
@@ -77,6 +83,7 @@ class ProjectRepository:
             end_date=date.fromisoformat(project_row.end_date) if project_row.end_date is not None else None,
             rating=project_row.rating,
             notes=project_row.notes,
+            yarn_requirements=yarn_requirements,
             skein_usages=skein_usages,
 
             image_blob=project_row.image_blob,
@@ -135,8 +142,9 @@ class ProjectRepository:
         for project_row in project_rows:
             gauge_row = gauge_rows_by_id.get(project_row.id)
             project_pattern_row = project_pattern_rows_by_id.get(project_row.id, [])
+            yarn_requirements = self._get_yarn_requirements(project_row.id)
             skein_usages = self._get_skein_usages(project_row.id)
-            projects.append(self._row_to_domain(project_row, gauge_row, project_pattern_row, skein_usages))
+            projects.append(self._row_to_domain(project_row, gauge_row, project_pattern_row, yarn_requirements, skein_usages))
         return projects
 
     def get_by_id(self, project_id: ProjectId) -> Optional[Project]:
@@ -152,9 +160,10 @@ class ProjectRepository:
 
         cursor = db.execute('SELECT * FROM project_patterns WHERE project_id = ?', (project_id.value,))
         project_pattern_rows = [ProjectPatternRow(**dict(row)) for row in cursor.fetchall()]
+        yarn_requirements = self._get_yarn_requirements(project_id.value)
         skein_usages = self._get_skein_usages(project_id.value)
 
-        return self._row_to_domain(project_row, gauge_row, project_pattern_rows, skein_usages)
+        return self._row_to_domain(project_row, gauge_row, project_pattern_rows, yarn_requirements, skein_usages)
 
     def _save_gauge(self, gauge: Gauge, project_id: int) -> None:
         db = get_db()
@@ -176,6 +185,7 @@ class ProjectRepository:
         )
         project.id = ProjectId(cursor.lastrowid)
         self._add_patterns(project)
+        self._add_yarn_requirements(project)
         self._add_skein_usages(project)
         if project.actual_gauge:
             self._save_gauge(project.actual_gauge, project.id.value)
@@ -192,6 +202,18 @@ class ProjectRepository:
                 (
                     project.id.value, pattern_id.value
                 )
+            )
+
+    def _add_yarn_requirements(self, project: Project) -> None:
+        db = get_db()
+        for requirement in project.yarn_requirements:
+            db.execute(
+                '''
+                INSERT INTO project_yarn_requirement (
+                project_id, yarn_id, required_weight_grams)
+                VALUES (?, ?, ?)''',
+            (project.id.value, requirement.yarn_id.value, requirement.required_weight.grams
+             )
             )
 
     def _add_skein_usages(self, project: Project) -> None:
@@ -221,8 +243,10 @@ class ProjectRepository:
         )
         db.execute('DELETE FROM project_gauge WHERE project_id = ?', (project.id.value,))
         db.execute('DELETE FROM project_patterns WHERE project_id = ?', (project.id.value,))
+        db.execute('DELETE FROM project_yarn_requirement WHERE project_id = ?', (project.id.value,))
         db.execute('DELETE FROM project_skein_usage WHERE project_id = ?', (project.id.value,))
         self._add_patterns(project)
+        self._add_yarn_requirements(project)
         self._add_skein_usages(project)
         if project.actual_gauge:
             self._save_gauge(project.actual_gauge, project.id.value)
@@ -232,6 +256,7 @@ class ProjectRepository:
         db = get_db()
         db.execute('DELETE FROM project_gauge WHERE project_id = ?', (project_id.value,))
         db.execute('DELETE FROM project_patterns WHERE project_id = ?', (project_id.value,))
+        db.execute('DELETE FROM project_yarn_requirement WHERE project_id = ?', (project_id.value,))
         db.execute('DELETE FROM project_skein_usage WHERE project_id = ?', (project_id.value,))
         db.execute('DELETE FROM project WHERE id = ?', (project_id.value,))
         db.commit()
@@ -240,6 +265,25 @@ class ProjectRepository:
         db = get_db()
         db.execute('DELETE FROM project_patterns WHERE pattern_id = ?', (pattern_id.value,))
         db.commit()
+
+
+    def _yarn_requirement_row_to_domain(self, row: ProjectYarnRequirementRow) -> ProjectYarnRequirement:
+        return ProjectYarnRequirement(
+            yarn_id=YarnId(row.yarn_id),
+            required_weight=Mass(row.required_weight_grams)
+        )
+
+    def _get_yarn_requirements(self, project_id: int):
+        db = get_db()
+        cursor = db.execute(
+            """
+            SELECT * FROM project_yarn_requirement WHERE project_id = ?
+            """, (project_id,)
+        )
+        project_yarn_requirement_rows = [ProjectYarnRequirementRow(**dict(row)) for row in cursor.fetchall()]
+        yarn_requirements = [self._yarn_requirement_row_to_domain(row) for row in project_yarn_requirement_rows]
+
+        return yarn_requirements
 
     def _skein_usage_row_to_domain(self, row: ProjectSkeinRow) -> ProjectSkeinUsage:
         return ProjectSkeinUsage(

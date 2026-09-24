@@ -1,19 +1,23 @@
 # User Learning Profile
 
-Last updated: 2026-09-04
+Last updated: 2026-09-24
 
 ## Current Comfort Zone
 
 - Comfortable with Python loops and conditional statements.
+- Can identify the main parts of an HTTP request: method, path, host/header information, and an optional body.
+- Understands the complete successful Flask form flow as two request/response cycles: `POST` followed by a redirect, then a new `GET` that renders the destination page.
 - Working in a Flask project with server-rendered templates, SQLite, and plain JavaScript.
 - Prefers understanding the reason behind a solution, not only receiving the final code.
 
 ## Currently Learning
 
+- Flask foundations: the request/response cycle, routes, view functions, templates, and GET/POST handling.
 - Classes and object-oriented programming concepts in Python.
 - Layered application structure: API/routes, domain objects, mappers/form-data objects, repositories, services, and use cases.
 - Form data flow from HTML through Flask into domain objects and SQLite.
 - Plain JavaScript and browser APIs.
+- The JavaScript `fetch()` browser API and how it sends HTTP requests with methods such as `GET`, `POST`, and `PATCH`.
 - CSS file organization and CSS custom properties used as design tokens.
 - Frontend state flow: how JavaScript state and DOM inputs update each other over time.
 - JavaScript pointer/mouse events for drag interactions on SVG chart cells.
@@ -24,9 +28,14 @@ Last updated: 2026-09-04
 - Object-oriented design and the role of classes.
 - Which application layer owns a specific responsibility.
 - Recognizing Flask routes in Blueprint-based `api.py` files: the route is the decorator such as `@patterns_api.get(...)`, `@patterns_api.post(...)`, or `@home_api.route(...)` together with the function directly below it.
+- Flask route lifecycle: decorators register URL-to-function rules during application startup; Flask later dispatches each incoming request to the matching function, while that function explicitly coordinates services and repositories.
 - Repository method roles, especially the difference between fetching rows, grouping rows for many parent objects, mapping rows to domain objects, and saving domain objects.
 - The difference between template issues, backend issues, JavaScript issues, database issues, and form-data issues.
 - HTTP request anatomy, especially the difference between metadata in request headers and submitted content in the request body.
+- Remembering the vocabulary for HTTP request and URL parts: method, scheme, host, path, query string, headers, and body.
+- Formal wording such as "what initiates a request" may need to be restated as the concrete question "what action causes the browser to start creating and sending the request" before answering.
+- Matching request body syntax to `Content-Type`: URL-encoded form bodies use `name=value`, while JSON bodies use quoted JSON such as `{"name": "value"}`.
+- Distinguishing request input from response content: a request body contains data the client already knows and sends to the server; it is not the unknown resource the client wants to receive.
 - JavaScript standard library and browser DOM APIs; explanations should name exact functions such as `querySelector`, `addEventListener`, or `classList.add`.
 - The difference between a single DOM element and a list of DOM elements returned by `querySelectorAll`, especially when using `.forEach(...)` and `.classList`.
 - CSS custom properties, especially when they act like reusable constants for repeated colors, spacing, radii, borders, shadows, and transitions.
@@ -36,13 +45,20 @@ Last updated: 2026-09-04
 - The difference between plain JavaScript data objects and DOM/SVG nodes: `appendChild(...)` can append an element such as an SVG `text` or `rect`, but not a data object such as selection `bounds`.
 - Drag-to-paint interaction flow in JavaScript: starting an action, continuing it while moving over cells, and stopping it when the pointer is released.
 - Separating similar pointer interactions in JavaScript, such as hover, painting, and temporary area selection, so one state flag does not accidentally mean several different things.
+- Separating a user-facing material requirement (`YarnId` plus required grams) from the physical inventory allocations (`SkeinId` records) that fulfill it.
+- Distinguishing creation of a domain object from execution of business logic: constructors create and may validate an object, while domain methods, services, or use cases must be called explicitly before persistence.
+- Distinguishing domain calculations from services: whether logic stays inside one module does not decide this by itself; domain computes from already-provided domain values, while a service coordinates fetching, validation, and persistence within a module.
+- The two distinct mapper stages in a form flow: `from_request_form()` creates an intermediate form-data object, then `to_domain()` creates and returns a domain object rather than translated text.
 - Helper function inputs and outputs: parameters themselves introduce local variables whose values come from call arguments; they do not need separate `const` declarations. Show the actual function header and the matching call together before using proposed parameter names in calculations. Distinguish whole point objects from coordinates and input data from returned results.
 
 ## Explanation Style That Works Well
 
 - Polish explanations with code and commit messages in English.
+- Personified, child-friendly stories help with multi-layer request flows when every character has one clearly named responsibility.
 - Small, coherent functional stages that group related changes, such as one complete pointer interaction. Avoid splitting each assignment or word into a separate review cycle.
+- During a cross-layer feature built in small steps, regularly reconnect the current class or table to the complete user-facing workflow so the purpose of the step stays clear.
 - After a successful implementation review, provide the next coherent step without waiting for another "what next?" message, unless the user is asking only a focused conceptual question or wants to pause.
+- In the small-step workflow, a short reply such as "oki" means the instructed change has already been implemented; immediately read and review the current source file instead of telling the user to implement it again.
 - Clear labels for the layer being discussed: backend, template, JavaScript, database, or form data.
 - Direct references to full file paths and function names.
 - When several loops look alike, provide a unique searchable line and explain what that block draws; file links and line numbers alone may not be enough to locate it.
@@ -72,6 +88,7 @@ Last updated: 2026-09-04
 
 ## Already Explained Topics
 
+- A complete form submission was explained as two HTTP trips: a `POST` request that saves data and receives a redirect response, followed by a new `GET` request that renders the destination page. The story is saved in `notes/15_formularz_request_response_redirect_historyjka_o_kawie.md`.
 - Flask and Jinja2 basics are documented in `notes/01_flask_jinja2_basics.md`.
 - Database and form basics are documented in `notes/02_baza_danych_i_formularze.md`.
 - JavaScript helper basics are documented in `notes/03_javascript_helpers.md`.
@@ -93,9 +110,15 @@ Last updated: 2026-09-04
 - JavaScript `const` reassignment, assigning a boolean expression directly to a constant, `&&` short-circuiting, and the difference between `node --check` syntax validation and runtime errors are documented in `notes/08_javascript_dom_i_przydatne_metody.md`.
 - Converting a bottom-up displayed row index to the chart grid's top-down array index with `state.rows - 1 - row` was explained using a 12-row chart mapping.
 - A bubbling `pointerdown` event can first run the chart listener, whose `renderChart()` replaces the SVG children, and only afterward reach the `document` listener with a detached `event.target`; a capture-phase listener can inspect the original ancestry first.
+- `fetch()` was introduced as the JavaScript browser function that starts an HTTP request; the HTTP method describes the request type, while `fetch()` is the tool that sends it.
+- The web request vocabulary was explained as one connected flow: client, server, HTTP, request, method, URL/path/query string, headers/body, Flask route, response/status, HTML or JSON, and redirect.
+- Jinja was distinguished from JavaScript by execution place and time: Jinja renders a template once on the server before the response is sent, while JavaScript runs later in the browser and can react to user actions or modify the received DOM.
+- Jinja's `loop` object inside `{% for %}` is documented in `notes/16_jinja_loop.md`.
 
 ## Recurring Confusions Or Watch Points
 
+- `Skein.current_weight` is a `Mass`, not an int. Adding it to `0` only works because `Mass.__radd__` accepts `0` and then the total becomes a `Mass`. Start from `Mass(0)` so an empty list and a non-empty list return the same type.
+- Jinja's automatic `loop` object inside `{% for %}` is documented in `notes/16_jinja_loop.md`. It is not a function. `loop.last` separates pattern names with commas, and `loop.index0` reads the same position from a second list.
 - Keep layer explanations separate. If the problem is in a template, explain it as a template problem first.
 - For small oversights such as unused imports, typos, or leftover code, say directly that it was probably a forgotten cleanup.
 - Do not assume knowledge of JavaScript library functions or browser APIs.

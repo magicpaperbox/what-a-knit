@@ -103,6 +103,12 @@
     background: var(--search-results-bg);
 }
 
+#pattern-search-results > .pattern-search-empty {
+    margin: 0;
+    padding: 10px 14px;
+    color: var(--heading);
+}
+
 #pattern-search-results > div {
     padding: 10px 14px;
     color: var(--heading);

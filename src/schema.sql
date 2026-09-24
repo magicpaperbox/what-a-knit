@@ -95,6 +95,17 @@ CREATE TABLE IF NOT EXISTS skein
     FOREIGN KEY (yarn_id) REFERENCES yarn (id)
 );
 
+CREATE TABLE IF NOT EXISTS project_yarn_requirement
+(
+    project_id        INTEGER NOT NULL,
+    yarn_id          INTEGER NOT NULL,
+    required_weight_grams INTEGER NOT NULL,
+    PRIMARY KEY (project_id, yarn_id),
+    FOREIGN KEY (project_id) REFERENCES project (id),
+    FOREIGN KEY (yarn_id) REFERENCES yarn (id)
+);
+
+
 CREATE TABLE IF NOT EXISTS project_skein_usage
 (
     project_id        INTEGER NOT NULL,

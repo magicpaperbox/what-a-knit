@@ -89,7 +89,10 @@ if (patternsDataElement) {
         });
 
         if (matchingPatterns.length === 0) {
-            resultsContainer.innerHTML = "Nie mam nic";
+            const emptyMessage = document.createElement("p");
+            emptyMessage.className = "pattern-search-empty";
+            emptyMessage.textContent = "Nothing to show";
+            resultsContainer.appendChild(emptyMessage);
             return;
         }
 

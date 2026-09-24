@@ -1,7 +1,7 @@
 # Task: Chart Area Selection
 
 Started: 2026-08-27
-Status: in progress
+Status: paused
 
 ## Goal
 
@@ -58,6 +58,7 @@ The user separated `rotate_selected` from the persistent `TOOLS` array into `SEL
 The command button now correctly has the command-specific `chart-selection-command-button` class and `data-command` attribute. Inside the `TOOLS` click handler, `querySelectorAll(".chart-selection-command-button")` gets the command-button list and `forEach(...)` recalculates each button's `hidden` property after `state.activeTool` changes. The user confirmed that Rotate selected now appears in Select mode and hides in the other modes. `node --check static/js/charts.js` and the whitespace check pass.
 The first outside-click detection step is connected through `handleDocumentPointerDown(event)` and a `pointerdown` listener on `document`. With the default bubble phase, the chart case logged `clickedInsideChart: false`: the event first reached `handleChartPointerDown`, which called `renderChart()` and cleared `svg.innerHTML`; the original `.chart-cell-hit` stored in `event.target` was therefore detached before the event reached `document`, so `event.target.closest("#chart")` returned `null`. The listener is now registered with `{capture: true}`, which should let the document handler inspect the original ancestry before the chart handler rerenders the SVG. JavaScript syntax validation passes; browser behavior after this change still needs confirmation.
 The capture-phase diagnostic clicks now appear to return the expected inside-chart and selection-command classifications. `handleDocumentPointerDown(event)` has been changed from diagnostic logging to a guard: chart clicks and selection-command clicks return early, while other pointer presses clear `selectionStart`, `selectionEnd`, and `selectedArea`, then rerender the chart. This implementation has been reviewed as functionally correct; browser behavior after the clearing change still needs confirmation.
+On 2026-09-07, the user paused chart-selection work to prioritize project yarn reservation and usage.
 
 ## Next Small Step
 

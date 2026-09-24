@@ -4,15 +4,20 @@ from dataclasses import dataclass, field
 from datetime import date
 
 from modules.patterns.domain import Gauge, Pattern, PatternId
-from modules.projects.domain import Project, ProjectId, ProjectStatus, ProjectSkeinUsage
+from modules.projects.domain import Project, ProjectId, ProjectStatus, ProjectSkeinUsage, ProjectYarnRequirement
 from modules.units.mass import Mass
-from modules.yarn.domain import SkeinId
+from modules.yarn.domain import SkeinId, YarnId
 
 
 @dataclass(frozen=True)
 class SelectedPatternFormData:
     id: int
     name: str
+
+@dataclass(frozen=True)
+class ProjectYarnRequirementFormData:
+    yarn_id: int
+    required_weight_grams: int
 
 @dataclass
 class ProjectSkeinFormData:
@@ -30,6 +35,7 @@ class ProjectFormData:
     end_date: str = ""
     notes: str = ""
     selected_patterns: list[SelectedPatternFormData] = field(default_factory=list)
+    yarn_requirements: list[ProjectYarnRequirementFormData] = field(default_factory=list)
     skein_usage: list[ProjectSkeinFormData] = field(default_factory=list)
     image_blob: bytes | None = None
     image_mime_type: str | None = None
@@ -52,6 +58,10 @@ class ProjectFormData:
                 SelectedPatternFormData(id=pattern.id.value, name=pattern.name)
                 for pattern in selected_patterns
                 if pattern.id is not None
+            ],
+            yarn_requirements=[
+                ProjectYarnRequirementFormData(yarn_id=yarn.yarn_id.value, required_weight_grams=yarn.required_weight.grams)
+                for yarn in project.yarn_requirements
             ],
             skein_usage=[
                 ProjectSkeinFormData(usage.skein_id.value, usage.used_weight.grams)
@@ -77,6 +87,11 @@ class ProjectFormData:
             for selected_pattern in self.selected_patterns
         ]
 
+        yarn_requirements = [
+            ProjectYarnRequirement(yarn_id=YarnId(yarn.yarn_id), required_weight=Mass(yarn.required_weight_grams))
+            for yarn in self.yarn_requirements
+        ]
+
         skein_usages = [
             ProjectSkeinUsage(skein_id=SkeinId(usage.skein_id), used_weight=Mass(usage.used_yarn_weight))
             for usage in self.skein_usage
@@ -96,6 +111,7 @@ class ProjectFormData:
             rating=None,
             notes=self.notes,
             skein_usages=skein_usages,
+            yarn_requirements=yarn_requirements,
             image_blob=self.image_blob,
             image_mime_type=self.image_mime_type or None
         )
@@ -132,6 +148,13 @@ class ProjectFormData:
         for skein_id, used_yarn_weight in zip(skein_ids, used_yarn_weights):
             skein_usage.append(ProjectSkeinFormData(skein_id=skein_id, used_yarn_weight=used_yarn_weight))
 
+        yarn_requirements = []
+        yarn_ids = form.getlist('yarn_id', type=int)
+        yarn_weights = form.getlist('required_weight_grams', type=int)
+
+        for yarn_id, yarn_weight in zip(yarn_ids, yarn_weights):
+            yarn_requirements.append(ProjectYarnRequirementFormData(yarn_id=yarn_id, required_weight_grams=yarn_weight))
+
         uploaded_image = files.get('image')
         if uploaded_image is not None and uploaded_image.filename:
             image_blob = uploaded_image.read()
@@ -153,6 +176,7 @@ class ProjectFormData:
             notes=form.get('notes', ''),
             selected_patterns=selected_patterns,
             skein_usage=skein_usage,
+            yarn_requirements=yarn_requirements,
             image_blob=image_blob,
             image_mime_type=image_mime_type,
         )

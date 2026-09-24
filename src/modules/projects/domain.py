@@ -6,7 +6,8 @@ from datetime import date
 
 from modules.patterns.domain import PatternId, Gauge
 from modules.units.mass import Mass
-from modules.yarn.domain import SkeinId
+from modules.yarn.domain import SkeinId, YarnId
+
 
 @dataclass
 class ProjectSkeinUsage:
@@ -16,6 +17,11 @@ class ProjectSkeinUsage:
 @dataclass(frozen=True)
 class ProjectId:
     value: int
+
+@dataclass
+class ProjectYarnRequirement:
+    yarn_id: YarnId
+    required_weight: Mass
 
 class ProjectStatus(StrEnum):
     NOT_STARTED = "not started"
@@ -38,6 +44,7 @@ class Project:
 
     rating: Optional[int] = None
     notes: Optional[str] = None
+    yarn_requirements: list[ProjectYarnRequirement] = field(default_factory=list)
     skein_usages: list[ProjectSkeinUsage] = field(default_factory=list)
 
     image_blob: Optional[bytes] = None
